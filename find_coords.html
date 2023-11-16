@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <style>
+      * {
+        box-sizing: border-box;
+      }
+    </style>
+  </head>
+  <body>
+    <div
+      id="container"
+      style="
+        width: 1000px;
+        height: 100%;
+        display: flex;
+        background: pink;
+        margin: 40px;
+        position: relative;
+      "
+    >
+      <img src="./Photoshoot/0E9A9000.jpg" alt="" id="image" />
+    </div>
+    <script>
+      // Loop through each photo, present it on screen
+      // On click of mouse store the coordinates of the click as the left eye coordinates relative to natural image size
+      // On click of mouse store the coordinates of the click as the right eye coordinates relative to natural image size
+      const image = document.getElementById('image')
+      if (!image) {
+        throw new Error('No image found')
+      }
+      const container = document.getElementById('container')
+      if (!container) {
+        throw new Error('No container found')
+      }
+      let targetWidth = 800
+      image.style.width = `${targetWidth}px`
+
+      const rawPhotos = [
+        {
+          url: './Photoshoot/0E9A9000.jpg',
+          direction: 'north',
+        },
+        {
+          url: './Photoshoot/0E9A9002.jpg',
+          direction: 'north east',
+        },
+        {
+          url: './Photoshoot/0E9A9003.jpg',
+          direction: 'north east east',
+        },
+        {
+          url: './Photoshoot/0E9A9004.jpg',
+          direction: 'east',
+        },
+        {
+          url: './Photoshoot/0E9A9005.jpg',
+          direction: 'south east east',
+        },
+        {
+          url: './Photoshoot/0E9A9006.jpg',
+          direction: 'south east',
+        },
+        {
+          url: './Photoshoot/0E9A9008.jpg',
+          direction: 'south south east',
+        },
+        {
+          url: './Photoshoot/0E9A9009.jpg',
+          direction: 'south',
+        },
+        {
+          url: './Photoshoot/0E9A9012.jpg',
+          direction: 'south south west',
+        },
+        {
+          url: './Photoshoot/0E9A9013.jpg',
+          direction: 'south west',
+        },
+        {
+          url: './Photoshoot/0E9A9015.jpg',
+          direction: 'south west west',
+        },
+        {
+          url: './Photoshoot/0E9A9017.jpg',
+          direction: 'west',
+        },
+        {
+          url: './Photoshoot/0E9A9020.jpg',
+          direction: 'north west',
+        },
+        {
+          url: './Photoshoot/0E9A9019.jpg',
+          direction: 'north north west',
+        },
+      ]
+
+      let i = 0
+
+      window.addEventListener('click', (e) => {
+        // Get the coordinates of the click relative to the image
+        const imageBoundingRect = image.getBoundingClientRect()
+        const x = e.clientX - imageBoundingRect.left
+        const y = e.clientY - imageBoundingRect.top
+
+        const ratio = image.naturalWidth / targetWidth
+        const naturalEyeX = x * ratio
+        console.log('naturalEyeX', naturalEyeX)
+        const naturalEyeY = y * ratio
+        console.log('naturalEyeY', naturalEyeY)
+        if (rawPhotos[i].leftEye) {
+          rawPhotos[i].rightEye = {
+            x: naturalEyeX,
+            y: naturalEyeY,
+          }
+          i++
+          if (i < rawPhotos.length) {
+            image.src = rawPhotos[i].url
+          } else {
+            console.log('rawPhotos', JSON.stringify(rawPhotos, null, 2))
+            alert('Done!')
+          }
+        } else {
+          rawPhotos[i].leftEye = {
+            x: naturalEyeX,
+            y: naturalEyeY,
+          }
+        }
+        console.log('rawPhotos', JSON.stringify(rawPhotos, null, 2))
+      })
+    </script>
+  </body>
+</html>

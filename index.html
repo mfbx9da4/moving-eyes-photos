@@ -1,0 +1,503 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <style>
+      /* Label text color variable */
+      :root {
+        --label: #333;
+        --labelSecondary: #666;
+        --background: white;
+      }
+
+      /* Dark mode */
+      @media (prefers-color-scheme: dark) {
+        :root {
+          --label: white;
+          --labelSecondary: rgb(200, 200, 200);
+          --background: rgb(36, 36, 36);
+        }
+      }
+
+      @font-face {
+        font-family: 'Virgil';
+        src: url('/fonts/Virgil.woff2');
+        font-display: fallback;
+      }
+      *,
+      *:before,
+      *:after {
+        box-sizing: border-box;
+      }
+      * {
+        font-family: 'Virgil';
+        color: var(--label);
+      }
+      html,
+      body {
+        background: var(--background);
+        margin: 0;
+        padding: 0;
+      }
+
+      a {
+        text-decoration: none;
+        padding: 0px 16px 4px 16px;
+        margin-bottom: 12px;
+      }
+      a:hover {
+        border-bottom: 1px solid var(--label);
+      }
+    </style>
+  </head>
+  <body>
+    <div
+      style="
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        height: 100vh;
+        width: 100vw;
+      "
+    >
+      <h1 style="text-align: center; font-size: 48px">David Adler</h1>
+      <div
+        style="
+          overflow: hidden;
+          position: relative;
+          background-color: pink;
+          border: solid var(--label);
+          border-color: var(--label);
+          border-width: 3px 4px 3px 5px;
+          border-radius: 95% 4% 92% 5%/4% 95% 6% 95%;
+          transform: rotate(2deg);
+        "
+      >
+        <img
+          src="/optimized/0E9A9000.jpg"
+          alt="David Adler Face Eyes Follow Mouse"
+          id="image"
+        />
+      </div>
+      <!-- Links -->
+      <div
+        style="
+          display: flex;
+          margin-top: 20px;
+          font-size: 24px;
+          width: 100%;
+          max-width: 1000px;
+          justify-content: space-between;
+          padding: 20px;
+          flex-wrap: wrap;
+          justify-content: center;
+        "
+      >
+        <!-- CV -->
+        <a href="./cv.pdf" target="_blank">CV</a>
+        <!-- GitHub -->
+        <a href="https://github.com/mfbx9da4" target="_blank">GitHub</a>
+        <!-- LinkedIn -->
+        <a
+          href="https://www.linkedin.com/in/david-adler-71056671/"
+          target="_blank"
+          >LinkedIn</a
+        >
+        <!-- StackOverflow -->
+        <a
+          href="https://stackoverflow.com/users/1376627/david-adler"
+          target="_blank"
+          >StackOverflow</a
+        >
+        <!-- Twitter -->
+        <a href="https://twitter.com/da_adler" target="_blank">Twitter</a>
+
+        <!-- Instagram -->
+        <a href="https://www.instagram.com/davidadlerfb/" target="_blank"
+          >Instagram</a
+        >
+      </div>
+    </div>
+    <script>
+      const directionVectors = {
+        north: { x: 0, y: -1 },
+        'north north east': { x: 0.25, y: -0.75 },
+        'north east': { x: 0.5, y: -0.5 },
+        'north east east': { x: 0.75, y: -0.25 },
+        east: { x: 1, y: 0 },
+        'south east east': { x: 0.75, y: 0.25 },
+        'south east': { x: 0.5, y: 0.5 },
+        'south south east': { x: 0.25, y: 0.75 },
+        south: { x: 0, y: 1 },
+        'south south west': { x: -0.25, y: 0.75 },
+        'south west': { x: -0.5, y: 0.5 },
+        'south west west': { x: -0.75, y: 0.25 },
+        west: { x: -1, y: 0 },
+        'north west west': { x: -0.75, y: -0.25 },
+        'north west': { x: -0.5, y: -0.5 },
+        'north north west': { x: -0.25, y: -0.75 },
+      }
+
+      const rawPhotos = [
+        {
+          url: '/optimized/0E9A9000.jpg',
+          direction: 'north',
+          leftEye: {
+            x: 221.21249999999995,
+            y: 248.62499999999994,
+          },
+          rightEye: {
+            x: 306.63749999999993,
+            y: 247.34999999999994,
+          },
+        },
+        {
+          url: '/optimized/0E9A9002.jpg',
+          direction: 'north east',
+          leftEye: {
+            x: 223.12499999999994,
+            y: 250.53749999999997,
+          },
+          rightEye: {
+            x: 309.18749999999994,
+            y: 249.26249999999996,
+          },
+        },
+        {
+          url: '/optimized/0E9A9003.jpg',
+          direction: 'north east east',
+          leftEye: {
+            x: 236.51249999999996,
+            y: 251.17499999999995,
+          },
+          rightEye: {
+            x: 323.2125,
+            y: 249.89999999999998,
+          },
+        },
+        {
+          url: '/optimized/0E9A9004.jpg',
+          direction: 'east',
+          leftEye: {
+            x: 236.51249999999996,
+            y: 257.54999999999995,
+          },
+          rightEye: {
+            x: 323.2125,
+            y: 254.99999999999994,
+          },
+        },
+        {
+          url: '/optimized/0E9A9005.jpg',
+          direction: 'south east east',
+          leftEye: {
+            x: 240.97499999999997,
+            y: 256.9124999999999,
+          },
+          rightEye: {
+            x: 328.31249999999994,
+            y: 254.99999999999994,
+          },
+        },
+        {
+          url: '/optimized/0E9A9006.jpg',
+          direction: 'south east',
+          leftEye: {
+            x: 231.41249999999994,
+            y: 256.2749999999999,
+          },
+          rightEye: {
+            x: 320.025,
+            y: 250.53749999999997,
+          },
+        },
+        {
+          url: '/optimized/0E9A9008.jpg',
+          direction: 'south south east',
+          leftEye: {
+            x: 233.32499999999996,
+            y: 258.825,
+          },
+          rightEye: {
+            x: 320.66249999999997,
+            y: 256.2749999999999,
+          },
+        },
+        {
+          url: '/optimized/0E9A9009.jpg',
+          direction: 'south',
+          leftEye: {
+            x: 235.87499999999997,
+            y: 255.63749999999993,
+          },
+          rightEye: {
+            x: 328.31249999999994,
+            y: 252.44999999999996,
+          },
+        },
+        {
+          url: '/optimized/0E9A9012.jpg',
+          direction: 'south south west',
+          leftEye: {
+            x: 211.64999999999998,
+            y: 260.09999999999997,
+          },
+          rightEye: {
+            x: 302.81249999999994,
+            y: 257.54999999999995,
+          },
+        },
+        {
+          url: '/optimized/0E9A9013.jpg',
+          direction: 'south west',
+          leftEye: {
+            x: 214.19999999999996,
+            y: 256.2749999999999,
+          },
+          rightEye: {
+            x: 306.63749999999993,
+            y: 254.99999999999994,
+          },
+        },
+        {
+          url: '/optimized/0E9A9015.jpg',
+          direction: 'south west west',
+          leftEye: {
+            x: 208.46249999999998,
+            y: 251.17499999999995,
+          },
+          rightEye: {
+            x: 303.44999999999993,
+            y: 249.89999999999998,
+          },
+        },
+        {
+          url: '/optimized/0E9A9017.jpg',
+          direction: 'west',
+          leftEye: {
+            x: 201.44999999999996,
+            y: 252.44999999999996,
+          },
+          rightEye: {
+            x: 291.3375,
+            y: 248.62499999999994,
+          },
+        },
+        {
+          url: '/optimized/0E9A9020.jpg',
+          direction: 'north west',
+          leftEye: {
+            x: 197.62499999999994,
+            y: 254.99999999999994,
+          },
+          rightEye: {
+            x: 290.06249999999994,
+            y: 249.26249999999996,
+          },
+        },
+        {
+          url: '/optimized/0E9A9019.jpg',
+          direction: 'north north west',
+          leftEye: {
+            x: 207.82499999999993,
+            y: 246.07499999999996,
+          },
+          rightEye: {
+            x: 302.17499999999995,
+            y: 240.33749999999995,
+          },
+        },
+      ]
+
+      // Each photo points in a direction, we need to convert each photo into
+      // two vectors indicating the section of the screen it captures until the next photo
+      const photosWithVectors = rawPhotos.map((photo) => {
+        const vector = directionVectors[photo.direction]
+        if (!vector) {
+          throw new Error(`Unknown direction ${photo.direction}`)
+        }
+        return { ...photo, vector }
+      })
+      // Go through each photo and work out the lower and upper bounds of the vector by taking the midpoint between it's neighbours
+      const photos = photosWithVectors.map((photo, index) => {
+        // Indexes wrap around
+        const antiClockwise =
+          photosWithVectors[
+            (index - 1 + photosWithVectors.length) % photosWithVectors.length
+          ]
+        const clockwise =
+          photosWithVectors[(index + 1) % photosWithVectors.length]
+        if (!antiClockwise || !clockwise) {
+          throw new Error(`Missing neighbour for photo ${photo.url}`)
+        }
+        let midpointAnticlockwise = {
+          x: (photo.vector.x + antiClockwise.vector.x) / 2,
+          y: (photo.vector.y + antiClockwise.vector.y) / 2,
+        }
+        // If this midpoint is infact clockwise of the photo, we need to flip it
+        if (
+          photo.vector.x * antiClockwise.vector.y -
+            photo.vector.y * antiClockwise.vector.x >
+          0
+        ) {
+          midpointAnticlockwise = {
+            x: -midpointAnticlockwise.x,
+            y: -midpointAnticlockwise.y,
+          }
+        }
+        let midpointClockwise = {
+          x: (photo.vector.x + clockwise.vector.x) / 2,
+          y: (photo.vector.y + clockwise.vector.y) / 2,
+        }
+        // If this midpoint is infact anticlockwise of the photo, we need to flip it
+        if (
+          photo.vector.x * clockwise.vector.y -
+            photo.vector.y * clockwise.vector.x <
+          0
+        ) {
+          midpointClockwise = {
+            x: -midpointClockwise.x,
+            y: -midpointClockwise.y,
+          }
+        }
+        return {
+          ...photo,
+          section: [midpointAnticlockwise, midpointClockwise],
+        }
+      })
+
+      // Draw the sections of the photos for debugging
+      // const canvas = document.createElement('canvas')
+      // canvas.width = window.innerWidth
+      // canvas.height = window.innerHeight
+      // canvas.style.position = 'absolute'
+      // canvas.style.top = 0
+      // canvas.style.left = 0
+
+      // document.body.appendChild(canvas)
+      // const ctx = canvas.getContext('2d')
+
+      // ctx.lineWidth = 5
+      // photos.forEach((photo, i) => {
+      //   // if (i > 0) return
+      //   ctx.strokeStyle = [
+      //     'red',
+      //     'green',
+      //     'blue',
+      //     'yellow',
+      //     'orange',
+      //     'purple',
+      //   ][i % 6]
+      //   const [lower, upper] = photo.section
+      //   console.log(photo.direction, '::', lower, '::', upper)
+
+      //   // Draw one line from the center of the screen to the lower bound
+      //   // and another from the center of the screen to the upper bound
+      //   ctx.beginPath()
+      //   ctx.moveTo(canvas.width / 2, canvas.height / 2)
+      //   ctx.lineTo(
+      //     canvas.width / 2 + lower.x * canvas.width,
+      //     canvas.height / 2 + lower.y * canvas.height
+      //   )
+      //   ctx.stroke()
+      //   ctx.beginPath()
+      //   ctx.moveTo(canvas.width / 2, canvas.height / 2)
+      //   ctx.lineTo(
+      //     canvas.width / 2 + upper.x * canvas.width,
+      //     canvas.height / 2 + upper.y * canvas.height
+      //   )
+      //   ctx.stroke()
+      // })
+
+      const parentWidth = Math.min(460, window.innerWidth - 20)
+      const targetWidth = parentWidth + 40
+      const parentHeight = parentWidth * 1.2
+      const image = document.getElementById('image')
+      if (!image) {
+        throw new Error('Missing image')
+      }
+      const parent = image.parentElement
+      if (!parent) {
+        throw new Error('Missing parent')
+      }
+
+      parent.style.width = `${parentWidth}px`
+      parent.style.height = `${parentHeight}px`
+
+      image.onload = () => {
+        // Preload all images after the first one
+        photos.forEach((photo) => {
+          const img = new Image()
+          img.src = photo.url
+        })
+      }
+
+      function handleMouseMove(e) {
+        // get mouse position
+        const x = e.clientX
+        const y = e.clientY
+        // get window size
+        const width = window.innerWidth
+        const height = window.innerHeight
+
+        // get unit vector from center of screen to mouse
+        const vector = {
+          // x should be from -1 to 1
+          x: (x - width / 2) / (width / 2),
+          // y should be from -1 to 1
+          y: (y - height / 2) / (height / 2),
+        }
+
+        // The vector will be inside one of the sections of the photos, find which one
+        const closestPhoto = photos.find((closest, photo) => {
+          const [lower, upper] = closest.section
+          // https://stackoverflow.com/a/17497339/1376627
+          // if (AxB * AxC >= 0 && CxB * CxA >= 0)
+          // then B is definitely inside A and C
+          const lowerInside = vector.x * lower.y - vector.y * lower.x <= 0
+          const upperInside = vector.x * upper.y - vector.y * upper.x >= 0
+          return lowerInside && upperInside
+        })
+
+        if (!closestPhoto) {
+          throw new Error('Missing closest photo')
+        }
+
+        // set image to closest photo
+        image.style.width = `${targetWidth}px`
+        // This is a hardcoded value all the photos have this width
+        const naturalWidth = 510
+        // We want to align the center of the eyes to the center of the screen
+        const ratio = targetWidth / naturalWidth
+        const naturalRightEyeCoords = closestPhoto.rightEye
+        const naturalLeftEyeCoords = closestPhoto.leftEye
+        const naturalCenter = [
+          (naturalRightEyeCoords.x + naturalLeftEyeCoords.x) / 2,
+          (naturalRightEyeCoords.y + naturalLeftEyeCoords.y) / 2,
+        ]
+        // Now that we have the natural center we need to scale it down to the target size
+        const scaledCenter = [
+          naturalCenter[0] * ratio,
+          naturalCenter[1] * ratio,
+        ]
+
+        const trueCenter = [parentWidth / 2, parentWidth / 2]
+        // Now we can work out the offset we need to apply to the image
+        const offset = [
+          trueCenter[0] - scaledCenter[0],
+          trueCenter[1] - scaledCenter[1],
+        ]
+        image.style.transform = `translate(${offset[0]}px, ${offset[1]}px)`
+        image.src = closestPhoto.url
+      }
+
+      // Fake a mouse move north of the screen to start
+      handleMouseMove({ clientX: window.innerWidth / 2, clientY: 0 })
+
+      window.addEventListener('mousemove', handleMouseMove)
+    </script>
+  </body>
+</html>

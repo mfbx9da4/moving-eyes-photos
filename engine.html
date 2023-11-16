@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <style>
+      body {
+        margin: 0;
+        padding: 0;
+        overflow: hidden;
+        background-color: #ecf0f1;
+        width: 100vw;
+        height: 100vh;
+      }
+      #button {
+        position: absolute;
+        width: 50px;
+        height: 50px;
+        background-color: #3498db;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+      }
+    </style>
+    <title>Interactive Button</title>
+  </head>
+  <body>
+    <button id="button"></button>
+
+    <script>
+      const button = document.getElementById('button')
+
+      // Initial position
+      let posX = window.innerWidth / 2 - button.offsetWidth / 2
+      let posY = window.innerHeight / 2 - button.offsetHeight / 2
+
+      // Mass, tension, and friction
+      let mass = 10
+      let tension = 0.1
+      let friction = 0.9
+
+      // Mouse position
+      let mouseX = 0
+      let mouseY = 0
+
+      // Listen for mousemove event
+      document.addEventListener('mousemove', (e) => {
+        mouseX = e.clientX
+        mouseY = e.clientY
+      })
+
+      // Update button position
+      function updateButton() {
+        const dx = mouseX - posX
+        const dy = mouseY - posY
+
+        const ax = (dx * tension) / mass
+        const ay = (dy * tension) / mass
+
+        posX += ax
+        posY += ay
+
+        // Apply friction
+        posX *= friction
+        posY *= friction
+
+        button.style.transform = `translate(${posX}px, ${posY}px)`
+
+        requestAnimationFrame(updateButton)
+      }
+
+      // Start the animation
+      updateButton()
+    </script>
+  </body>
+</html>
