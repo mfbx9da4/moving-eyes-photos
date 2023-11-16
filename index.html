@@ -469,8 +469,7 @@
       //   ctx.stroke()
       // })
 
-      const parentWidth = Math.min(460, window.innerWidth - 20)
-      console.log('window.innerWidth - 20', window.innerWidth - 20, parentWidth)
+      const parentWidth = Math.min(460, window.innerWidth - 100)
       const targetWidth = parentWidth + 40
       const parentHeight = parentWidth * 1.2
       const image = document.getElementById('image')
@@ -496,10 +495,11 @@
         })
       }
 
+      /** @param {MouseEvent | TouchEvent} e */
       function handleMouseMove(e) {
-        // get mouse position
-        const x = e.clientX
-        const y = e.clientY
+        // get touch or mouse position
+        const x = 'clientX' in e ? e.clientX : e.touches[0].clientX
+        const y = 'clientY' in e ? e.clientY : e.touches[0].clientY
         // get window size
         const width = window.innerWidth
         const height = window.innerHeight
@@ -559,6 +559,7 @@
       handleMouseMove({ clientX: window.innerWidth / 2, clientY: 0 })
 
       window.addEventListener('mousemove', handleMouseMove)
+      window.addEventListener('touchmove', handleMouseMove)
     </script>
 
     <!-- Cloudflare Web Analytics -->
