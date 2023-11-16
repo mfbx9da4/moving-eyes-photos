@@ -555,12 +555,7 @@
         image.style.transform = `translate(${offset[0]}px, ${offset[1]}px)`
       }
 
-      // Fake a mouse move north of the screen to start
-      handleMouseMove({ clientX: window.innerWidth / 2, clientY: 0 })
-
-      window.addEventListener('mousemove', handleMouseMove)
-      window.addEventListener('touchmove', handleMouseMove)
-      window.addEventListener('resize', () => {
+      function handleOnResize() {
         // If the last href and the h1 are all in the viewport then we can block scrolling
         const lastHref = document.querySelector('a:last-of-type')
         const h1 = document.querySelector('h1')
@@ -584,7 +579,16 @@
         } else {
           document.body.style.overflow = 'auto'
         }
-      })
+      }
+
+      window.addEventListener('mousemove', handleMouseMove)
+      window.addEventListener('touchmove', handleMouseMove)
+      window.addEventListener('resize', handleOnResize)
+
+      // Fake a mouse move north of the screen to start
+      handleMouseMove({ clientX: window.innerWidth / 2, clientY: 0 })
+      // Fake a resize to start
+      handleOnResize()
     </script>
 
     <!-- Cloudflare Web Analytics -->
