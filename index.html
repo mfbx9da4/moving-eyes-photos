@@ -110,7 +110,6 @@
         flex-direction: column;
         align-items: center;
         justify-content: center;
-        height: 100vh;
         width: 100vw;
       "
     >
@@ -552,8 +551,8 @@
           trueCenter[0] - scaledCenter[0],
           trueCenter[1] - scaledCenter[1],
         ]
-        image.style.transform = `translate(${offset[0]}px, ${offset[1]}px)`
         image.src = closestPhoto.url
+        image.style.transform = `translate(${offset[0]}px, ${offset[1]}px)`
       }
 
       // Fake a mouse move north of the screen to start
