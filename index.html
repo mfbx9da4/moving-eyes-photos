@@ -203,7 +203,10 @@
       const rawPhotos = [
         {
           url: '/webp/0E9A9000.webp',
+          // The direction the photo is pointing
           direction: 'north',
+          // The coordinates of the eyes, these are used for aligning the photos so
+          // the eyes are in the center of the screen
           leftEye: {
             x: 221.21249999999995,
             y: 248.62499999999994,
@@ -371,8 +374,7 @@
         },
       ]
 
-      // Each photo points in a direction, we need to convert each photo into
-      // two vectors indicating the section of the screen it captures until the next photo
+      // Each photo points in a direction convert these human readable directions into vectors
       const photosWithVectors = rawPhotos.map((photo) => {
         const vector = directionVectors[photo.direction]
         if (!vector) {
@@ -380,7 +382,9 @@
         }
         return { ...photo, vector }
       })
-      // Go through each photo and work out the lower and upper bounds of the vector by taking the midpoint between it's neighbours
+
+      // Convert each direction vector into two vectors indicating the section
+      // of the screen it captures flush against it's neighbouring photos
       const photos = photosWithVectors.map((photo, index) => {
         // Indexes wrap around
         const antiClockwise =
@@ -402,6 +406,7 @@
             photo.vector.y * antiClockwise.vector.x >
           0
         ) {
+          console.log('Flipping anticlockwise')
           midpointAnticlockwise = {
             x: -midpointAnticlockwise.x,
             y: -midpointAnticlockwise.y,
@@ -417,6 +422,7 @@
             photo.vector.y * clockwise.vector.x <
           0
         ) {
+          console.log('Flipping clockwise')
           midpointClockwise = {
             x: -midpointClockwise.x,
             y: -midpointClockwise.y,
@@ -428,63 +434,20 @@
         }
       })
 
-      // Draw the sections of the photos for debugging
-      // const canvas = document.createElement('canvas')
-      // canvas.width = window.innerWidth
-      // canvas.height = window.innerHeight
-      // canvas.style.position = 'absolute'
-      // canvas.style.top = 0
-      // canvas.style.left = 0
-
-      // document.body.appendChild(canvas)
-      // const ctx = canvas.getContext('2d')
-
-      // ctx.lineWidth = 5
-      // photos.forEach((photo, i) => {
-      //   // if (i > 0) return
-      //   ctx.strokeStyle = [
-      //     'red',
-      //     'green',
-      //     'blue',
-      //     'yellow',
-      //     'orange',
-      //     'purple',
-      //   ][i % 6]
-      //   const [lower, upper] = photo.section
-      //   console.log(photo.direction, '::', lower, '::', upper)
-
-      //   // Draw one line from the center of the screen to the lower bound
-      //   // and another from the center of the screen to the upper bound
-      //   ctx.beginPath()
-      //   ctx.moveTo(canvas.width / 2, canvas.height / 2)
-      //   ctx.lineTo(
-      //     canvas.width / 2 + lower.x * canvas.width,
-      //     canvas.height / 2 + lower.y * canvas.height
-      //   )
-      //   ctx.stroke()
-      //   ctx.beginPath()
-      //   ctx.moveTo(canvas.width / 2, canvas.height / 2)
-      //   ctx.lineTo(
-      //     canvas.width / 2 + upper.x * canvas.width,
-      //     canvas.height / 2 + upper.y * canvas.height
-      //   )
-      //   ctx.stroke()
-      // })
-
-      const parentWidth = Math.min(460, window.innerWidth - 100)
-      const targetWidth = parentWidth + 40
-      const parentHeight = parentWidth * 1.2
+      const frameWidth = Math.min(460, window.innerWidth - 100)
+      const targetWidth = frameWidth + 40
+      const frameHeight = frameWidth * 1.2
       const image = document.getElementById('image')
       if (!image) {
         throw new Error('Missing image')
       }
-      const parent = image.parentElement
-      if (!parent) {
-        throw new Error('Missing parent')
+      const frame = image.parentElement
+      if (!frame) {
+        throw new Error('Missing frame')
       }
 
-      parent.style.width = `${parentWidth}px`
-      parent.style.height = `${parentHeight}px`
+      frame.style.width = `${frameWidth}px`
+      frame.style.height = `${frameHeight}px`
 
       let hasLoadedAllImages = false
       image.onload = () => {
@@ -506,7 +469,7 @@
         const width = window.innerWidth
         const height = window.innerHeight
 
-        // get unit vector from center of screen to mouse
+        // Get unit vector from center of screen to mouse
         const vector = {
           // x should be from -1 to 1
           x: (x - width / 2) / (width / 2),
@@ -533,7 +496,7 @@
         image.width = targetWidth
         // This is a hardcoded value all the photos have this width
         const naturalWidth = 510
-        // We want to align the center of the eyes to the center of the screen
+        // We want to align the center of the eyes to the center of the frame
         const ratio = targetWidth / naturalWidth
         const naturalRightEyeCoords = closestPhoto.rightEye
         const naturalLeftEyeCoords = closestPhoto.leftEye
@@ -547,11 +510,11 @@
           naturalCenter[1] * ratio,
         ]
 
-        const trueCenter = [parentWidth / 2, parentWidth / 2]
+        const frameCenter = [frameWidth / 2, frameWidth / 2]
         // Now we can work out the offset we need to apply to the image
         const offset = [
-          trueCenter[0] - scaledCenter[0],
-          trueCenter[1] - scaledCenter[1],
+          frameCenter[0] - scaledCenter[0],
+          frameCenter[1] - scaledCenter[1],
         ]
         image.src = closestPhoto.url
         image.style.transform = `translate(${offset[0]}px, ${offset[1]}px)`
@@ -559,6 +522,7 @@
 
       function handleOnResize() {
         // If the last href and the h1 are all in the viewport then we can block scrolling
+        // to make for a better experience on mobile
         const lastHref = document.querySelector('a:last-of-type')
         const h1 = document.querySelector('h1')
         if (!lastHref || !h1) {
@@ -591,6 +555,52 @@
       handleMouseMove({ clientX: window.innerWidth / 2, clientY: 0 })
       // Fake a resize to start
       handleOnResize()
+
+      // #region Debugging
+      function debugDrawSegments() {
+        // Draw the sections of the photos for debugging
+        const canvas = document.createElement('canvas')
+        canvas.width = window.innerWidth
+        canvas.height = window.innerHeight
+        canvas.style.position = 'absolute'
+        canvas.style.top = 0
+        canvas.style.left = 0
+
+        document.body.appendChild(canvas)
+        const ctx = canvas.getContext('2d')
+
+        ctx.lineWidth = 5
+        photos.forEach((photo, i) => {
+          // if (i > 0) return
+          ctx.strokeStyle = [
+            'red',
+            'green',
+            'blue',
+            'yellow',
+            'orange',
+            'purple',
+          ][i % 6]
+          const [lower, upper] = photo.section
+          console.log(photo.direction, '::', lower, '::', upper)
+
+          // Draw one line from the center of the screen to the lower bound
+          // and another from the center of the screen to the upper bound
+          ctx.beginPath()
+          ctx.moveTo(canvas.width / 2, canvas.height / 2)
+          ctx.lineTo(
+            canvas.width / 2 + lower.x * canvas.width,
+            canvas.height / 2 + lower.y * canvas.height
+          )
+          ctx.stroke()
+          ctx.beginPath()
+          ctx.moveTo(canvas.width / 2, canvas.height / 2)
+          ctx.lineTo(
+            canvas.width / 2 + upper.x * canvas.width,
+            canvas.height / 2 + upper.y * canvas.height
+          )
+          ctx.stroke()
+        })
+      }
     </script>
 
     <!-- Cloudflare Web Analytics -->
