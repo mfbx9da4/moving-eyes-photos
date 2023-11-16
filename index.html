@@ -150,7 +150,7 @@
         "
       >
         <!-- CV -->
-        <a href="./cv.pdf" target="_blank">CV</a>
+        <a href="/cv.pdf" target="_blank">CV</a>
         <!-- GitHub -->
         <a href="https://github.com/mfbx9da4" target="_blank">GitHub</a>
         <!-- LinkedIn -->
@@ -471,6 +471,7 @@
       // })
 
       const parentWidth = Math.min(460, window.innerWidth - 20)
+      console.log('window.innerWidth - 20', window.innerWidth - 20, parentWidth)
       const targetWidth = parentWidth + 40
       const parentHeight = parentWidth * 1.2
       const image = document.getElementById('image')
