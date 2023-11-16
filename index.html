@@ -374,6 +374,31 @@
         },
       ]
 
+      const hoveredPhoto = {
+        url: './webp/0E9A8952_hovered.webp',
+        direction: 'north',
+        leftEye: {
+          x: 207.825,
+          y: 249.89999999999998,
+        },
+        rightEye: {
+          x: 297.7125,
+          y: 246.075,
+        },
+      }
+      const clickedPhoto = {
+        url: './webp/0E9A8956_clicked.webp',
+        direction: 'north east',
+        leftEye: {
+          x: 203.36249999999998,
+          y: 260.09999999999997,
+        },
+        rightEye: {
+          x: 297.7125,
+          y: 260.73749999999995,
+        },
+      }
+
       // Each photo points in a direction convert these human readable directions into vectors
       const photosWithVectors = rawPhotos.map((photo) => {
         const vector = directionVectors[photo.direction]
@@ -460,6 +485,20 @@
         })
       }
 
+      function isInCentralPortionOfFace(x, y) {
+        const frameRect = frame.getBoundingClientRect()
+        const frameAbsoluteCenter = [
+          frameRect.left + frameRect.width / 2,
+          frameRect.top + frameRect.height / 2,
+        ]
+        return (
+          x > frameAbsoluteCenter[0] - 60 &&
+          x < frameAbsoluteCenter[0] + 60 &&
+          y > frameAbsoluteCenter[1] - 60 &&
+          y < frameAbsoluteCenter[1] + 60
+        )
+      }
+
       /** @param {MouseEvent | TouchEvent} e */
       function handleMouseMove(e) {
         // get touch or mouse position
@@ -468,6 +507,7 @@
         // get window size
         const width = window.innerWidth
         const height = window.innerHeight
+        const frameCenter = [frameWidth / 2, frameWidth / 2]
 
         // Get unit vector from center of screen to mouse
         const vector = {
@@ -478,7 +518,7 @@
         }
 
         // The vector will be inside one of the sections of the photos, find which one
-        const closestPhoto = photos.find((closest, photo) => {
+        let closestPhoto = photos.find((closest, photo) => {
           const [lower, upper] = closest.section
           // https://stackoverflow.com/a/17497339/1376627
           // if (AxB * AxC >= 0 && CxB * CxA >= 0)
@@ -487,6 +527,13 @@
           const upperInside = vector.x * upper.y - vector.y * upper.x >= 0
           return lowerInside && upperInside
         })
+
+        const absoluteCenter = [window.innerWidth / 2, window.innerHeight / 2]
+
+        // If we click and we're in the central portion of the face then show the hovered photo
+        if (isInCentralPortionOfFace(x, y)) {
+          closestPhoto = hoveredPhoto
+        }
 
         if (!closestPhoto) {
           throw new Error('Missing closest photo')
@@ -510,7 +557,6 @@
           naturalCenter[1] * ratio,
         ]
 
-        const frameCenter = [frameWidth / 2, frameWidth / 2]
         // Now we can work out the offset we need to apply to the image
         const offset = [
           frameCenter[0] - scaledCenter[0],
@@ -547,6 +593,17 @@
         }
       }
 
+      /** @param {MouseEvent} e */
+      function handleClick(e) {
+        // If we click and we're in the central portion of the face then show the clicked photo
+        const x = e.clientX
+        const y = e.clientY
+        if (isInCentralPortionOfFace(x, y)) {
+          image.src = clickedPhoto.url
+        }
+      }
+
+      window.addEventListener('click', handleClick)
       window.addEventListener('mousemove', handleMouseMove)
       window.addEventListener('touchmove', handleMouseMove)
       window.addEventListener('resize', handleOnResize)

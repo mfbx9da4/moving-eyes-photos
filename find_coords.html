@@ -39,66 +39,78 @@
       let targetWidth = 800
       image.style.width = `${targetWidth}px`
 
+      // const rawPhotos = [
+      //   {
+      //     url: './Photoshoot/0E9A9000.jpg',
+      //     direction: 'north',
+      //   },
+      //   {
+      //     url: './Photoshoot/0E9A9002.jpg',
+      //     direction: 'north east',
+      //   },
+      //   {
+      //     url: './Photoshoot/0E9A9003.jpg',
+      //     direction: 'north east east',
+      //   },
+      //   {
+      //     url: './Photoshoot/0E9A9004.jpg',
+      //     direction: 'east',
+      //   },
+      //   {
+      //     url: './Photoshoot/0E9A9005.jpg',
+      //     direction: 'south east east',
+      //   },
+      //   {
+      //     url: './Photoshoot/0E9A9006.jpg',
+      //     direction: 'south east',
+      //   },
+      //   {
+      //     url: './Photoshoot/0E9A9008.jpg',
+      //     direction: 'south south east',
+      //   },
+      //   {
+      //     url: './Photoshoot/0E9A9009.jpg',
+      //     direction: 'south',
+      //   },
+      //   {
+      //     url: './Photoshoot/0E9A9012.jpg',
+      //     direction: 'south south west',
+      //   },
+      //   {
+      //     url: './Photoshoot/0E9A9013.jpg',
+      //     direction: 'south west',
+      //   },
+      //   {
+      //     url: './Photoshoot/0E9A9015.jpg',
+      //     direction: 'south west west',
+      //   },
+      //   {
+      //     url: './Photoshoot/0E9A9017.jpg',
+      //     direction: 'west',
+      //   },
+      //   {
+      //     url: './Photoshoot/0E9A9020.jpg',
+      //     direction: 'north west',
+      //   },
+      //   {
+      //     url: './Photoshoot/0E9A9019.jpg',
+      //     direction: 'north north west',
+      //   },
+      // ]
       const rawPhotos = [
         {
-          url: './Photoshoot/0E9A9000.jpg',
+          url: './webp/0E9A8952_hovered.webp',
           direction: 'north',
         },
         {
-          url: './Photoshoot/0E9A9002.jpg',
+          url: './webp/0E9A8956_clicked.webp',
           direction: 'north east',
-        },
-        {
-          url: './Photoshoot/0E9A9003.jpg',
-          direction: 'north east east',
-        },
-        {
-          url: './Photoshoot/0E9A9004.jpg',
-          direction: 'east',
-        },
-        {
-          url: './Photoshoot/0E9A9005.jpg',
-          direction: 'south east east',
-        },
-        {
-          url: './Photoshoot/0E9A9006.jpg',
-          direction: 'south east',
-        },
-        {
-          url: './Photoshoot/0E9A9008.jpg',
-          direction: 'south south east',
-        },
-        {
-          url: './Photoshoot/0E9A9009.jpg',
-          direction: 'south',
-        },
-        {
-          url: './Photoshoot/0E9A9012.jpg',
-          direction: 'south south west',
-        },
-        {
-          url: './Photoshoot/0E9A9013.jpg',
-          direction: 'south west',
-        },
-        {
-          url: './Photoshoot/0E9A9015.jpg',
-          direction: 'south west west',
-        },
-        {
-          url: './Photoshoot/0E9A9017.jpg',
-          direction: 'west',
-        },
-        {
-          url: './Photoshoot/0E9A9020.jpg',
-          direction: 'north west',
-        },
-        {
-          url: './Photoshoot/0E9A9019.jpg',
-          direction: 'north north west',
         },
       ]
 
       let i = 0
+
+      image.src = rawPhotos[i].url
 
       window.addEventListener('click', (e) => {
         // Get the coordinates of the click relative to the image
