@@ -11,10 +11,12 @@
       content="Experienced Full Stack Engineer, Founder and Contractor with a demonstrated history of working with startups and large enterprises. A blend of business and technical skills. Experience in leadership roles. Strongly attuned to business goals and product usability."
       property="og:description"
     />
+    <meta name="theme-color" content="#ffffff" />
 
     <meta content="David Alberto Adler" property="og:title" />
     <meta content="profile" property="og:type" />
-    <!-- TODO -->
+    <!-- TODO: Favicon -->
+    <!-- TODO: og:image -->
     <meta
       content="https://mfbx9da4.github.io/assets/img/og-chaordic-profile.png"
       property="og:image"
@@ -98,9 +100,10 @@
         "
       >
         <img
-          src="/optimized/0E9A9000.jpg"
+          src="/webp/0E9A9000.webp"
           alt="David Adler Face Eyes Follow Mouse"
           id="image"
+          width="500"
         />
       </div>
 
@@ -170,7 +173,7 @@
 
       const rawPhotos = [
         {
-          url: '/optimized/0E9A9000.jpg',
+          url: '/webp/0E9A9000.webp',
           direction: 'north',
           leftEye: {
             x: 221.21249999999995,
@@ -182,7 +185,7 @@
           },
         },
         {
-          url: '/optimized/0E9A9002.jpg',
+          url: '/webp/0E9A9002.webp',
           direction: 'north east',
           leftEye: {
             x: 223.12499999999994,
@@ -194,7 +197,7 @@
           },
         },
         {
-          url: '/optimized/0E9A9003.jpg',
+          url: '/webp/0E9A9003.webp',
           direction: 'north east east',
           leftEye: {
             x: 236.51249999999996,
@@ -206,7 +209,7 @@
           },
         },
         {
-          url: '/optimized/0E9A9004.jpg',
+          url: '/webp/0E9A9004.webp',
           direction: 'east',
           leftEye: {
             x: 236.51249999999996,
@@ -218,7 +221,7 @@
           },
         },
         {
-          url: '/optimized/0E9A9005.jpg',
+          url: '/webp/0E9A9005.webp',
           direction: 'south east east',
           leftEye: {
             x: 240.97499999999997,
@@ -230,7 +233,7 @@
           },
         },
         {
-          url: '/optimized/0E9A9006.jpg',
+          url: '/webp/0E9A9006.webp',
           direction: 'south east',
           leftEye: {
             x: 231.41249999999994,
@@ -242,7 +245,7 @@
           },
         },
         {
-          url: '/optimized/0E9A9008.jpg',
+          url: '/webp/0E9A9008.webp',
           direction: 'south south east',
           leftEye: {
             x: 233.32499999999996,
@@ -254,7 +257,7 @@
           },
         },
         {
-          url: '/optimized/0E9A9009.jpg',
+          url: '/webp/0E9A9009.webp',
           direction: 'south',
           leftEye: {
             x: 235.87499999999997,
@@ -266,7 +269,7 @@
           },
         },
         {
-          url: '/optimized/0E9A9012.jpg',
+          url: '/webp/0E9A9012.webp',
           direction: 'south south west',
           leftEye: {
             x: 211.64999999999998,
@@ -278,7 +281,7 @@
           },
         },
         {
-          url: '/optimized/0E9A9013.jpg',
+          url: '/webp/0E9A9013.webp',
           direction: 'south west',
           leftEye: {
             x: 214.19999999999996,
@@ -290,7 +293,7 @@
           },
         },
         {
-          url: '/optimized/0E9A9015.jpg',
+          url: '/webp/0E9A9015.webp',
           direction: 'south west west',
           leftEye: {
             x: 208.46249999999998,
@@ -302,7 +305,7 @@
           },
         },
         {
-          url: '/optimized/0E9A9017.jpg',
+          url: '/webp/0E9A9017.webp',
           direction: 'west',
           leftEye: {
             x: 201.44999999999996,
@@ -314,7 +317,7 @@
           },
         },
         {
-          url: '/optimized/0E9A9020.jpg',
+          url: '/webp/0E9A9020.webp',
           direction: 'north west',
           leftEye: {
             x: 197.62499999999994,
@@ -326,7 +329,7 @@
           },
         },
         {
-          url: '/optimized/0E9A9019.jpg',
+          url: '/webp/0E9A9019.webp',
           direction: 'north north west',
           leftEye: {
             x: 207.82499999999993,
@@ -494,7 +497,7 @@
         }
 
         // set image to closest photo
-        image.style.width = `${targetWidth}px`
+        image.width = targetWidth
         // This is a hardcoded value all the photos have this width
         const naturalWidth = 510
         // We want to align the center of the eyes to the center of the screen
