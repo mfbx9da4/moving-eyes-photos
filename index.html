@@ -560,6 +560,31 @@
 
       window.addEventListener('mousemove', handleMouseMove)
       window.addEventListener('touchmove', handleMouseMove)
+      window.addEventListener('resize', () => {
+        // If the last href and the h1 are all in the viewport then we can block scrolling
+        const lastHref = document.querySelector('a:last-of-type')
+        const h1 = document.querySelector('h1')
+        if (!lastHref || !h1) {
+          console.warn('Missing last href or h1')
+        }
+        const lastHrefRect = lastHref.getBoundingClientRect()
+        const h1Rect = h1.getBoundingClientRect()
+        const lastHrefInViewport =
+          lastHrefRect.top >= 0 &&
+          lastHrefRect.left >= 0 &&
+          lastHrefRect.bottom <= window.innerHeight &&
+          lastHrefRect.right <= window.innerWidth
+        const h1InViewport =
+          h1Rect.top >= 0 &&
+          h1Rect.left >= 0 &&
+          h1Rect.bottom <= window.innerHeight &&
+          h1Rect.right <= window.innerWidth
+        if (lastHrefInViewport && h1InViewport) {
+          document.body.style.overflow = 'hidden'
+        } else {
+          document.body.style.overflow = 'auto'
+        }
+      })
     </script>
 
     <!-- Cloudflare Web Analytics -->
