@@ -486,7 +486,10 @@
       parent.style.width = `${parentWidth}px`
       parent.style.height = `${parentHeight}px`
 
+      let hasLoadedAllImages = false
       image.onload = () => {
+        if (hasLoadedAllImages) return
+        hasLoadedAllImages = true
         // Preload all images after the first one
         photos.forEach((photo) => {
           const img = new Image()
