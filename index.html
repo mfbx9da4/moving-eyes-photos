@@ -625,6 +625,25 @@
       // Fake a resize to start
       handleOnResize()
 
+      const h1 = document.querySelector('h1')
+      if (h1) {
+        // if click four times within 500ms then show the debug lines
+        let clickCount = 0
+        let lastClickTime = 0
+        h1.addEventListener('click', () => {
+          const now = Date.now()
+          if (now - lastClickTime < 500) {
+            clickCount++
+          } else {
+            clickCount = 0
+          }
+          lastClickTime = now
+          if (clickCount === 3) {
+            debugDrawSegments()
+          }
+        })
+      }
+
       // #region Debugging
       function debugDrawSegments() {
         // Draw the sections of the photos for debugging
