@@ -503,6 +503,8 @@
         )
       }
 
+      let lastTimeEnteredFace = 0
+
       /** @param {MouseEvent | TouchEvent} e */
       function handleMouseMove(e) {
         // get touch or mouse position
@@ -534,9 +536,15 @@
 
         const absoluteCenter = [window.innerWidth / 2, window.innerHeight / 2]
 
-        // If we click and we're in the central portion of the face then show the hovered photo
+        // If we're in the central portion of the face for more than 1 second then show the hovered photo
         if (isInCentralPortionOfFace(x, y)) {
-          closestPhoto = hoveredPhoto
+          if (lastTimeEnteredFace === 0) {
+            lastTimeEnteredFace = Date.now()
+          } else if (Date.now() - lastTimeEnteredFace > 150) {
+            closestPhoto = hoveredPhoto
+          }
+        } else {
+          lastTimeEnteredFace = 0
         }
 
         if (!closestPhoto) {
