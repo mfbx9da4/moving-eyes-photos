@@ -536,7 +536,7 @@
 
         const absoluteCenter = [window.innerWidth / 2, window.innerHeight / 2]
 
-        // If we're in the central portion of the face for more than 1 second then show the hovered photo
+        // If we're in the central portion of the face for more than 200ms then show the hovered photo
         if (isInCentralPortionOfFace(x, y)) {
           if (lastTimeEnteredFace === 0) {
             lastTimeEnteredFace = Date.now()
