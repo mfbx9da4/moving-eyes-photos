@@ -63,7 +63,8 @@
       /* Label text color variable */
       :root {
         --label: #333;
-        --labelSecondary: #666;
+        --labelSecondary: rgba(60, 60, 67, 0.6);
+        --labelTertiary: rgba(60, 60, 67, 0.3);
         --background: white;
       }
 
@@ -71,7 +72,8 @@
       @media (prefers-color-scheme: dark) {
         :root {
           --label: white;
-          --labelSecondary: rgb(200, 200, 200);
+          --labelSecondary: rgba(235, 235, 245, 0.6);
+          --labelTertiary: rgba(235, 235, 245, 0.3);
           --background: rgb(36, 36, 36);
         }
       }
@@ -184,7 +186,26 @@
         >
       </div>
     </div>
+    <!-- Positioned in the bottom right hand corner label tertiary -->
+    <div
+      id="copyright"
+      style="
+        position: fixed;
+        bottom: 0;
+        right: 0;
+        padding: 10px;
+        font-size: 12px;
+        color: var(--labelSecondary);
+      "
+    ></div>
     <script>
+      const copyright = document.getElementById('copyright')
+      copyright.innerHTML = '© ' + new Date().getFullYear() + ' David Adler'
+      copyright.onclick = () =>
+        alert(
+          `I only put this here so you have a handy way of knowing the current year is ${new Date().getFullYear()}`
+        )
+
       const directionVectors = {
         north: { x: 0, y: -1 },
         'north north east': { x: 0.25, y: -0.75 },
