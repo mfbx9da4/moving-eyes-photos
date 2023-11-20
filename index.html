@@ -758,6 +758,7 @@
         const offScreenCtx = offScreenCanvas.getContext('2d')
         const numberOfBalloons = Math.round(window.innerWidth / 50)
         for (let i = 0; i < numberOfBalloons; i++) {
+          // Optimization: integers are more performant
           const width = Math.round(Math.random() * 50 + 50)
           const height = Math.round(width * imageRatio)
           balloons.push(
@@ -767,7 +768,7 @@
               image,
               width,
               height,
-              x: Math.round(Math.random() * window.innerWidth - width / 2),
+              x: Math.random() * window.innerWidth - width / 2,
               y: window.innerHeight + 150,
               vx: 0,
               vy: 1 + Math.random() * 10,
