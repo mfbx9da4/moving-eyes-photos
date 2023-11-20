@@ -522,6 +522,12 @@
       if (!frame) {
         throw new Error('Missing frame')
       }
+      const initialPhoto = photos.find(
+        (x) => x.url === image.getAttribute('src')
+      )
+      if (!initialPhoto) throw new Error('Initial photo not found')
+      // This is a bit of a hack we need this to be true so that the initial image is correctly aligned on first render
+      initialPhoto.imageLoaded = true
 
       frame.style.width = `${frameWidth}px`
       frame.style.height = `${frameHeight}px`
@@ -538,11 +544,6 @@
       image.onload = async () => {
         if (hasLoadedAllImages) return
         hasLoadedAllImages = true
-        const initialPhoto = photos.find(
-          (x) => x.url === image.getAttribute('src')
-        )
-        if (!initialPhoto) throw new Error('Initial photo not found')
-        initialPhoto.imageLoaded = true
 
         await Promise.all(
           photos.concat([hoveredPhoto, clickedPhoto]).map(async (photo) => {
