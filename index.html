@@ -726,8 +726,8 @@
           this.vx *= this.friction
           this.vy *= this.friction
           this.x += this.vx
-          this.y -= this.vy
-          this.x += Math.sin(Date.now() * 0.001) * this.sway
+          this.y -= Math.round(this.vy)
+          this.x += Math.round(Math.sin(Date.now() * 0.001) * this.sway)
         }
       }
 
@@ -745,8 +745,8 @@
         canvas.height = window.innerHeight
         const numberOfBalloons = Math.round(window.innerWidth / 50)
         for (let i = 0; i < numberOfBalloons; i++) {
-          const width = Math.random() * 50 + 50
-          const height = width * imageRatio
+          const width = Math.round(Math.random() * 50 + 50)
+          const height = Math.round(width * imageRatio)
           balloons.push(
             new Balloon({
               canvas,
@@ -754,7 +754,7 @@
               image,
               width,
               height,
-              x: Math.random() * window.innerWidth - width / 2,
+              x: Math.round(Math.random() * window.innerWidth - width / 2),
               y: window.innerHeight + 150,
               vx: 0,
               vy: 1 + Math.random() * 10,
