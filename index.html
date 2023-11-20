@@ -522,12 +522,6 @@
       if (!frame) {
         throw new Error('Missing frame')
       }
-      const initialPhoto = photos.find(
-        (x) => x.url === image.getAttribute('src')
-      )
-      if (!initialPhoto) throw new Error('Initial photo not found')
-      // This is a bit of a hack we need this to be true so that the initial image is correctly aligned on first render
-      initialPhoto.imageLoaded = true
 
       frame.style.width = `${frameWidth}px`
       frame.style.height = `${frameHeight}px`
@@ -549,7 +543,6 @@
           photos.concat([hoveredPhoto, clickedPhoto]).map(async (photo) => {
             try {
               await preloadImage(photo.url)
-              photo.imageLoaded = true
             } catch (e) {
               // Ignore
             }
@@ -649,10 +642,8 @@
           frameCenter[0] - scaledCenter[0],
           frameCenter[1] - scaledCenter[1],
         ]
-        if (closestPhoto.imageLoaded) {
-          image.src = closestPhoto.url
-          image.style.transform = `translate(${offset[0]}px, ${offset[1]}px)`
-        }
+        image.src = closestPhoto.url
+        image.style.transform = `translate(${offset[0]}px, ${offset[1]}px)`
       }
 
       function handleOnResize() {
