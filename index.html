@@ -117,6 +117,17 @@
     </style>
   </head>
   <body>
+    <canvas
+      id="canvas"
+      style="
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        margin: auto;
+      "
+    ></canvas>
     <div
       style="
         display: flex;
@@ -127,6 +138,8 @@
         /* Apparently solves horizontal scroll issue with scrollbars but not tested https://stackoverflow.com/a/23367686/1376627 */
         max-width: 100%;
         min-height: 80vh;
+        z-index: 2;
+        position: relative;
       "
     >
       <h1 style="text-align: center; font-size: 48px; line-height: 61px">
@@ -434,6 +447,7 @@
           y: 260.73749999999995,
         },
       }
+      const balloonPhotoUrl = '/static/immutable/resized/IMG_7981.png'
 
       // Each photo points in a direction convert these human readable directions into vectors
       const photosWithVectors = rawPhotos.map((photo) => {
@@ -511,14 +525,28 @@
       frame.style.height = `${frameHeight}px`
 
       // Preload all images after the first one has loaded
+      const preloadImage = (url) =>
+        new Promise((resolve, reject) => {
+          const img = new Image()
+          img.onload = () => resolve()
+          img.onerror = (e) => reject(e)
+          img.src = url
+        })
       let hasLoadedAllImages = false
-      image.onload = () => {
+      image.onload = async () => {
         if (hasLoadedAllImages) return
         hasLoadedAllImages = true
-        photos.concat([hoveredPhoto, clickedPhoto]).forEach((photo) => {
-          const img = new Image()
-          img.src = photo.url
-        })
+        await Promise.all(
+          photos.concat([hoveredPhoto, clickedPhoto]).map(async (photo) => {
+            try {
+              await preloadImage(photo.url)
+              photo.imageLoaded = true
+            } catch (e) {
+              // Ignore
+            }
+          })
+        )
+        await preloadImage(balloonPhotoUrl)
       }
       if (image.complete) {
         image.onload()
@@ -647,6 +675,7 @@
         const y = e.clientY
         if (isInCentralPortionOfFace(x, y)) {
           image.src = clickedPhoto.url
+          performBalloonAnimation()
         }
       }
 
@@ -660,6 +689,94 @@
       handleMouseMove({ clientX: window.innerWidth / 2, clientY: 0 })
       // Fake a resize to start
       handleOnResize()
+
+      // #region Balloon Animation
+      class Balloon {
+        constructor(options) {
+          this.canvas = options.canvas
+          this.ctx = options.ctx
+          this.image = options.image
+          this.width = options.width
+          this.height = options.height
+          this.x = options.x
+          this.y = options.y
+          this.vx = options.vx
+          this.vy = options.vy
+          this.ax = options.ax
+          this.ay = options.ay
+          this.friction = options.friction
+          this.gravity = options.gravity
+          this.sway = Math.random() * 1.5
+        }
+
+        draw() {
+          this._update()
+          this.ctx.drawImage(
+            this.image,
+            this.x,
+            this.y,
+            this.width,
+            this.height
+          )
+        }
+
+        _update() {
+          this.vx += this.ax
+          this.vy += this.ay
+          this.vx *= this.friction
+          this.vy *= this.friction
+          this.x += this.vx
+          this.y -= this.vy
+          this.x += Math.sin(Date.now() * 0.001) * this.sway
+        }
+      }
+
+      let isBalloonAnimationRunning = false
+      function performBalloonAnimation() {
+        if (isBalloonAnimationRunning) return
+        isBalloonAnimationRunning = true
+        const image = new Image()
+        image.src = balloonPhotoUrl
+        const naturalWidth = 250
+        const naturalHeight = 350
+        const imageRatio = naturalHeight / naturalWidth
+        const canvas = document.getElementById('canvas')
+        const ctx = canvas.getContext('2d')
+        canvas.width = window.innerWidth
+        canvas.height = window.innerHeight
+        let balloons = Array.from({ length: 50 }, () => {
+          const width = Math.random() * 50 + 50
+          const height = width * imageRatio
+          return new Balloon({
+            canvas,
+            ctx,
+            image,
+            width,
+            height,
+            x: Math.random() * window.innerWidth,
+            y: window.innerHeight + 150,
+            vx: 0,
+            vy: 1 + Math.random() * 10,
+            ax: 0,
+            ay: 0.1 + Math.random() * 0.14,
+            friction: 0.98,
+            gravity: 0.98,
+          })
+        })
+        const draw = () => {
+          ctx.clearRect(0, 0, canvas.width, canvas.height)
+          const isAboveScreen = (x) => x.y + x.height < 0
+          balloons = balloons.filter((x) => !isAboveScreen(x))
+          balloons.forEach((x) => x.draw())
+          if (balloons.length) {
+            requestAnimationFrame(draw)
+          } else {
+            isBalloonAnimationRunning = false
+          }
+        }
+        draw()
+      }
+      // #endregion
     </script>
 
     <!-- Cloudflare Web Analytics -->
