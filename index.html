@@ -538,6 +538,12 @@
       image.onload = async () => {
         if (hasLoadedAllImages) return
         hasLoadedAllImages = true
+        const initialPhoto = photos.find(
+          (x) => x.url === image.getAttribute('src')
+        )
+        if (!initialPhoto) throw new Error('Initial photo not found')
+        initialPhoto.imageLoaded = true
+
         await Promise.all(
           photos.concat([hoveredPhoto, clickedPhoto]).map(async (photo) => {
             try {
@@ -770,7 +776,7 @@
               height,
               x: Math.random() * window.innerWidth - width / 2,
               y: window.innerHeight + 150,
-              vx: 0,
+              vx: Math.random() * 12 - 6,
               vy: 1 + Math.random() * 10,
               ax: 0,
               ay: 0.15 + Math.random() * 0.14,
