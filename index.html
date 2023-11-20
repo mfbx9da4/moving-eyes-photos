@@ -135,11 +135,9 @@
         align-items: center;
         justify-content: center;
         width: 100vw;
-        /* Apparently solves horizontal scroll issue with scrollbars but not tested https://stackoverflow.com/a/23367686/1376627 */
+        /* This removes horizontal scroll caused on Windows by scrollbars as yet not tested https://stackoverflow.com/a/23367686/1376627 */
         max-width: 100%;
         min-height: 80vh;
-        z-index: 2;
-        position: relative;
       "
     >
       <h1 style="text-align: center; font-size: 48px; line-height: 61px">
@@ -516,6 +514,8 @@
       if (!image) {
         throw new Error('Missing image')
       }
+      // Don't show a dialog to download the image on iPhone long press
+      image.oncontextmenu = (e) => e.preventDefault()
       const frame = image.parentElement
       if (!frame) {
         throw new Error('Missing frame')
@@ -632,13 +632,15 @@
           naturalCenter[1] * ratio,
         ]
 
-        // Now we can work out the offset we need to apply to the image
+        // Now we can work out the offset we need to apply to the image to align the eyes
         const offset = [
           frameCenter[0] - scaledCenter[0],
           frameCenter[1] - scaledCenter[1],
         ]
-        image.src = closestPhoto.url
-        image.style.transform = `translate(${offset[0]}px, ${offset[1]}px)`
+        if (closestPhoto.imageLoaded) {
+          image.src = closestPhoto.url
+          image.style.transform = `translate(${offset[0]}px, ${offset[1]}px)`
+        }
       }
 
       function handleOnResize() {
@@ -726,6 +728,7 @@
           this.vx *= this.friction
           this.vy *= this.friction
           this.x += this.vx
+          // Apparently rounding improves performance as it prevents anti-aliasing computation
           this.y -= Math.round(this.vy)
           this.x += Math.round(Math.sin(Date.now() * 0.001) * this.sway)
         }
@@ -733,6 +736,8 @@
 
       let isBalloonAnimationRunning = false
       let balloons = []
+      // Optimization for drawing more efficiently
+      const offScreenCanvas = document.createElement('canvas')
       function performBalloonAnimation() {
         const image = new Image()
         image.src = balloonPhotoUrl
@@ -743,14 +748,17 @@
         const ctx = canvas.getContext('2d')
         canvas.width = window.innerWidth
         canvas.height = window.innerHeight
+        offScreenCanvas.width = canvas.width
+        offScreenCanvas.height = canvas.height
+        const offScreenCtx = offScreenCanvas.getContext('2d')
         const numberOfBalloons = Math.round(window.innerWidth / 50)
         for (let i = 0; i < numberOfBalloons; i++) {
           const width = Math.round(Math.random() * 50 + 50)
           const height = Math.round(width * imageRatio)
           balloons.push(
             new Balloon({
-              canvas,
-              ctx,
+              canvas: offScreenCanvas,
+              ctx: offScreenCtx,
               image,
               width,
               height,
@@ -766,10 +774,14 @@
           )
         }
         const draw = () => {
-          ctx.clearRect(0, 0, canvas.width, canvas.height)
+          offScreenCtx.clearRect(0, 0, canvas.width, canvas.height)
           const isAboveScreen = (x) => x.y + x.height < 0
           balloons = balloons.filter((x) => !isAboveScreen(x))
           balloons.forEach((x) => x.draw())
+          // Optimization: Faster to redraw everything on an offscreen canvas
+          // and then redraw once on the actual canvas
+          ctx.clearRect(0, 0, canvas.width, canvas.height)
+          ctx.drawImage(offScreenCanvas, 0, 0)
           if (balloons.length) {
             requestAnimationFrame(draw)
           } else {
