@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Physics engine play</title>
+    <style>
+      /* Reset */
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+    </style>
+  </head>
+  <body>
+    <canvas
+      id="canvas"
+      style="
+        border: 1px solid black;
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        margin: auto;
+      "
+    ></canvas>
+    <script>
+      class Balloon {
+        constructor(options) {
+          this.canvas = options.canvas
+          this.ctx = options.ctx
+          this.image = options.image
+          this.width = options.width
+          this.height = options.height
+          this.x = options.x
+          this.y = options.y
+          this.vx = options.vx
+          this.vy = options.vy
+          this.ax = options.ax
+          this.ay = options.ay
+          this.friction = options.friction
+          this.gravity = options.gravity
+          this.sway = Math.random() * 1.5
+        }
+
+        draw() {
+          this._update()
+          this.ctx.drawImage(
+            this.image,
+            this.x,
+            this.y,
+            this.width,
+            this.height
+          )
+        }
+
+        _update() {
+          this.vx += this.ax
+          this.vy += this.ay
+          this.vx *= this.friction
+          this.vy *= this.friction
+          this.x += this.vx
+          this.y -= this.vy
+          this.x += Math.sin(Date.now() * 0.001) * this.sway
+        }
+      }
+
+      function performBalloonAnimation() {
+        const image = new Image()
+        image.src = '/static/immutable/resized/IMG_7981_transparent.png'
+        const naturalWidth = 250
+        const naturalHeight = 350
+        const imageRatio = naturalHeight / naturalWidth
+        const canvas = document.getElementById('canvas')
+        const ctx = canvas.getContext('2d')
+        canvas.width = window.innerWidth
+        canvas.height = window.innerHeight
+        let balloons = Array.from({ length: 50 }, () => {
+          const width = Math.random() * 50 + 50
+          const height = width * imageRatio
+          return new Balloon({
+            canvas,
+            ctx,
+            image,
+            width,
+            height,
+            x: Math.random() * window.innerWidth,
+            y: window.innerHeight + 200,
+            vx: 0,
+            vy: 1 + Math.random() * 10,
+            ax: 0,
+            ay: 0.1 + Math.random() * 0.14,
+            friction: 0.98,
+            gravity: 0.98,
+          })
+        })
+        const draw = () => {
+          ctx.clearRect(0, 0, canvas.width, canvas.height)
+          const isAboveScreen = (x) => x.y + x.height < 0
+          balloons = balloons.filter((x) => !isAboveScreen(x))
+          balloons.forEach((x) => x.draw())
+          if (balloons.length) {
+            requestAnimationFrame(draw)
+          }
+        }
+        draw()
+      }
+      performBalloonAnimation()
+    </script>
+  </body>
+</html>

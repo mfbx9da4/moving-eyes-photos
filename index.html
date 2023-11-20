@@ -732,9 +732,8 @@
       }
 
       let isBalloonAnimationRunning = false
+      let balloons = []
       function performBalloonAnimation() {
-        if (isBalloonAnimationRunning) return
-        isBalloonAnimationRunning = true
         const image = new Image()
         image.src = balloonPhotoUrl
         const naturalWidth = 250
@@ -744,25 +743,27 @@
         const ctx = canvas.getContext('2d')
         canvas.width = window.innerWidth
         canvas.height = window.innerHeight
-        let balloons = Array.from({ length: 50 }, () => {
+        for (let i = 0; i < 50; i++) {
           const width = Math.random() * 50 + 50
           const height = width * imageRatio
-          return new Balloon({
-            canvas,
-            ctx,
-            image,
-            width,
-            height,
-            x: Math.random() * window.innerWidth,
-            y: window.innerHeight + 150,
-            vx: 0,
-            vy: 1 + Math.random() * 10,
-            ax: 0,
-            ay: 0.1 + Math.random() * 0.14,
-            friction: 0.98,
-            gravity: 0.98,
-          })
-        })
+          balloons.push(
+            new Balloon({
+              canvas,
+              ctx,
+              image,
+              width,
+              height,
+              x: Math.random() * window.innerWidth,
+              y: window.innerHeight + 150,
+              vx: 0,
+              vy: 1 + Math.random() * 10,
+              ax: 0,
+              ay: 0.1 + Math.random() * 0.14,
+              friction: 0.98,
+              gravity: 0.98,
+            })
+          )
+        }
         const draw = () => {
           ctx.clearRect(0, 0, canvas.width, canvas.height)
           const isAboveScreen = (x) => x.y + x.height < 0
@@ -774,7 +775,10 @@
             isBalloonAnimationRunning = false
           }
         }
-        draw()
+        if (!isBalloonAnimationRunning) {
+          isBalloonAnimationRunning = true
+          draw()
+        }
       }
       // #endregion
     </script>
