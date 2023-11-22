@@ -635,12 +635,13 @@
           eyesRelativeCenter[1] - scaledCenter[1],
         ]
 
-        if (
-          closestPhoto.imageLoaded ||
-          closestPhoto.url === image.getAttribute('src')
-        ) {
-          image.src = closestPhoto.url
+        image.src = closestPhoto.url
+        // Avoid shifting the image before it's loaded as otherwise it will shift the eyes of the old image
+        image.onload = () => {
           image.style.transform = `translate(${offset[0]}px, ${offset[1]}px)`
+        }
+        if (image.complete) {
+          image.onload()
         }
       }
 
