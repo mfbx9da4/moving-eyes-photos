@@ -760,17 +760,7 @@
           performBalloonAnimation()
 
           if (++clicks >= 2) {
-            callButton.parentElement.style.marginTop = frameHeight / 28 + 'px'
-            callButton.style.transform = 'scale(1)'
-            callButton.onclick = () => {
-              callButton.style.animation =
-                'btn-primary-border-pulsate 2.5s infinite'
-              callDavid(() => {
-                callButton.style.animation = ''
-                callButton.style.transform = 'scale(0)'
-                callButton.innerText = 'Call David Now'
-              })
-            }
+            toggleCallButton()
           }
         }
       }
@@ -787,10 +777,38 @@
       handleOnResize()
 
       // #region Call David
-      let isCalling = false
-      function callDavid(done) {
-        if (isCalling) return
-        isCalling = true
+
+      let isCallButtonShown = false
+      let call = undefined
+      function toggleCallButton() {
+        if (!isCallButtonShown) {
+          isCallButtonShown = true
+          callButton.parentElement.style.marginTop = frameHeight / 28 + 'px'
+          callButton.style.transform = 'scale(1)'
+          callButton.onclick = () => {
+            if (call) {
+              if (call.isConnected) {
+                call.disconnect()
+                call = undefined
+              }
+              return
+            }
+            callButton.style.animation =
+              'btn-primary-border-pulsate 2.5s infinite'
+            call = callDavid(() => {
+              callButton.style.animation = ''
+              callButton.style.transform = 'scale(0)'
+              setTimeout(() => {
+                callButton.innerText = 'Call David Now'
+                isCallButtonShown = false
+              }, 1000)
+            })
+          }
+        }
+      }
+
+      function callDavid(onDisconnect) {
+        let state = 'connecting'
         const ringtone = new Audio()
         ringtone.src = '/static/immutable/audio/compressed/ringing.mp3'
         ringtone.loop = true
@@ -799,17 +817,33 @@
         callButton.innerText = 'Calling...'
         setTimeout(() => {
           ringtone.play()
-
           setTimeout(() => {
+            state = 'connected'
             ringtone.pause()
             callButton.innerText = 'Connected'
             response.onended = () => {
               isCalling = false
-              done()
+              state = 'disconnected'
+              onDisconnect()
             }
             response.play()
           }, 7000)
         }, 500)
+
+        return {
+          disconnect: () => {
+            ringtone.pause()
+            response.pause()
+            isCalling = false
+            onDisconnect()
+          },
+          get state() {
+            return state
+          },
+          get isConnected() {
+            return state === 'connected'
+          },
+        }
       }
 
       // #region Balloon Animation
