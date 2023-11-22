@@ -681,6 +681,7 @@
         if (isInCentralPortionOfFace(x, y)) {
           image.src = clickedPhoto.url
           performBalloonAnimation()
+          callDavid()
         }
       }
 
@@ -694,6 +695,29 @@
       handleMouseMove({ clientX: 0, clientY: 0 })
       // Fake a resize to start
       handleOnResize()
+
+      // #region Call David
+      let isCalling = false
+      function callDavid() {
+        if (isCalling) return
+        isCalling = true
+        const ringtone = new Audio()
+        ringtone.src = '/static/immutable/audio/compressed/ringing.mp3'
+        ringtone.loop = true
+        const response = new Audio()
+        response.src = '/static/immutable/audio/compressed/response.mp3'
+        setTimeout(() => {
+          ringtone.play()
+
+          setTimeout(() => {
+            ringtone.pause()
+            response.onended = () => {
+              isCalling = false
+            }
+            response.play()
+          }, 7000)
+        }, 500)
+      }
 
       // #region Balloon Animation
       class Balloon {
