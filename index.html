@@ -144,7 +144,9 @@
         font-family: sans-serif;
         color: var(--btn-primary-text);
         box-shadow: var(--btn-primary-shadow);
-        transition: all 0.2s ease-in-out;
+        transition: background-color 0.2s ease-in-out,
+          border-color 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+        transition: transform 0.8s ease-in-out;
       }
 
       .btn.primary:hover {
