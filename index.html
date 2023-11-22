@@ -787,9 +787,7 @@
           callButton.style.transform = 'scale(1)'
           callButton.onclick = () => {
             if (call) {
-              if (call.isConnected) {
-                call.disconnect()
-              }
+              call.disconnect()
               return
             }
             callButton.style.animation =
