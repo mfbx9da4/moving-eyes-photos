@@ -488,7 +488,7 @@
       const frameWidth = Math.min(460, window.innerWidth - 100)
       // The width of the photo inside the frame must be bigger as it will need to be offset to align eyes
       const scaledPhotoWidth = frameWidth + 40
-      const frameHeight = frameWidth * 1
+      const frameHeight = frameWidth * 1.2
       const image = document.getElementById('image')
       if (!image) {
         throw new Error('Missing image')
@@ -532,16 +532,17 @@
         image.onload()
       }
 
-      function getFrameAbsoluteCenter() {
+      function getEyesAbsoluteCenter() {
         // May want to cache this if it causes a performance issue
         const frameRect = frame.getBoundingClientRect()
         return {
           x: frameRect.left + frameRect.width / 2,
-          y: frameRect.top + frameRect.height / 2,
+          // Note we use width here because it looks better having the eyes a little higher in the frame
+          y: frameRect.top + frameRect.width / 2,
         }
       }
-
-      const frameRelativeCenter = [frameWidth / 2, frameHeight / 2]
+      // Note we use width here because it looks better having the eyes a little higher in the frame
+      const eyesRelativeCenter = [frameWidth / 2, frameWidth / 2]
 
       function distance(point1, point2) {
         const x = point1.x - point2.x
@@ -550,7 +551,7 @@
       }
 
       function isInCentralPortionOfFace(x, y) {
-        const frameAbsoluteCenter = getFrameAbsoluteCenter()
+        const frameAbsoluteCenter = getEyesAbsoluteCenter()
         return distance({ x, y }, frameAbsoluteCenter) < 60
       }
 
@@ -563,7 +564,7 @@
         const x = 'clientX' in e ? e.clientX : e.touches[0].clientX
         const y = 'clientY' in e ? e.clientY : e.touches[0].clientY
 
-        const frameAbsoluteCenter = getFrameAbsoluteCenter()
+        const frameAbsoluteCenter = getEyesAbsoluteCenter()
 
         // Get unit vector from center of frame to mouse
         const vector = {
@@ -621,8 +622,8 @@
 
         // Now we can work out the offset we need to apply to the image to align the eyes
         const offset = [
-          frameRelativeCenter[0] - scaledCenter[0],
-          frameRelativeCenter[1] - scaledCenter[1],
+          eyesRelativeCenter[0] - scaledCenter[0],
+          eyesRelativeCenter[1] - scaledCenter[1],
         ]
 
         if (
