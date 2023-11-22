@@ -532,14 +532,18 @@
         image.onload()
       }
 
+      let eyesAbsoluteCenter = null
       function getEyesAbsoluteCenter() {
-        // May want to cache this if it causes a performance issue
-        const frameRect = frame.getBoundingClientRect()
-        return {
-          x: frameRect.left + frameRect.width / 2,
-          // Note we use width here because it looks better having the eyes a little higher in the frame
-          y: frameRect.top + frameRect.width / 2,
+        if (!eyesAbsoluteCenter) {
+          // Avoid layout thrashing
+          const frameRect = frame.getBoundingClientRect()
+          eyesAbsoluteCenter = {
+            x: frameRect.left + frameRect.width / 2,
+            // Note we use width here because it looks better having the eyes a little higher in the frame
+            y: frameRect.top + frameRect.width / 2,
+          }
         }
+        return eyesAbsoluteCenter
       }
       // Note we use width here because it looks better having the eyes a little higher in the frame
       const eyesRelativeCenter = [frameWidth / 2, frameWidth / 2]
@@ -636,6 +640,9 @@
       }
 
       function handleOnResize() {
+        // Clear the cached eyes absolute center
+        eyesAbsoluteCenter = null
+
         // If the last href and the h1 are all in the viewport then we can block scrolling
         // to make for a better experience on mobile
         const lastHref = document.querySelector('a:last-of-type')
