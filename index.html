@@ -66,6 +66,17 @@
         --labelSecondary: rgba(60, 60, 67, 0.6);
         --labelTertiary: rgba(60, 60, 67, 0.3);
         --background: white;
+
+        /* ngl stolen from GitHub */
+        --btn-primary-text: #ffffff;
+        --btn-primary-bg: #1f883d;
+        --btn-primary-border: rgba(31, 35, 40, 0.15);
+        --btn-primary-shadow: 0 1px 0 rgba(31, 35, 40, 0.1);
+        --btn-primary-inset-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.03);
+        --btn-primary-hover-bg: #1a7f37;
+        --btn-primary-hover-border: rgba(31, 35, 40, 0.15);
+        --btn-primary-selected-bg: hsla(137, 66%, 28%, 1);
+        --btn-primary-selected-shadow: inset 0 1px 0 rgba(0, 45, 17, 0.2);
       }
 
       /* Dark mode */
@@ -75,6 +86,15 @@
           --labelSecondary: rgba(235, 235, 245, 0.6);
           --labelTertiary: rgba(235, 235, 245, 0.3);
           --background: rgb(36, 36, 36);
+
+          --btn-primary-bg: #238636;
+          --btn-primary-border: rgba(240, 246, 252, 0.1);
+          --btn-primary-shadow: 0 0 transparent;
+          --btn-primary-inset-shadow: 0 0 transparent;
+          --btn-primary-hover-bg: #2ea043;
+          --btn-primary-hover-border: rgba(240, 246, 252, 0.1);
+          --btn-primary-selected-bg: #238636;
+          --btn-primary-selected-shadow: 0 0 transparent;
         }
       }
 
@@ -113,6 +133,29 @@
         #copyright {
           display: none;
         }
+      }
+
+      .btn.primary {
+        cursor: pointer;
+        background-color: var(--btn-primary-bg);
+        border: solid var(--btn-primary-border);
+        border-radius: 8px;
+        padding: 8px 16px;
+        font-family: sans-serif;
+        color: var(--btn-primary-text);
+        box-shadow: var(--btn-primary-shadow);
+        transition: all 0.2s ease-in-out;
+      }
+
+      .btn.primary:hover {
+        background-color: var(--btn-primary-hover-bg);
+        border-color: var(--btn-primary-hover-border);
+      }
+
+      .btn.primary:active {
+        background-color: var(--btn-primary-selected-bg);
+        border-color: var(--btn-primary-selected-border);
+        box-shadow: var(--btn-primary-selected-shadow);
       }
     </style>
   </head>
@@ -156,6 +199,23 @@
           transform: rotate(2deg);
         "
       >
+        <div
+          style="
+            position: absolute;
+            z-index: 2;
+            left: 0;
+            right: 0;
+            margin: auto;
+            transform: rotate(358deg);
+            display: flex;
+            justify-content: center;
+            margin-top: 24px;
+          "
+        >
+          <button id="call" class="btn primary" style="transform: scale(0)">
+            Call David Now
+          </button>
+        </div>
         <img
           src="/static/immutable/webp/0E9A9020.webp"
           alt="David Adler Face Eyes Follow Mouse"
@@ -537,21 +597,20 @@
         image.onload()
       }
 
-      let eyesAbsoluteCenter = null
-      function getEyesAbsoluteCenter() {
-        if (!eyesAbsoluteCenter) {
+      const eyesRelativePosition = { x: frameWidth / 2, y: frameWidth / 2 }
+
+      let eyesAbsolutePosition = null
+      function getEyesAbsolutePosition() {
+        if (!eyesAbsolutePosition) {
           // Avoid layout thrashing
           const frameRect = frame.getBoundingClientRect()
-          eyesAbsoluteCenter = {
-            x: frameRect.left + frameRect.width / 2,
-            // Note we use width here because it looks better having the eyes a little higher in the frame
-            y: frameRect.top + frameRect.width / 2,
+          eyesAbsolutePosition = {
+            x: frameRect.left + eyesRelativePosition.x,
+            y: frameRect.top + eyesRelativePosition.y,
           }
         }
-        return eyesAbsoluteCenter
+        return eyesAbsolutePosition
       }
-      // Note we use width here because it looks better having the eyes a little higher in the frame
-      const eyesRelativeCenter = [frameWidth / 2, frameWidth / 2]
 
       function distance(point1, point2) {
         const x = point1.x - point2.x
@@ -560,7 +619,7 @@
       }
 
       function isInCentralPortionOfFace(x, y) {
-        const frameAbsoluteCenter = getEyesAbsoluteCenter()
+        const frameAbsoluteCenter = getEyesAbsolutePosition()
         return distance({ x, y }, frameAbsoluteCenter) < 60
       }
 
@@ -573,7 +632,7 @@
         const x = 'clientX' in e ? e.clientX : e.touches[0].clientX
         const y = 'clientY' in e ? e.clientY : e.touches[0].clientY
 
-        const frameAbsoluteCenter = getEyesAbsoluteCenter()
+        const frameAbsoluteCenter = getEyesAbsolutePosition()
 
         // Get unit vector from center of frame to mouse
         const vector = {
@@ -619,26 +678,26 @@
         const ratio = scaledPhotoWidth / naturalWidth
         const naturalRightEyeCoords = closestPhoto.rightEye
         const naturalLeftEyeCoords = closestPhoto.leftEye
-        const naturalCenter = [
-          (naturalRightEyeCoords.x + naturalLeftEyeCoords.x) / 2,
-          (naturalRightEyeCoords.y + naturalLeftEyeCoords.y) / 2,
-        ]
+        const naturalCenter = {
+          x: (naturalRightEyeCoords.x + naturalLeftEyeCoords.x) / 2,
+          y: (naturalRightEyeCoords.y + naturalLeftEyeCoords.y) / 2,
+        }
         // Now that we have the natural center we need to scale it down to the target size
-        const scaledCenter = [
-          naturalCenter[0] * ratio,
-          naturalCenter[1] * ratio,
-        ]
+        const scaledCenter = {
+          x: naturalCenter.x * ratio,
+          y: naturalCenter.y * ratio,
+        }
 
         // Now we can work out the offset we need to apply to the image to align the eyes
-        const offset = [
-          eyesRelativeCenter[0] - scaledCenter[0],
-          eyesRelativeCenter[1] - scaledCenter[1],
-        ]
+        const offset = {
+          x: eyesRelativePosition.x - scaledCenter.x,
+          y: eyesRelativePosition.y - scaledCenter.y,
+        }
 
         image.src = closestPhoto.url
         // Avoid shifting the image before it's loaded as otherwise it will shift the eyes of the old image
         image.onload = () => {
-          image.style.transform = `translate(${offset[0]}px, ${offset[1]}px)`
+          image.style.transform = `translate(${offset.x}px, ${offset.y}px)`
         }
         if (image.complete) {
           image.onload()
@@ -647,7 +706,7 @@
 
       function handleOnResize() {
         // Clear the cached eyes absolute center
-        eyesAbsoluteCenter = null
+        eyesAbsolutePosition = null
 
         // If the last href and the h1 are all in the viewport then we can block scrolling
         // to make for a better experience on mobile
@@ -674,6 +733,8 @@
         }
       }
 
+      let clicks = 0
+
       /** @param {MouseEvent} e */
       function handleClick(e) {
         // If we click and we're in the central portion of the face then show the clicked photo
@@ -682,7 +743,13 @@
         if (isInCentralPortionOfFace(x, y)) {
           image.src = clickedPhoto.url
           performBalloonAnimation()
-          callDavid()
+
+          if (++clicks === 2) {
+            const callButton = document.getElementById('call')
+            if (!callButton) throw new Error('Missing call button')
+            callButton.style.transform = 'scale(1)'
+            callButton.onclick = () => callDavid()
+          }
         }
       }
 
