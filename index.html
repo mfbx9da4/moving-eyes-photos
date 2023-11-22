@@ -226,7 +226,7 @@
           "
         >
           <button id="call" class="btn primary" style="transform: scale(0)">
-            Call David Now
+            Say Hello
           </button>
         </div>
         <img
@@ -295,6 +295,10 @@
       "
     ></div>
     <script>
+      // Disable saved scroll position as otherwise leads to weird layout on second load
+      if ('scrollRestoration' in history) {
+        history.scrollRestoration = 'manual'
+      }
       const h1 = document.querySelector('h1')
       if (!h1) throw new Error('Missing h1')
       // Shorten the name for mobile
@@ -568,7 +572,7 @@
       const frameWidth = Math.min(460, window.innerWidth - 100)
       // The width of the photo inside the frame must be bigger as it will need to be offset to align eyes
       const scaledPhotoWidth = frameWidth + 40
-      const frameHeight = frameWidth * 1.2
+      const frameHeight = frameWidth * 1.1
       const image = document.getElementById('image')
       if (!image) {
         throw new Error('Missing image')
@@ -759,9 +763,7 @@
           image.src = clickedPhoto.url
           performBalloonAnimation()
 
-          if (++clicks >= 2) {
-            toggleCallButton()
-          }
+          toggleCallButton()
         }
       }
 
@@ -785,6 +787,7 @@
           isCallButtonShown = true
           callButton.parentElement.style.marginTop = frameHeight / 28 + 'px'
           callButton.style.transform = 'scale(1)'
+          callButton.style.pointerEvents = ''
           callButton.onclick = () => {
             if (call) {
               call.disconnect()
@@ -795,9 +798,10 @@
             call = callDavid(() => {
               callButton.style.animation = ''
               callButton.style.transform = 'scale(0)'
+              callButton.style.pointerEvents = 'none'
               call = undefined
               setTimeout(() => {
-                callButton.innerText = 'Call David Now'
+                callButton.innerText = 'Say Hello'
                 isCallButtonShown = false
               }, 1000)
             })
