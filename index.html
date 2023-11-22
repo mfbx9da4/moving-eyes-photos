@@ -560,7 +560,7 @@
       }
 
       let lastTimeEnteredFace = 0
-      let timeoutHoveredFace = 0
+      let timeoutIdHoveredFace = 0
 
       /** @param {MouseEvent | TouchEvent} e */
       function handleMouseMove(e) {
@@ -593,13 +593,13 @@
         if (isInCentralPortionOfFace(x, y)) {
           if (lastTimeEnteredFace === 0) {
             lastTimeEnteredFace = Date.now()
-            timeoutHoveredFace = setTimeout(() => handleMouseMove(e), 150)
+            timeoutIdHoveredFace = setTimeout(() => handleMouseMove(e), 150)
           } else if (Date.now() - lastTimeEnteredFace > 150) {
             closestPhoto = hoveredPhoto
           }
         } else {
           lastTimeEnteredFace = 0
-          clearTimeout(timeoutHoveredFace)
+          clearTimeout(timeoutIdHoveredFace)
         }
 
         if (!closestPhoto) {
