@@ -484,9 +484,11 @@
         }
       })
 
+      // The width of the frame of the photo
       const frameWidth = Math.min(460, window.innerWidth - 100)
+      // The width of the photo inside the frame must be bigger as it will need to be offset to align eyes
       const scaledPhotoWidth = frameWidth + 40
-      const frameHeight = frameWidth * 1.2
+      const frameHeight = frameWidth * 1
       const image = document.getElementById('image')
       if (!image) {
         throw new Error('Missing image')
@@ -518,6 +520,7 @@
           photos.concat([hoveredPhoto, clickedPhoto]).map(async (photo) => {
             try {
               await preloadImage(photo.url)
+              photo.imageLoaded = true
             } catch (e) {
               // Ignore
             }
@@ -529,18 +532,26 @@
         image.onload()
       }
 
-      function isInCentralPortionOfFace(x, y) {
+      function getFrameAbsoluteCenter() {
+        // May want to cache this if it causes a performance issue
         const frameRect = frame.getBoundingClientRect()
-        const frameAbsoluteCenter = [
-          frameRect.left + frameRect.width / 2,
-          frameRect.top + frameRect.height / 2,
-        ]
-        return (
-          x > frameAbsoluteCenter[0] - 60 &&
-          x < frameAbsoluteCenter[0] + 60 &&
-          y > frameAbsoluteCenter[1] - 60 &&
-          y < frameAbsoluteCenter[1] + 60
-        )
+        return {
+          x: frameRect.left + frameRect.width / 2,
+          y: frameRect.top + frameRect.height / 2,
+        }
+      }
+
+      const frameRelativeCenter = [frameWidth / 2, frameHeight / 2]
+
+      function distance(point1, point2) {
+        const x = point1.x - point2.x
+        const y = point1.y - point2.y
+        return Math.sqrt(x * x + y * y)
+      }
+
+      function isInCentralPortionOfFace(x, y) {
+        const frameAbsoluteCenter = getFrameAbsoluteCenter()
+        return distance({ x, y }, frameAbsoluteCenter) < 60
       }
 
       let lastTimeEnteredFace = 0
@@ -551,17 +562,15 @@
         // get touch or mouse position
         const x = 'clientX' in e ? e.clientX : e.touches[0].clientX
         const y = 'clientY' in e ? e.clientY : e.touches[0].clientY
-        // get window size
-        const width = window.innerWidth
-        const height = window.innerHeight
-        const frameCenter = [frameWidth / 2, frameWidth / 2]
 
-        // Get unit vector from center of screen to mouse
+        const frameAbsoluteCenter = getFrameAbsoluteCenter()
+
+        // Get unit vector from center of frame to mouse
         const vector = {
           // x should be from -1 to 1
-          x: (x - width / 2) / (width / 2),
+          x: (x - frameAbsoluteCenter.x) / frameAbsoluteCenter.x,
           // y should be from -1 to 1
-          y: (y - height / 2) / (height / 2),
+          y: (y - frameAbsoluteCenter.y) / frameAbsoluteCenter.y,
         }
 
         // The vector will be inside one of the sections of the photos, find which one
@@ -575,9 +584,7 @@
           return lowerInside && upperInside
         })
 
-        const absoluteCenter = [window.innerWidth / 2, window.innerHeight / 2]
-
-        // Show the hovered face. We don't show it immediately to reduce jank if the user swipes through the face
+        // Delay showing the hovered face to avoid jank during quick swipes
         if (isInCentralPortionOfFace(x, y)) {
           if (lastTimeEnteredFace === 0) {
             lastTimeEnteredFace = Date.now()
@@ -614,11 +621,17 @@
 
         // Now we can work out the offset we need to apply to the image to align the eyes
         const offset = [
-          frameCenter[0] - scaledCenter[0],
-          frameCenter[1] - scaledCenter[1],
+          frameRelativeCenter[0] - scaledCenter[0],
+          frameRelativeCenter[1] - scaledCenter[1],
         ]
-        image.src = closestPhoto.url
-        image.style.transform = `translate(${offset[0]}px, ${offset[1]}px)`
+
+        if (
+          closestPhoto.imageLoaded ||
+          closestPhoto.url === image.getAttribute('src')
+        ) {
+          image.src = closestPhoto.url
+          image.style.transform = `translate(${offset[0]}px, ${offset[1]}px)`
+        }
       }
 
       function handleOnResize() {
