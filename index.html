@@ -142,7 +142,7 @@
       "
     >
       <h1 style="text-align: center; font-size: 48px; line-height: 61px">
-        David Adler
+        David Alberto Adler
       </h1>
       <div
         style="
@@ -222,6 +222,11 @@
       "
     ></div>
     <script>
+      const h1 = document.querySelector('h1')
+      if (!h1) throw new Error('Missing h1')
+      // Shorten the name for mobile
+      if (window.innerWidth < 700) h1.innerText = 'David Adler'
+
       const copyright = document.getElementById('copyright')
       copyright.innerHTML = '© ' + new Date().getFullYear() + ' David Adler'
       copyright.onclick = () =>
@@ -646,7 +651,6 @@
         // If the last href and the h1 are all in the viewport then we can block scrolling
         // to make for a better experience on mobile
         const lastHref = document.querySelector('a:last-of-type')
-        const h1 = document.querySelector('h1')
         if (!lastHref || !h1) {
           console.warn('Missing last href or h1')
         }
