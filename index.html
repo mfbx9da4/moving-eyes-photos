@@ -813,14 +813,14 @@
         const response = new Audio()
         response.src = '/static/immutable/audio/compressed/response.mp3'
         callButton.innerText = 'Calling...'
-        setTimeout(() => {
+        let ringtoneDurationTimeoutId = 0
+        const ringtoneDelayTimeoutId = setTimeout(() => {
           ringtone.play()
-          setTimeout(() => {
+          ringtoneDurationTimeoutId = setTimeout(() => {
             state = 'connected'
             ringtone.pause()
             callButton.innerText = 'Connected'
             response.onended = () => {
-              isCalling = false
               state = 'disconnected'
               onDisconnect()
             }
@@ -832,7 +832,8 @@
           disconnect: () => {
             ringtone.pause()
             response.pause()
-            isCalling = false
+            clearTimeout(ringtoneDelayTimeoutId)
+            clearTimeout(ringtoneDurationTimeoutId)
             onDisconnect()
           },
           get state() {
