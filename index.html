@@ -159,6 +159,18 @@
         border-color: var(--btn-primary-selected-border);
         box-shadow: var(--btn-primary-selected-shadow);
       }
+
+      @keyframes btn-primary-border-pulsate {
+        0% {
+          border-color: var(--btn-primary-hover-border);
+        }
+        50% {
+          border-color: var(--btn-primary-selected-border);
+        }
+        100% {
+          border-color: var(--btn-primary-hover-border);
+        }
+      }
     </style>
   </head>
   <body>
@@ -288,6 +300,8 @@
       if (!h1) throw new Error('Missing h1')
       // Shorten the name for mobile
       if (window.innerWidth < 700) h1.innerText = 'David Adler'
+      const callButton = document.getElementById('call')
+      if (!callButton) throw new Error('Missing call button')
 
       const copyright = document.getElementById('copyright')
       copyright.innerHTML = '© ' + new Date().getFullYear() + ' David Adler'
@@ -746,11 +760,16 @@
           image.src = clickedPhoto.url
           performBalloonAnimation()
 
-          if (++clicks === 2) {
-            const callButton = document.getElementById('call')
-            if (!callButton) throw new Error('Missing call button')
+          if (++clicks >= 2) {
             callButton.style.transform = 'scale(1)'
-            callButton.onclick = () => callDavid()
+            callButton.onclick = () => {
+              callButton.style.animation =
+                'btn-primary-border-pulsate 2.5s infinite'
+              callDavid(() => {
+                callButton.style.animation = ''
+                callButton.style.transform = 'scale(0)'
+              })
+            }
           }
         }
       }
@@ -768,7 +787,7 @@
 
       // #region Call David
       let isCalling = false
-      function callDavid() {
+      function callDavid(done) {
         if (isCalling) return
         isCalling = true
         const ringtone = new Audio()
@@ -776,13 +795,16 @@
         ringtone.loop = true
         const response = new Audio()
         response.src = '/static/immutable/audio/compressed/response.mp3'
+        callButton.innerText = 'Calling...'
         setTimeout(() => {
           ringtone.play()
 
           setTimeout(() => {
             ringtone.pause()
+            callButton.innerText = 'Connected'
             response.onended = () => {
               isCalling = false
+              done()
             }
             response.play()
           }, 7000)
