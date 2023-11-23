@@ -805,8 +805,7 @@
         if (isInCentralPortionOfFace(x, y)) {
           image.src = clickedPhoto.url
           performBalloonAnimation()
-
-          toggleCallButton()
+          if (++clicks >= 2) toggleCallButton()
         }
       }
 
