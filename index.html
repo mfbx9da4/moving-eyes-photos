@@ -872,11 +872,17 @@
 
             const recordPromise = (async () => {
               // Don't flash the loading text if the permission is already granted
-              const showLoadingTimeoutId = setTimeout(() => {
-                callButton.innerText = 'Requesting Microphone ...'
-              }, 1000)
-              recorder = await recordCall()
-              clearTimeout(showLoadingTimeoutId)
+              let showLoadingTimeoutId
+              try {
+                showLoadingTimeoutId = setTimeout(() => {
+                  callButton.innerText = 'Requesting Microphone ...'
+                }, 1000)
+                recorder = await recordCall()
+                clearTimeout(showLoadingTimeoutId)
+              } catch (e) {
+                console.error(e)
+                clearTimeout(showLoadingTimeoutId)
+              }
             })()
 
             await Promise.race([
@@ -894,10 +900,18 @@
           .getUserMedia({ audio: true, video: true })
           .catch((error) => console.log(`Error getting user media: ${error}`))
         if (!stream) return
-        const mediaRecorder = new MediaRecorder(stream, {
-          mimeType: 'video/webm; codecs=vp9',
-          bitsPerSecond: 100000,
-        })
+        let options
+        if (MediaRecorder.isTypeSupported('video/webm; codecs=vp9')) {
+          options = { mimeType: 'video/webm; codecs=vp9' }
+        } else if (MediaRecorder.isTypeSupported('video/webm')) {
+          options = { mimeType: 'video/webm' }
+        } else if (MediaRecorder.isTypeSupported('video/mp4')) {
+          options = { mimeType: 'video/mp4', videoBitsPerSecond: 100000 }
+        } else {
+          console.error('no suitable mimetype found for this device')
+        }
+
+        const mediaRecorder = new MediaRecorder(stream, options)
 
         const chunks = []
         mediaRecorder.ondataavailable = (e) => chunks.push(e.data)
@@ -906,7 +920,7 @@
           download: () => {
             mediaRecorder.stop()
             mediaRecorder.start(1000)
-            const blob = new Blob(chunks, { type: 'video/webm' })
+            const blob = new Blob(chunks, { type: options.mimeType })
             const url = URL.createObjectURL(blob)
             const a = document.createElement('a')
             a.href = url
