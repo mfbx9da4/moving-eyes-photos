@@ -849,7 +849,11 @@
               setTimeout(() => {
                 if (recorder) {
                   shareRecording.style.transform = 'scale(1)'
-                  shareRecording.innerHTML = `Thanks for calling! I would love to see the recording, to share it with me <a id="share_download_video" href='#'>first download the video</a> and then <a id="share_send_email">send me an email</a> with the video attached.`
+                  shareRecording.innerHTML = /*html*/ `Thanks for calling! 
+                  I would love to see the recording, to share it with me 
+                  <a id="share_download_video" href='#'>first download the video</a> 
+                  and then <a id="share_send_email">send me an email</a> with the video attached. 
+                  Or just <a id="close_share_recording" href="#">close this message</a>.`
                   const downloadVideo = document.getElementById(
                     'share_download_video'
                   )
@@ -866,6 +870,15 @@
                   )}&body=${encodeURIComponent(
                     'Hey,\n\nThanks for taking the time to play with my website 😊. Please remember to attach the video recording!\n'
                   )}`
+                  const closeShareRecording = document.getElementById(
+                    'close_share_recording'
+                  )
+                  if (!closeShareRecording)
+                    throw new Error('Missing close share recording')
+                  closeShareRecording.onclick = (e) => {
+                    e.preventDefault()
+                    shareRecording.style.transform = 'scale(0)'
+                  }
                 }
                 callButton.innerText = 'Say Hello'
                 isCallButtonShown = false
