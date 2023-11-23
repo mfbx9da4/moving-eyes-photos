@@ -855,7 +855,10 @@
                     'share_download_video'
                   )
                   if (!downloadVideo) throw new Error('Missing download video')
-                  downloadVideo.onclick = () => recorder.download()
+                  downloadVideo.onclick = (e) => {
+                    e.preventDefault()
+                    recorder.download()
+                  }
                   const sendEmail = document.getElementById('share_send_email')
                   if (!sendEmail) throw new Error('Missing send email')
                   sendEmail.target = '_blank'
@@ -919,8 +922,9 @@
         return {
           download: () => {
             mediaRecorder.stop()
-            mediaRecorder.start(1000)
             const blob = new Blob(chunks, { type: options.mimeType })
+            // Continue recording incase they press download again
+            mediaRecorder.start(1000)
             const url = URL.createObjectURL(blob)
             const a = document.createElement('a')
             a.href = url
