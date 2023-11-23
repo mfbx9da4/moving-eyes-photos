@@ -66,6 +66,7 @@
         --labelSecondary: rgba(60, 60, 67, 0.6);
         --labelTertiary: rgba(60, 60, 67, 0.3);
         --background: white;
+        --link: rgb(16, 33, 204);
 
         /* ngl stolen from GitHub */
         --btn-primary-text: #ffffff;
@@ -118,14 +119,20 @@
         background: var(--background);
         margin: 0;
         padding: 0;
+        color: var(--label);
       }
 
       a {
+        color: var(--link);
+      }
+
+      .social-link {
+        color: var(--label);
         text-decoration: none;
         padding: 0px 16px 4px 16px;
         margin-bottom: 12px;
       }
-      a:hover {
+      .social-link:hover {
         border-bottom: 1px solid var(--label);
       }
 
@@ -222,12 +229,28 @@
             margin: auto;
             transform: rotate(358deg);
             display: flex;
+            flex-direction: column;
             justify-content: center;
+            align-items: center;
           "
         >
           <button id="call" class="btn primary" style="transform: scale(0)">
             Say Hello
           </button>
+          <p
+            id="share_recording"
+            style="
+              transform: scale(0);
+              padding: 4px;
+              margin: 4px;
+              width: 90%;
+              border: 1px solid #dfdfdf;
+              text-align: center;
+              transition: transform 0.3s ease-in-out 0s;
+              background: rgba(255, 255, 255, 0.8);
+              color: #333;
+            "
+          ></p>
         </div>
         <img
           src="/static/immutable/webp/0E9A9020.webp"
@@ -252,31 +275,49 @@
         "
       >
         <!-- CV -->
-        <a href="/cv.pdf" target="_blank">CV</a>
+        <a class="social-link" href="/cv.pdf" target="_blank">CV</a>
         <!-- GitHub -->
-        <a href="https://github.com/mfbx9da4" target="_blank">GitHub</a>
+        <a
+          class="social-link"
+          href="https://github.com/mfbx9da4"
+          target="_blank"
+          >GitHub</a
+        >
         <!-- LinkedIn -->
         <a
+          class="social-link"
           href="https://www.linkedin.com/in/david-adler-71056671/"
           target="_blank"
           >LinkedIn</a
         >
         <!-- StackOverflow -->
         <a
+          class="social-link"
           href="https://stackoverflow.com/users/1376627/david-adler"
           target="_blank"
           >StackOverflow</a
         >
         <!-- Twitter -->
-        <a href="https://twitter.com/da_adler" target="_blank">Twitter</a>
+        <a
+          class="social-link"
+          href="https://twitter.com/da_adler"
+          target="_blank"
+          >Twitter</a
+        >
 
         <!-- Instagram -->
-        <a href="https://www.instagram.com/davidadlerfb/" target="_blank"
+        <a
+          class="social-link"
+          href="https://www.instagram.com/davidadlerfb/"
+          target="_blank"
           >Instagram</a
         >
 
         <!-- Hacker News -->
-        <a href="https://news.ycombinator.com/user?id=mfbx9da4" target="_blank"
+        <a
+          class="social-link"
+          href="https://news.ycombinator.com/user?id=mfbx9da4"
+          target="_blank"
           >Hacker News</a
         >
       </div>
@@ -305,6 +346,8 @@
       if (window.innerWidth < 700) h1.innerText = 'David Adler'
       const callButton = document.getElementById('call')
       if (!callButton) throw new Error('Missing call button')
+      const shareRecording = document.getElementById('share_recording')
+      if (!shareRecording) throw new Error('Missing share recording')
 
       const copyright = document.getElementById('copyright')
       copyright.innerHTML = '© ' + new Date().getFullYear() + ' David Adler'
@@ -782,55 +825,126 @@
 
       let isCallButtonShown = false
       let call = undefined
+      let startedCall = 0
       function toggleCallButton() {
         if (!isCallButtonShown) {
           isCallButtonShown = true
           callButton.parentElement.style.marginTop = frameHeight / 28 + 'px'
           callButton.style.transform = 'scale(1)'
           callButton.style.pointerEvents = ''
-          callButton.onclick = () => {
+          callButton.onclick = async () => {
             if (call) {
-              call.disconnect()
+              if (Date.now() - startedCall > 1000) call.disconnect()
               return
             }
+            call = callDavid()
+            startedCall = Date.now()
             callButton.style.animation =
               'btn-primary-border-pulsate 2.5s infinite'
-            call = callDavid(() => {
+            let recorder = undefined
+            call.onDisconnect = () => {
               callButton.style.animation = ''
               callButton.style.transform = 'scale(0)'
               callButton.style.pointerEvents = 'none'
               call = undefined
               setTimeout(() => {
+                if (recorder) {
+                  shareRecording.style.transform = 'scale(1)'
+                  shareRecording.innerHTML = `Thanks for calling! I would love to see the recording, to share it with me <a id="share_download_video" href='#'>first download the video</a> and then <a id="share_send_email">send me an email</a> with the video attached.`
+                  const downloadVideo = document.getElementById(
+                    'share_download_video'
+                  )
+                  if (!downloadVideo) throw new Error('Missing download video')
+                  downloadVideo.onclick = () => recorder.download()
+                  const sendEmail = document.getElementById('share_send_email')
+                  if (!sendEmail) throw new Error('Missing send email')
+                  sendEmail.target = '_blank'
+                  sendEmail.href = `mailto:hiredavidadler@gmail.com?subject=${encodeURIComponent(
+                    'Call With David Adler'
+                  )}&body=${encodeURIComponent(
+                    'Hey,\n\nThanks for taking the time to play with my website 😊. Please remember to attach the video recording!\n'
+                  )}`
+                }
                 callButton.innerText = 'Say Hello'
                 isCallButtonShown = false
               }, 1000)
-            })
+            }
+
+            const recordPromise = (async () => {
+              // Don't flash the loading text if the permission is already granted
+              const showLoadingTimeoutId = setTimeout(() => {
+                callButton.innerText = 'Requesting Microphone ...'
+              }, 1000)
+              recorder = await recordCall()
+              clearTimeout(showLoadingTimeoutId)
+            })()
+
+            await Promise.race([
+              recordPromise,
+              new Promise((r) => setTimeout(r, 3000)),
+            ])
+
+            call?.start()
           }
         }
       }
 
-      function callDavid(onDisconnect) {
-        let state = 'connecting'
+      async function recordCall() {
+        const stream = await navigator.mediaDevices
+          .getUserMedia({ audio: true, video: true })
+          .catch((error) => console.log(`Error getting user media: ${error}`))
+        if (!stream) return
+        const mediaRecorder = new MediaRecorder(stream, {
+          mimeType: 'video/webm; codecs=vp9',
+          bitsPerSecond: 100000,
+        })
+
+        const chunks = []
+        mediaRecorder.ondataavailable = (e) => chunks.push(e.data)
+        mediaRecorder.start(1000)
+        return {
+          download: () => {
+            mediaRecorder.stop()
+            mediaRecorder.start(1000)
+            const blob = new Blob(chunks, { type: 'video/webm' })
+            const url = URL.createObjectURL(blob)
+            const a = document.createElement('a')
+            a.href = url
+            a.download = 'call_with_david_adler.webm'
+            a.click()
+          },
+        }
+      }
+
+      function callDavid() {
+        let state = 'disconnected'
         const ringtone = new Audio()
         ringtone.src = '/static/immutable/audio/compressed/ringing.mp3'
         ringtone.loop = true
         const response = new Audio()
         response.src = '/static/immutable/audio/compressed/response.mp3'
-        callButton.innerText = 'Calling...'
         let ringtoneDurationTimeoutId = 0
-        const ringtoneDelayTimeoutId = setTimeout(() => {
-          ringtone.play()
-          ringtoneDurationTimeoutId = setTimeout(() => {
-            state = 'connected'
-            ringtone.pause()
-            callButton.innerText = 'Connected'
-            response.onended = () => {
-              state = 'disconnected'
-              onDisconnect()
-            }
-            response.play()
-          }, 7000)
-        }, 500)
+        let ringtoneDelayTimeoutId = 0
+
+        let onDisconnect = () => {}
+
+        const start = () => {
+          state = 'connecting'
+          callButton.innerText = 'Calling...'
+          ringtoneDelayTimeoutId = setTimeout(() => {
+            ringtone.play()
+            ringtoneDurationTimeoutId = setTimeout(() => {
+              state = 'connected'
+              ringtone.pause()
+              callButton.innerText = 'Connected'
+              response.onended = () => {
+                state = 'disconnected'
+                onDisconnect()
+              }
+              response.play()
+            }, 7000)
+          }, 500)
+        }
 
         return {
           disconnect: () => {
@@ -840,8 +954,12 @@
             clearTimeout(ringtoneDurationTimeoutId)
             onDisconnect()
           },
+          start,
           get state() {
             return state
+          },
+          set onDisconnect(callback) {
+            onDisconnect = callback
           },
           get isConnected() {
             return state === 'connected'

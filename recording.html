@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Media recording</title>
+  </head>
+  <body>
+    <script>
+      async function recordCall() {
+        try {
+          const stream = await navigator.mediaDevices.getUserMedia({
+            audio: true,
+            video: true,
+          })
+        } catch (error) {
+          console.log(error)
+          return
+        }
+        const mediaRecorder = new MediaRecorder(stream)
+        mediaRecorder.start()
+        const chunks = []
+        mediaRecorder.ondataavailable = (event) => {
+          chunks.push(event.data)
+        }
+        return {
+          stop: () => {
+            const blob = new Blob(chunks, { type: 'video/webm' })
+            const url = URL.createObjectURL(blob)
+            // Download the video and create mailto
+            const a = document.createElement('a')
+            a.href = url
+            a.download = 'video.webm'
+            a.click()
+            URL.revokeObjectURL(url)
+          },
+        }
+      }
+      recordCall()
+    </script>
+  </body>
+</html>
