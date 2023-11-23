@@ -235,7 +235,7 @@
           "
         >
           <button id="call" class="btn primary" style="transform: scale(0)">
-            Say Hello
+            Call David Now
           </button>
           <p
             id="share_recording"
@@ -795,8 +795,6 @@
         }
       }
 
-      let clicks = 0
-
       /** @param {MouseEvent} e */
       function handleClick(e) {
         // If we click and we're in the central portion of the face then show the clicked photo
@@ -805,7 +803,7 @@
         if (isInCentralPortionOfFace(x, y)) {
           image.src = clickedPhoto.url
           performBalloonAnimation()
-          if (++clicks >= 2) toggleCallButton()
+          toggleCallButton()
         }
       }
 
@@ -824,7 +822,6 @@
 
       let isCallButtonShown = false
       let call = undefined
-      let startedCall = 0
       function toggleCallButton() {
         if (!isCallButtonShown) {
           isCallButtonShown = true
@@ -833,24 +830,23 @@
           callButton.style.pointerEvents = ''
           callButton.onclick = async () => {
             if (call) {
-              if (Date.now() - startedCall > 1000) call.disconnect()
               return
             }
             call = callDavid()
             startedCall = Date.now()
             callButton.style.animation =
               'btn-primary-border-pulsate 2.5s infinite'
-            let recorder = undefined
+            let recording = undefined
             call.onDisconnect = () => {
               callButton.style.animation = ''
               callButton.style.transform = 'scale(0)'
               callButton.style.pointerEvents = 'none'
               call = undefined
               setTimeout(() => {
-                if (recorder) {
+                if (recording) {
                   shareRecording.style.transform = 'scale(1)'
                   shareRecording.innerHTML = /*html*/ `Thanks for calling! 
-                  I would love to see the recording, to share it with me 
+                  I would love to see the recording of the call, to share it with me 
                   <a id="share_download_video" href='#'>first download the video</a> 
                   and then <a id="share_send_email">send me an email</a> with the video attached. 
                   Or just <a id="close_share_recording" href="#">close this message</a>.`
@@ -860,7 +856,7 @@
                   if (!downloadVideo) throw new Error('Missing download video')
                   downloadVideo.onclick = (e) => {
                     e.preventDefault()
-                    recorder.download()
+                    recording.download()
                   }
                   const sendEmail = document.getElementById('share_send_email')
                   if (!sendEmail) throw new Error('Missing send email')
@@ -880,19 +876,19 @@
                     shareRecording.style.transform = 'scale(0)'
                   }
                 }
-                callButton.innerText = 'Say Hello'
+                callButton.innerHTML = 'Call David Now'
                 isCallButtonShown = false
               }, 1000)
             }
 
-            const recordPromise = (async () => {
+            const recordingPromise = (async () => {
               // Don't flash the loading text if the permission is already granted
               let showLoadingTimeoutId
               try {
                 showLoadingTimeoutId = setTimeout(() => {
                   callButton.innerText = 'Requesting Microphone ...'
                 }, 1000)
-                recorder = await recordCall()
+                recording = await recordCall()
                 clearTimeout(showLoadingTimeoutId)
               } catch (e) {
                 console.error(e)
@@ -901,7 +897,7 @@
             })()
 
             await Promise.race([
-              recordPromise,
+              recordingPromise,
               new Promise((r) => setTimeout(r, 3000)),
             ])
 
