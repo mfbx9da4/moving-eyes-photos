@@ -923,8 +923,6 @@
           download: () => {
             mediaRecorder.stop()
             const blob = new Blob(chunks, { type: options.mimeType })
-            // Continue recording incase they press download again
-            mediaRecorder.start(1000)
             const url = URL.createObjectURL(blob)
             const a = document.createElement('a')
             a.href = url
