@@ -833,7 +833,6 @@
               return
             }
             call = callDavid()
-            startedCall = Date.now()
             callButton.style.animation =
               'btn-primary-border-pulsate 2.5s infinite'
             let recording = undefined
@@ -881,25 +880,9 @@
               }, 1000)
             }
 
-            const recordingPromise = (async () => {
-              // Don't flash the loading text if the permission is already granted
-              let showLoadingTimeoutId
-              try {
-                showLoadingTimeoutId = setTimeout(() => {
-                  callButton.innerText = 'Requesting Microphone ...'
-                }, 1000)
-                recording = await recordCall()
-                clearTimeout(showLoadingTimeoutId)
-              } catch (e) {
-                console.error(e)
-                clearTimeout(showLoadingTimeoutId)
-              }
-            })()
-
-            await Promise.race([
-              recordingPromise,
-              new Promise((r) => setTimeout(r, 3000)),
-            ])
+            recordCall()
+              .then((x) => (recording = x))
+              .catch((e) => console.error('Error recording call', e))
 
             call?.start()
           }
