@@ -336,6 +336,7 @@
       "
     ></div>
     <script>
+      // #region Setup
       // Disable saved scroll position as otherwise leads to weird layout on second load
       if ('scrollRestoration' in history) {
         history.scrollRestoration = 'manual'
@@ -348,7 +349,6 @@
       if (!callButton) throw new Error('Missing call button')
       const shareRecording = document.getElementById('share_recording')
       if (!shareRecording) throw new Error('Missing share recording')
-
       const copyright = document.getElementById('copyright')
       copyright.innerHTML = '© ' + new Date().getFullYear() + ' David Adler'
       copyright.onclick = () =>
@@ -356,6 +356,13 @@
           `I only put this here so you have a handy way of knowing the current year is ${new Date().getFullYear()}. You hereby have my permission to come back at any time to check what year it is.`
         )
 
+      // #endregion
+
+      // #region Utils
+      const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms))
+      // #endregion
+
+      // #region Eye Tracking
       const directionVectors = {
         north: { x: 0, y: -1 },
         'north north east': { x: 0.25, y: -0.75 },
@@ -817,6 +824,7 @@
       handleMouseMove({ clientX: 0, clientY: 0 })
       // Fake a resize to start
       handleOnResize()
+      // #endregion
 
       // #region Call David
 
@@ -836,48 +844,48 @@
             callButton.style.animation =
               'btn-primary-border-pulsate 2.5s infinite'
             let recording = undefined
-            call.onDisconnect = () => {
+            call.onDisconnect = async () => {
               callButton.style.animation = ''
               callButton.style.transform = 'scale(0)'
               callButton.style.pointerEvents = 'none'
               call = undefined
-              setTimeout(() => {
-                if (recording) {
-                  shareRecording.style.transform = 'scale(1)'
-                  shareRecording.innerHTML = /*html*/ `Thanks for calling! 
+              await sleep(1000) // Wait for the call button animation to finish
+              callButton.innerHTML = 'Call David Now'
+              isCallButtonShown = false
+              if (recording) {
+                // Display the share recording message
+                shareRecording.style.transform = 'scale(1)'
+                shareRecording.innerHTML = /*html*/ `Thanks for calling! 
                   I would love to see the recording of the call, to share it with me 
                   <a id="share_download_video" href='#'>first download the video</a> 
                   and then <a id="share_send_email">send me an email</a> with the video attached. 
                   Or just <a id="close_share_recording" href="#">close this message</a>.`
-                  const downloadVideo = document.getElementById(
-                    'share_download_video'
-                  )
-                  if (!downloadVideo) throw new Error('Missing download video')
-                  downloadVideo.onclick = (e) => {
-                    e.preventDefault()
-                    recording.download()
-                  }
-                  const sendEmail = document.getElementById('share_send_email')
-                  if (!sendEmail) throw new Error('Missing send email')
-                  sendEmail.target = '_blank'
-                  sendEmail.href = `mailto:hiredavidadler@gmail.com?subject=${encodeURIComponent(
-                    'Call With David Adler'
-                  )}&body=${encodeURIComponent(
-                    'Hey,\n\nThanks for taking the time to play with my website 😊. Please remember to attach the video recording!\n'
-                  )}`
-                  const closeShareRecording = document.getElementById(
-                    'close_share_recording'
-                  )
-                  if (!closeShareRecording)
-                    throw new Error('Missing close share recording')
-                  closeShareRecording.onclick = (e) => {
-                    e.preventDefault()
-                    shareRecording.style.transform = 'scale(0)'
-                  }
+                const downloadVideo = document.getElementById(
+                  'share_download_video'
+                )
+                if (!downloadVideo) throw new Error('Missing download video')
+                downloadVideo.onclick = (e) => {
+                  e.preventDefault()
+                  recording.download()
                 }
-                callButton.innerHTML = 'Call David Now'
-                isCallButtonShown = false
-              }, 1000)
+                const sendEmail = document.getElementById('share_send_email')
+                if (!sendEmail) throw new Error('Missing send email')
+                sendEmail.target = '_blank'
+                sendEmail.href = `mailto:hiredavidadler@gmail.com?subject=${encodeURIComponent(
+                  'Call With David Adler'
+                )}&body=${encodeURIComponent(
+                  'Hey,\n\nThanks for taking the time to play with my website 😊. Please remember to attach the video recording!\n'
+                )}`
+                const closeShareRecording = document.getElementById(
+                  'close_share_recording'
+                )
+                if (!closeShareRecording)
+                  throw new Error('Missing close share recording')
+                closeShareRecording.onclick = (e) => {
+                  e.preventDefault()
+                  shareRecording.style.transform = 'scale(0)'
+                }
+              }
             }
 
             recordCall()
@@ -895,12 +903,12 @@
           .catch((error) => console.log(`Error getting user media: ${error}`))
         if (!stream) return
         let options
-        if (MediaRecorder.isTypeSupported('video/webm; codecs=vp9')) {
+        if (MediaRecorder.isTypeSupported('video/mp4')) {
+          options = { mimeType: 'video/mp4', videoBitsPerSecond: 100000 }
+        } else if (MediaRecorder.isTypeSupported('video/webm; codecs=vp9')) {
           options = { mimeType: 'video/webm; codecs=vp9' }
         } else if (MediaRecorder.isTypeSupported('video/webm')) {
           options = { mimeType: 'video/webm' }
-        } else if (MediaRecorder.isTypeSupported('video/mp4')) {
-          options = { mimeType: 'video/mp4', videoBitsPerSecond: 100000 }
         } else {
           console.error('no suitable mimetype found for this device')
         }
@@ -917,7 +925,7 @@
             const url = URL.createObjectURL(blob)
             const a = document.createElement('a')
             a.href = url
-            a.download = 'call_with_david_adler.webm'
+            a.download = `call_with_david.${options.mimeType.split('/')[1]}`
             a.click()
           },
         }
