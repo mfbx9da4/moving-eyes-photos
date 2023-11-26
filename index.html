@@ -861,10 +861,10 @@
               if (recording) {
                 // Display the share recording message
                 shareRecording.style.transform = 'scale(1)'
-                shareRecording.innerHTML = /*html*/ `Thanks for calling! 
-                  I would love to see the recording of the call, to share it with me 
-                  <a id="share_download_video" href='#'>first download the video</a> 
-                  and then <a id="share_send_email">send me an email</a> with the video attached. 
+                shareRecording.innerHTML = /*html*/ `Thanks for calling!
+                  I would love to see the recording of the call, to share it with me
+                  <a id="share_download_video" href='#'>first download the video</a>
+                  and then <a id="share_send_email">send me an email</a> with the video attached.
                   Or just <a id="close_share_recording" href="#">close this message</a>.`
                 const downloadVideo = document.getElementById(
                   'share_download_video'
@@ -910,7 +910,7 @@
         if (!stream) return
         let options
         if (MediaRecorder.isTypeSupported('video/mp4')) {
-          options = { mimeType: 'video/mp4', videoBitsPerSecond: 100000 }
+          options = { mimeType: 'video/mp4', videoBitsPerSecond: 500000, audioBitsPerSecond: 64000, },
         } else if (MediaRecorder.isTypeSupported('video/webm; codecs=vp9')) {
           options = { mimeType: 'video/webm; codecs=vp9' }
         } else if (MediaRecorder.isTypeSupported('video/webm')) {
