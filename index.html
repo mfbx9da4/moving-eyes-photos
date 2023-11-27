@@ -859,44 +859,14 @@
               callButton.innerHTML = 'Press Here (Sound Required)'
               isCallButtonShown = false
               if (recording) {
-                // Display the share recording message
-                shareRecording.style.transform = 'scale(1)'
-                shareRecording.innerHTML = /*html*/ `Thanks for calling!
-                  I would love to see the recording of the call, to share it with me
-                  <a id="share_download_video" href='#'>first download the video</a>
-                  and then <a id="share_send_email">send me an email</a> with the video attached.
-                  Or just <a id="close_share_recording" href="#">close this message</a>.`
-                const downloadVideo = document.getElementById(
-                  'share_download_video'
-                )
-                if (!downloadVideo) throw new Error('Missing download video')
-                downloadVideo.onclick = (e) => {
-                  e.preventDefault()
-                  recording.download()
-                }
-                const sendEmail = document.getElementById('share_send_email')
-                if (!sendEmail) throw new Error('Missing send email')
-                sendEmail.target = '_blank'
-                sendEmail.href = `mailto:hiredavidadler@gmail.com?subject=${encodeURIComponent(
-                  'Call With David Adler'
-                )}&body=${encodeURIComponent(
-                  'Hey,\n\nThanks for taking the time to play with my website 😊. Please remember to attach the video recording!\n'
-                )}`
-                const closeShareRecording = document.getElementById(
-                  'close_share_recording'
-                )
-                if (!closeShareRecording)
-                  throw new Error('Missing close share recording')
-                closeShareRecording.onclick = (e) => {
-                  e.preventDefault()
-                  shareRecording.style.transform = 'scale(0)'
-                }
+                displayShareRecordingMessage(recording)
               }
             }
 
-            recordCall()
-              .then((x) => (recording = x))
-              .catch((e) => console.error('Error recording call', e))
+            // Disable recording as it's not working well
+            // recordCall()
+            //   .then((x) => (recording = x))
+            //   .catch((e) => console.error('Error recording call', e))
 
             call?.start()
           }
@@ -938,6 +908,39 @@
             a.download = `call_with_david.${options.mimeType.split('/')[1]}`
             a.click()
           },
+        }
+      }
+
+      async function displayShareRecordingMessage(recording) {
+        // Display the share recording message
+        shareRecording.style.transform = 'scale(1)'
+        shareRecording.innerHTML = /*html*/ `Thanks for calling!
+                  I would love to see the recording of the call, to share it with me
+                  <a id="share_download_video" href='#'>first download the video</a>
+                  and then <a id="share_send_email">send me an email</a> with the video attached.
+                  Or just <a id="close_share_recording" href="#">close this message</a>.`
+        const downloadVideo = document.getElementById('share_download_video')
+        if (!downloadVideo) throw new Error('Missing download video')
+        downloadVideo.onclick = (e) => {
+          e.preventDefault()
+          recording.download()
+        }
+        const sendEmail = document.getElementById('share_send_email')
+        if (!sendEmail) throw new Error('Missing send email')
+        sendEmail.target = '_blank'
+        sendEmail.href = `mailto:hiredavidadler@gmail.com?subject=${encodeURIComponent(
+          'Call With David Adler'
+        )}&body=${encodeURIComponent(
+          'Hey,\n\nThanks for taking the time to play with my website 😊. Please remember to attach the video recording!\n'
+        )}`
+        const closeShareRecording = document.getElementById(
+          'close_share_recording'
+        )
+        if (!closeShareRecording)
+          throw new Error('Missing close share recording')
+        closeShareRecording.onclick = (e) => {
+          e.preventDefault()
+          shareRecording.style.transform = 'scale(0)'
         }
       }
 
