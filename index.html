@@ -920,7 +920,7 @@
         } else if (MediaRecorder.isTypeSupported('video/webm')) {
           options = { mimeType: 'video/webm' }
         } else {
-          console.error('no suitable mimetype found for this device')
+          console.error('No suitable mimetype found for this device')
         }
 
         const mediaRecorder = new MediaRecorder(stream, options)
