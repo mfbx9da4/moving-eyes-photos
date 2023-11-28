@@ -240,7 +240,7 @@
           "
         >
           <button id="call" class="btn primary" style="transform: scale(0)">
-            Press Here (Sound Required)
+            Turn Sound On
           </button>
           <p
             id="share_recording"
@@ -856,7 +856,7 @@
               callButton.style.pointerEvents = 'none'
               call = undefined
               await sleep(1000) // Wait for the call button animation to finish
-              callButton.innerHTML = 'Press Here (Sound Required)'
+              callButton.innerHTML = 'Turn Sound On'
               isCallButtonShown = false
               if (recording) {
                 displayShareRecordingMessage(recording)
