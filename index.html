@@ -100,8 +100,8 @@
       }
 
       @font-face {
-        font-family: 'Virgil';
-        src: url('/static/immutable/fonts/Virgil.woff2');
+        font-family: "Virgil";
+        src: url("/static/immutable/fonts/Virgil.woff2");
         font-display: fallback;
       }
       *,
@@ -110,7 +110,7 @@
         box-sizing: border-box;
       }
       * {
-        font-family: 'Virgil';
+        font-family: "Virgil";
         color: var(--label);
         user-select: none;
         -webkit-touch-callout: none; /* iOS Safari */
@@ -344,55 +344,55 @@
     <script>
       // #region Setup
       // Disable saved scroll position as otherwise leads to weird layout on second load
-      if ('scrollRestoration' in history) {
-        history.scrollRestoration = 'manual'
+      if ("scrollRestoration" in history) {
+        history.scrollRestoration = "manual";
       }
-      const h1 = document.querySelector('h1')
-      if (!h1) throw new Error('Missing h1')
+      const h1 = document.querySelector("h1");
+      if (!h1) throw new Error("Missing h1");
       // Shorten the name for mobile
-      if (window.innerWidth < 700) h1.innerText = 'David Adler'
-      const callButton = document.getElementById('call')
-      if (!callButton) throw new Error('Missing call button')
-      const shareRecording = document.getElementById('share_recording')
-      if (!shareRecording) throw new Error('Missing share recording')
-      const copyright = document.getElementById('copyright')
-      copyright.innerHTML = '© ' + new Date().getFullYear() + ' David Adler'
+      if (window.innerWidth < 700) h1.innerText = "David Adler";
+      const callButton = document.getElementById("call");
+      if (!callButton) throw new Error("Missing call button");
+      const shareRecording = document.getElementById("share_recording");
+      if (!shareRecording) throw new Error("Missing share recording");
+      const copyright = document.getElementById("copyright");
+      copyright.innerHTML = "© " + new Date().getFullYear() + " David Adler";
       copyright.onclick = () =>
         alert(
           `I only put this here so you have a handy way of knowing the current year is ${new Date().getFullYear()}. You hereby have my permission to come back at any time to check what year it is.`
-        )
+        );
 
       // #endregion
 
       // #region Utils
-      const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms))
+      const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
       // #endregion
 
       // #region Eye Tracking
       const directionVectors = {
         north: { x: 0, y: -1 },
-        'north north east': { x: 0.25, y: -0.75 },
-        'north east': { x: 0.5, y: -0.5 },
-        'north east east': { x: 0.75, y: -0.25 },
+        "north north east": { x: 0.25, y: -0.75 },
+        "north east": { x: 0.5, y: -0.5 },
+        "north east east": { x: 0.75, y: -0.25 },
         east: { x: 1, y: 0 },
-        'south east east': { x: 0.75, y: 0.25 },
-        'south east': { x: 0.5, y: 0.5 },
-        'south south east': { x: 0.25, y: 0.75 },
+        "south east east": { x: 0.75, y: 0.25 },
+        "south east": { x: 0.5, y: 0.5 },
+        "south south east": { x: 0.25, y: 0.75 },
         south: { x: 0, y: 1 },
-        'south south west': { x: -0.25, y: 0.75 },
-        'south west': { x: -0.5, y: 0.5 },
-        'south west west': { x: -0.75, y: 0.25 },
+        "south south west": { x: -0.25, y: 0.75 },
+        "south west": { x: -0.5, y: 0.5 },
+        "south west west": { x: -0.75, y: 0.25 },
         west: { x: -1, y: 0 },
-        'north west west': { x: -0.75, y: -0.25 },
-        'north west': { x: -0.5, y: -0.5 },
-        'north north west': { x: -0.25, y: -0.75 },
-      }
+        "north west west": { x: -0.75, y: -0.25 },
+        "north west": { x: -0.5, y: -0.5 },
+        "north north west": { x: -0.25, y: -0.75 },
+      };
 
       const rawPhotos = [
         {
-          url: '/static/immutable/webp/0E9A9000.webp',
+          url: "/static/immutable/webp/0E9A9000.webp",
           // The direction the photo is pointing
-          direction: 'north',
+          direction: "north",
           // The coordinates of the eyes, these are used for aligning the photos so
           // the eyes are in the center of the screen
           leftEye: {
@@ -405,8 +405,8 @@
           },
         },
         {
-          url: '/static/immutable/webp/0E9A9002.webp',
-          direction: 'north east',
+          url: "/static/immutable/webp/0E9A9002.webp",
+          direction: "north east",
           leftEye: {
             x: 223.12,
             y: 250.54,
@@ -417,8 +417,8 @@
           },
         },
         {
-          url: '/static/immutable/webp/0E9A9003.webp',
-          direction: 'north east east',
+          url: "/static/immutable/webp/0E9A9003.webp",
+          direction: "north east east",
           leftEye: {
             x: 236.51,
             y: 251.17,
@@ -429,8 +429,8 @@
           },
         },
         {
-          url: '/static/immutable/webp/0E9A9004.webp',
-          direction: 'east',
+          url: "/static/immutable/webp/0E9A9004.webp",
+          direction: "east",
           leftEye: {
             x: 236.51,
             y: 257.55,
@@ -441,8 +441,8 @@
           },
         },
         {
-          url: '/static/immutable/webp/0E9A9005.webp',
-          direction: 'south east east',
+          url: "/static/immutable/webp/0E9A9005.webp",
+          direction: "south east east",
           leftEye: {
             x: 240.97,
             y: 256.91,
@@ -453,8 +453,8 @@
           },
         },
         {
-          url: '/static/immutable/webp/0E9A9006.webp',
-          direction: 'south east',
+          url: "/static/immutable/webp/0E9A9006.webp",
+          direction: "south east",
           leftEye: {
             x: 231.41,
             y: 256.27,
@@ -465,8 +465,8 @@
           },
         },
         {
-          url: '/static/immutable/webp/0E9A9008.webp',
-          direction: 'south south east',
+          url: "/static/immutable/webp/0E9A9008.webp",
+          direction: "south south east",
           leftEye: {
             x: 233.32,
             y: 258.82,
@@ -477,8 +477,8 @@
           },
         },
         {
-          url: '/static/immutable/webp/0E9A9009.webp',
-          direction: 'south',
+          url: "/static/immutable/webp/0E9A9009.webp",
+          direction: "south",
           leftEye: {
             x: 235.87,
             y: 255.64,
@@ -489,8 +489,8 @@
           },
         },
         {
-          url: '/static/immutable/webp/0E9A9012.webp',
-          direction: 'south south west',
+          url: "/static/immutable/webp/0E9A9012.webp",
+          direction: "south south west",
           leftEye: {
             x: 211.65,
             y: 260.1,
@@ -501,8 +501,8 @@
           },
         },
         {
-          url: '/static/immutable/webp/0E9A9013.webp',
-          direction: 'south west',
+          url: "/static/immutable/webp/0E9A9013.webp",
+          direction: "south west",
           leftEye: {
             x: 214.2,
             y: 256.27,
@@ -513,8 +513,8 @@
           },
         },
         {
-          url: '/static/immutable/webp/0E9A9015.webp',
-          direction: 'south west west',
+          url: "/static/immutable/webp/0E9A9015.webp",
+          direction: "south west west",
           leftEye: {
             x: 208.46,
             y: 251.17,
@@ -525,8 +525,8 @@
           },
         },
         {
-          url: '/static/immutable/webp/0E9A9017.webp',
-          direction: 'west',
+          url: "/static/immutable/webp/0E9A9017.webp",
+          direction: "west",
           leftEye: {
             x: 201.45,
             y: 252.45,
@@ -537,8 +537,8 @@
           },
         },
         {
-          url: '/static/immutable/webp/0E9A9020.webp',
-          direction: 'north west',
+          url: "/static/immutable/webp/0E9A9020.webp",
+          direction: "north west",
           leftEye: {
             x: 197.62,
             y: 255,
@@ -549,8 +549,8 @@
           },
         },
         {
-          url: '/static/immutable/webp/0E9A9019.webp',
-          direction: 'north north west',
+          url: "/static/immutable/webp/0E9A9019.webp",
+          direction: "north north west",
           leftEye: {
             x: 207.82,
             y: 246.07,
@@ -560,11 +560,11 @@
             y: 240.34,
           },
         },
-      ]
+      ];
 
       const hoveredPhoto = {
-        url: '/static/immutable/webp/0E9A8952_hovered.webp',
-        direction: 'north',
+        url: "/static/immutable/webp/0E9A8952_hovered.webp",
+        direction: "north",
         leftEye: {
           x: 207.83,
           y: 249.9,
@@ -573,10 +573,10 @@
           x: 297.71,
           y: 246.08,
         },
-      }
+      };
       const clickedPhoto = {
-        url: '/static/immutable/webp/0E9A8956_clicked.webp',
-        direction: 'north east',
+        url: "/static/immutable/webp/0E9A8956_clicked.webp",
+        direction: "north east",
         leftEye: {
           x: 203.36,
           y: 260.1,
@@ -585,17 +585,17 @@
           x: 297.71,
           y: 260.74,
         },
-      }
-      const balloonPhotoUrl = '/static/immutable/resized/IMG_7981.png'
+      };
+      const balloonPhotoUrl = "/static/immutable/resized/IMG_7981.png";
 
       // Each photo points in a direction convert these human readable directions into vectors
       const photosWithVectors = rawPhotos.map((photo) => {
-        const vector = directionVectors[photo.direction]
+        const vector = directionVectors[photo.direction];
         if (!vector) {
-          throw new Error(`Unknown direction ${photo.direction}`)
+          throw new Error(`Unknown direction ${photo.direction}`);
         }
-        return { ...photo, vector }
-      })
+        return { ...photo, vector };
+      });
 
       // Convert each direction vector into two vectors indicating the section
       // of the screen it captures flush against it's neighbouring photos
@@ -604,112 +604,111 @@
         const antiClockwise =
           photosWithVectors[
             (index - 1 + photosWithVectors.length) % photosWithVectors.length
-          ]
+          ];
         const clockwise =
-          photosWithVectors[(index + 1) % photosWithVectors.length]
+          photosWithVectors[(index + 1) % photosWithVectors.length];
         if (!antiClockwise || !clockwise) {
-          throw new Error(`Missing neighbour for photo ${photo.url}`)
+          throw new Error(`Missing neighbour for photo ${photo.url}`);
         }
         const midpointAnticlockwise = {
           x: (photo.vector.x + antiClockwise.vector.x) / 2,
           y: (photo.vector.y + antiClockwise.vector.y) / 2,
-        }
+        };
         const midpointClockwise = {
           x: (photo.vector.x + clockwise.vector.x) / 2,
           y: (photo.vector.y + clockwise.vector.y) / 2,
-        }
+        };
         return {
           ...photo,
           section: [midpointAnticlockwise, midpointClockwise],
-        }
-      })
+        };
+      });
 
       // The width of the frame of the photo
-      const frameWidth = Math.min(460, window.innerWidth - 100)
+      const frameWidth = Math.min(460, window.innerWidth - 100);
       // The width of the photo inside the frame must be bigger as it will need to be offset to align eyes
-      const scaledPhotoWidth = frameWidth + 40
-      const frameHeight = frameWidth * 1.1
-      const image = document.getElementById('image')
+      const scaledPhotoWidth = frameWidth + 40;
+      const frameHeight = frameWidth * 1.1;
+      const image = document.getElementById("image");
       if (!image) {
-        throw new Error('Missing image')
+        throw new Error("Missing image");
       }
       // Don't show a dialog to download the image on iPhone long press
-      image.oncontextmenu = (e) => e.preventDefault()
-      const frame = image.parentElement
+      image.oncontextmenu = (e) => e.preventDefault();
+      const frame = image.parentElement;
       if (!frame) {
-        throw new Error('Missing frame')
+        throw new Error("Missing frame");
       }
 
-      frame.style.width = `${frameWidth}px`
-      frame.style.height = `${frameHeight}px`
+      frame.style.width = `${frameWidth}px`;
+      frame.style.height = `${frameHeight}px`;
 
       // Preload all images after the first one has loaded
       const preloadImage = (url) =>
         new Promise((resolve, reject) => {
-          const img = new Image()
-          img.onload = () => resolve()
-          img.onerror = (e) => reject(e)
-          img.src = url
-        })
-      let hasLoadedAllImages = false
+          const img = new Image();
+          img.onload = () => resolve();
+          img.onerror = (e) => reject(e);
+          img.src = url;
+        });
+      let hasLoadedAllImages = false;
       image.onload = async () => {
-        if (hasLoadedAllImages) return
-        hasLoadedAllImages = true
+        if (hasLoadedAllImages) return;
+        hasLoadedAllImages = true;
 
         await Promise.all(
           photos.concat([hoveredPhoto, clickedPhoto]).map(async (photo) => {
             try {
-              await preloadImage(photo.url)
-              photo.imageLoaded = true
+              await preloadImage(photo.url);
             } catch (e) {
               // Ignore
             }
           })
-        )
-        await preloadImage(balloonPhotoUrl)
-      }
+        );
+        await preloadImage(balloonPhotoUrl);
+      };
       if (image.complete) {
-        image.onload()
+        image.onload();
       }
       // The onload doesn't seem to fire if loading from cache
-      setTimeout(() => image.onload(), 200)
+      setTimeout(() => image.onload(), 200);
 
-      const eyesRelativePosition = { x: frameWidth / 2, y: frameWidth / 2 }
+      const eyesRelativePosition = { x: frameWidth / 2, y: frameWidth / 2 };
 
-      let eyesAbsolutePosition = null
+      let eyesAbsolutePosition = null;
       function getEyesAbsolutePosition() {
         if (!eyesAbsolutePosition) {
           // Avoid layout thrashing
-          const frameRect = frame.getBoundingClientRect()
+          const frameRect = frame.getBoundingClientRect();
           eyesAbsolutePosition = {
             x: frameRect.left + eyesRelativePosition.x,
             y: frameRect.top + eyesRelativePosition.y,
-          }
+          };
         }
-        return eyesAbsolutePosition
+        return eyesAbsolutePosition;
       }
 
       function distance(point1, point2) {
-        const x = point1.x - point2.x
-        const y = point1.y - point2.y
-        return Math.sqrt(x * x + y * y)
+        const x = point1.x - point2.x;
+        const y = point1.y - point2.y;
+        return Math.sqrt(x * x + y * y);
       }
 
       function isInCentralPortionOfFace(x, y) {
-        const frameAbsoluteCenter = getEyesAbsolutePosition()
-        return distance({ x, y }, frameAbsoluteCenter) < 60
+        const frameAbsoluteCenter = getEyesAbsolutePosition();
+        return distance({ x, y }, frameAbsoluteCenter) < 60;
       }
 
-      let lastTimeEnteredFace = 0
-      let timeoutIdHoveredFace = 0
+      let lastTimeEnteredFace = 0;
+      let timeoutIdHoveredFace = 0;
 
       /** @param {MouseEvent | TouchEvent} e */
       function handleMouseMove(e) {
         // get touch or mouse position
-        const x = 'clientX' in e ? e.clientX : e.touches[0].clientX
-        const y = 'clientY' in e ? e.clientY : e.touches[0].clientY
+        const x = "clientX" in e ? e.clientX : e.touches[0].clientX;
+        const y = "clientY" in e ? e.clientY : e.touches[0].clientY;
 
-        const frameAbsoluteCenter = getEyesAbsolutePosition()
+        const frameAbsoluteCenter = getEyesAbsolutePosition();
 
         // Get unit vector from center of frame to mouse
         const vector = {
@@ -717,349 +716,349 @@
           x: (x - frameAbsoluteCenter.x) / frameAbsoluteCenter.x,
           // y should be from -1 to 1
           y: (y - frameAbsoluteCenter.y) / frameAbsoluteCenter.y,
-        }
+        };
 
         // The vector will be inside one of the sections of the photos, find which one
         let closestPhoto = photos.find((closest, photo) => {
-          const [lower, upper] = closest.section
+          const [lower, upper] = closest.section;
           // https://stackoverflow.com/a/17497339/1376627
           // if (AxB * AxC >= 0 && CxB * CxA >= 0)
           // then B is definitely inside A and C
-          const lowerInside = vector.x * lower.y - vector.y * lower.x <= 0
-          const upperInside = vector.x * upper.y - vector.y * upper.x >= 0
-          return lowerInside && upperInside
-        })
+          const lowerInside = vector.x * lower.y - vector.y * lower.x <= 0;
+          const upperInside = vector.x * upper.y - vector.y * upper.x >= 0;
+          return lowerInside && upperInside;
+        });
 
         // Delay showing the hovered face to avoid jank during quick swipes
         if (isInCentralPortionOfFace(x, y)) {
           if (lastTimeEnteredFace === 0) {
-            lastTimeEnteredFace = Date.now()
-            timeoutIdHoveredFace = setTimeout(() => handleMouseMove(e), 150)
+            lastTimeEnteredFace = Date.now();
+            timeoutIdHoveredFace = setTimeout(() => handleMouseMove(e), 150);
           } else if (Date.now() - lastTimeEnteredFace > 150) {
-            closestPhoto = hoveredPhoto
+            closestPhoto = hoveredPhoto;
           }
         } else {
-          lastTimeEnteredFace = 0
-          clearTimeout(timeoutIdHoveredFace)
+          lastTimeEnteredFace = 0;
+          clearTimeout(timeoutIdHoveredFace);
         }
 
         if (!closestPhoto) {
-          throw new Error('Missing closest photo')
+          throw new Error("Missing closest photo");
         }
 
         // set image to closest photo
-        image.width = scaledPhotoWidth
+        image.width = scaledPhotoWidth;
         // This is a hardcoded value all the photos have this width
-        const naturalWidth = 510
+        const naturalWidth = 510;
         // We want to align the center of the eyes to the center of the frame
-        const ratio = scaledPhotoWidth / naturalWidth
-        const naturalRightEyeCoords = closestPhoto.rightEye
-        const naturalLeftEyeCoords = closestPhoto.leftEye
+        const ratio = scaledPhotoWidth / naturalWidth;
+        const naturalRightEyeCoords = closestPhoto.rightEye;
+        const naturalLeftEyeCoords = closestPhoto.leftEye;
         const naturalCenter = {
           x: (naturalRightEyeCoords.x + naturalLeftEyeCoords.x) / 2,
           y: (naturalRightEyeCoords.y + naturalLeftEyeCoords.y) / 2,
-        }
+        };
         // Now that we have the natural center we need to scale it down to the target size
         const scaledCenter = {
           x: naturalCenter.x * ratio,
           y: naturalCenter.y * ratio,
-        }
+        };
 
         // Now we can work out the offset we need to apply to the image to align the eyes
         const offset = {
           x: eyesRelativePosition.x - scaledCenter.x,
           y: eyesRelativePosition.y - scaledCenter.y,
-        }
+        };
 
-        image.src = closestPhoto.url
+        image.src = closestPhoto.url;
         // Avoid shifting the image before it's loaded as otherwise it will shift the eyes of the old image
         image.onload = () => {
-          image.style.transform = `translate(${offset.x}px, ${offset.y}px)`
-        }
+          image.style.transform = `translate(${offset.x}px, ${offset.y}px)`;
+        };
         if (image.complete) {
-          image.onload()
+          image.onload();
         }
       }
 
       function handleOnResize() {
         // Clear the cached eyes absolute center
-        eyesAbsolutePosition = null
+        eyesAbsolutePosition = null;
 
         // If the last href and the h1 are all in the viewport then we can block scrolling
         // to make for a better experience on mobile
-        const lastHref = document.querySelector('a:last-of-type')
+        const lastHref = document.querySelector("a:last-of-type");
         if (!lastHref || !h1) {
-          console.warn('Missing last href or h1')
+          console.warn("Missing last href or h1");
         }
-        const lastHrefRect = lastHref.getBoundingClientRect()
-        const h1Rect = h1.getBoundingClientRect()
+        const lastHrefRect = lastHref.getBoundingClientRect();
+        const h1Rect = h1.getBoundingClientRect();
         const lastHrefInViewport =
           lastHrefRect.top >= 0 &&
           lastHrefRect.left >= 0 &&
           lastHrefRect.bottom <= window.innerHeight &&
-          lastHrefRect.right <= window.innerWidth
+          lastHrefRect.right <= window.innerWidth;
         const h1InViewport =
           h1Rect.top >= 0 &&
           h1Rect.left >= 0 &&
           h1Rect.bottom <= window.innerHeight &&
-          h1Rect.right <= window.innerWidth
+          h1Rect.right <= window.innerWidth;
         if (lastHrefInViewport && h1InViewport) {
-          document.body.style.overflow = 'hidden'
+          document.body.style.overflow = "hidden";
         } else {
-          document.body.style.overflow = 'auto'
+          document.body.style.overflow = "auto";
         }
       }
 
       /** @param {MouseEvent} e */
       function handleClick(e) {
         // If we click and we're in the central portion of the face then show the clicked photo
-        const x = e.clientX
-        const y = e.clientY
+        const x = e.clientX;
+        const y = e.clientY;
         if (isInCentralPortionOfFace(x, y)) {
-          image.src = clickedPhoto.url
-          performBalloonAnimation()
-          toggleCallButton()
+          image.src = clickedPhoto.url;
+          performBalloonAnimation();
+          toggleCallButton();
         }
       }
 
-      window.addEventListener('click', handleClick)
-      window.addEventListener('mousemove', handleMouseMove)
-      window.addEventListener('touchstart', handleMouseMove)
-      window.addEventListener('touchmove', handleMouseMove)
-      window.addEventListener('resize', handleOnResize)
+      window.addEventListener("click", handleClick);
+      window.addEventListener("mousemove", handleMouseMove);
+      window.addEventListener("touchstart", handleMouseMove);
+      window.addEventListener("touchmove", handleMouseMove);
+      window.addEventListener("resize", handleOnResize);
 
       // Fake a mouse move to the north west of the screen to start
-      handleMouseMove({ clientX: 0, clientY: 0 })
+      handleMouseMove({ clientX: 0, clientY: 0 });
       // Fake a resize to start
-      handleOnResize()
+      handleOnResize();
       // #endregion
 
       // #region Call David
 
-      let isCallButtonShown = false
-      let call = undefined
+      let isCallButtonShown = false;
+      let call = undefined;
       function toggleCallButton() {
         if (!isCallButtonShown) {
-          isCallButtonShown = true
-          callButton.parentElement.style.marginTop = frameHeight / 28 + 'px'
-          callButton.style.transform = 'scale(1)'
-          callButton.style.pointerEvents = ''
+          isCallButtonShown = true;
+          callButton.parentElement.style.marginTop = frameHeight / 28 + "px";
+          callButton.style.transform = "scale(1)";
+          callButton.style.pointerEvents = "";
           callButton.onclick = async () => {
             if (call) {
-              return
+              return;
             }
-            call = callDavid()
+            call = callDavid();
             callButton.style.animation =
-              'btn-primary-border-pulsate 2.5s infinite'
-            let recording = undefined
+              "btn-primary-border-pulsate 2.5s infinite";
+            let recording = undefined;
             call.onDisconnect = async () => {
-              callButton.style.animation = ''
-              callButton.style.transform = 'scale(0)'
-              callButton.style.pointerEvents = 'none'
-              call = undefined
-              await sleep(1000) // Wait for the call button animation to finish
-              callButton.innerHTML = 'Turn Sound On'
-              isCallButtonShown = false
+              callButton.style.animation = "";
+              callButton.style.transform = "scale(0)";
+              callButton.style.pointerEvents = "none";
+              call = undefined;
+              await sleep(1000); // Wait for the call button animation to finish
+              callButton.innerHTML = "Turn Sound On";
+              isCallButtonShown = false;
               if (recording) {
-                displayShareRecordingMessage(recording)
+                displayShareRecordingMessage(recording);
               }
-            }
+            };
 
             // Disable recording as it's not working well
             // recordCall()
             //   .then((x) => (recording = x))
             //   .catch((e) => console.error('Error recording call', e))
 
-            call?.start()
-          }
+            call?.start();
+          };
         }
       }
 
       async function recordCall() {
         const stream = await navigator.mediaDevices
           .getUserMedia({ audio: true, video: true })
-          .catch((error) => console.log(`Error getting user media: ${error}`))
-        if (!stream) return
-        let options
-        if (MediaRecorder.isTypeSupported('video/mp4')) {
+          .catch((error) => console.log(`Error getting user media: ${error}`));
+        if (!stream) return;
+        let options;
+        if (MediaRecorder.isTypeSupported("video/mp4")) {
           options = {
-            mimeType: 'video/mp4',
+            mimeType: "video/mp4",
             videoBitsPerSecond: 500000,
             audioBitsPerSecond: 64000,
-          }
-        } else if (MediaRecorder.isTypeSupported('video/webm; codecs=vp9')) {
-          options = { mimeType: 'video/webm; codecs=vp9' }
-        } else if (MediaRecorder.isTypeSupported('video/webm')) {
-          options = { mimeType: 'video/webm' }
+          };
+        } else if (MediaRecorder.isTypeSupported("video/webm; codecs=vp9")) {
+          options = { mimeType: "video/webm; codecs=vp9" };
+        } else if (MediaRecorder.isTypeSupported("video/webm")) {
+          options = { mimeType: "video/webm" };
         } else {
-          console.error('No suitable mimetype found for this device')
+          console.error("No suitable mimetype found for this device");
         }
 
-        const mediaRecorder = new MediaRecorder(stream, options)
+        const mediaRecorder = new MediaRecorder(stream, options);
 
-        const chunks = []
-        mediaRecorder.ondataavailable = (e) => chunks.push(e.data)
-        mediaRecorder.start(1000)
+        const chunks = [];
+        mediaRecorder.ondataavailable = (e) => chunks.push(e.data);
+        mediaRecorder.start(1000);
         return {
           download: () => {
-            mediaRecorder.stop()
-            const blob = new Blob(chunks, { type: options.mimeType })
-            const url = URL.createObjectURL(blob)
-            const a = document.createElement('a')
-            a.href = url
-            a.download = `call_with_david.${options.mimeType.split('/')[1]}`
-            a.click()
+            mediaRecorder.stop();
+            const blob = new Blob(chunks, { type: options.mimeType });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement("a");
+            a.href = url;
+            a.download = `call_with_david.${options.mimeType.split("/")[1]}`;
+            a.click();
           },
-        }
+        };
       }
 
       async function displayShareRecordingMessage(recording) {
         // Display the share recording message
-        shareRecording.style.transform = 'scale(1)'
+        shareRecording.style.transform = "scale(1)";
         shareRecording.innerHTML = /*html*/ `Thanks for calling!
                   I would love to see the recording of the call, to share it with me
                   <a id="share_download_video" href='#'>first download the video</a>
                   and then <a id="share_send_email">send me an email</a> with the video attached.
-                  Or just <a id="close_share_recording" href="#">close this message</a>.`
-        const downloadVideo = document.getElementById('share_download_video')
-        if (!downloadVideo) throw new Error('Missing download video')
+                  Or just <a id="close_share_recording" href="#">close this message</a>.`;
+        const downloadVideo = document.getElementById("share_download_video");
+        if (!downloadVideo) throw new Error("Missing download video");
         downloadVideo.onclick = (e) => {
-          e.preventDefault()
-          recording.download()
-        }
-        const sendEmail = document.getElementById('share_send_email')
-        if (!sendEmail) throw new Error('Missing send email')
-        sendEmail.target = '_blank'
+          e.preventDefault();
+          recording.download();
+        };
+        const sendEmail = document.getElementById("share_send_email");
+        if (!sendEmail) throw new Error("Missing send email");
+        sendEmail.target = "_blank";
         sendEmail.href = `mailto:hiredavidadler@gmail.com?subject=${encodeURIComponent(
-          'Call With David Adler'
+          "Call With David Adler"
         )}&body=${encodeURIComponent(
-          'Hey,\n\nThanks for taking the time to play with my website 😊. Please remember to attach the video recording!\n'
-        )}`
+          "Hey,\n\nThanks for taking the time to play with my website 😊. Please remember to attach the video recording!\n"
+        )}`;
         const closeShareRecording = document.getElementById(
-          'close_share_recording'
-        )
+          "close_share_recording"
+        );
         if (!closeShareRecording)
-          throw new Error('Missing close share recording')
+          throw new Error("Missing close share recording");
         closeShareRecording.onclick = (e) => {
-          e.preventDefault()
-          shareRecording.style.transform = 'scale(0)'
-        }
+          e.preventDefault();
+          shareRecording.style.transform = "scale(0)";
+        };
       }
 
       function callDavid() {
-        let state = 'disconnected'
-        const ringtone = new Audio()
-        ringtone.src = '/static/immutable/audio/compressed/ringing.mp3'
-        ringtone.loop = true
-        const response = new Audio()
-        response.src = '/static/immutable/audio/compressed/response.mp3'
-        let ringtoneDurationTimeoutId = 0
-        let ringtoneDelayTimeoutId = 0
+        let state = "disconnected";
+        const ringtone = new Audio();
+        ringtone.src = "/static/immutable/audio/compressed/ringing.mp3";
+        ringtone.loop = true;
+        const response = new Audio();
+        response.src = "/static/immutable/audio/compressed/response.mp3";
+        let ringtoneDurationTimeoutId = 0;
+        let ringtoneDelayTimeoutId = 0;
 
-        let onDisconnect = () => {}
+        let onDisconnect = () => {};
 
         const start = () => {
-          state = 'connecting'
-          callButton.innerText = 'Calling...'
+          state = "connecting";
+          callButton.innerText = "Calling...";
           ringtoneDelayTimeoutId = setTimeout(() => {
-            ringtone.play()
+            ringtone.play();
             ringtoneDurationTimeoutId = setTimeout(() => {
-              state = 'connected'
-              ringtone.pause()
-              callButton.innerText = 'Connected'
+              state = "connected";
+              ringtone.pause();
+              callButton.innerText = "Connected";
               response.onended = () => {
-                state = 'disconnected'
-                onDisconnect()
-              }
-              response.play()
-            }, 7000)
-          }, 500)
-        }
+                state = "disconnected";
+                onDisconnect();
+              };
+              response.play();
+            }, 7000);
+          }, 500);
+        };
 
         return {
           disconnect: () => {
-            ringtone.pause()
-            response.pause()
-            clearTimeout(ringtoneDelayTimeoutId)
-            clearTimeout(ringtoneDurationTimeoutId)
-            onDisconnect()
+            ringtone.pause();
+            response.pause();
+            clearTimeout(ringtoneDelayTimeoutId);
+            clearTimeout(ringtoneDurationTimeoutId);
+            onDisconnect();
           },
           start,
           get state() {
-            return state
+            return state;
           },
           set onDisconnect(callback) {
-            onDisconnect = callback
+            onDisconnect = callback;
           },
           get isConnected() {
-            return state === 'connected'
+            return state === "connected";
           },
-        }
+        };
       }
 
       // #region Balloon Animation
       class Balloon {
         constructor(options) {
-          this.canvas = options.canvas
-          this.ctx = options.ctx
-          this.image = options.image
-          this.width = options.width
-          this.height = options.height
-          this.x = options.x
-          this.y = options.y
-          this.vx = options.vx
-          this.vy = options.vy
-          this.ax = options.ax
-          this.ay = options.ay
-          this.friction = options.friction
-          this.sway = Math.random() * 1.5
+          this.canvas = options.canvas;
+          this.ctx = options.ctx;
+          this.image = options.image;
+          this.width = options.width;
+          this.height = options.height;
+          this.x = options.x;
+          this.y = options.y;
+          this.vx = options.vx;
+          this.vy = options.vy;
+          this.ax = options.ax;
+          this.ay = options.ay;
+          this.friction = options.friction;
+          this.sway = Math.random() * 1.5;
         }
 
         draw() {
-          this._update()
+          this._update();
           this.ctx.drawImage(
             this.image,
             this.x,
             this.y,
             this.width,
             this.height
-          )
+          );
         }
 
         _update() {
-          this.vx += this.ax
-          this.vy += this.ay
-          this.vx *= this.friction
-          this.vy *= this.friction
-          this.x += this.vx
+          this.vx += this.ax;
+          this.vy += this.ay;
+          this.vx *= this.friction;
+          this.vy *= this.friction;
+          this.x += this.vx;
           // Apparently rounding improves performance as it prevents anti-aliasing computation
-          this.y -= Math.round(this.vy)
-          this.x += Math.round(Math.sin(Date.now() * 0.001) * this.sway)
+          this.y -= Math.round(this.vy);
+          this.x += Math.round(Math.sin(Date.now() * 0.001) * this.sway);
         }
       }
 
-      let isBalloonAnimationRunning = false
-      let balloons = []
+      let isBalloonAnimationRunning = false;
+      let balloons = [];
       // Optimization for drawing more efficiently
-      const offScreenCanvas = document.createElement('canvas')
+      const offScreenCanvas = document.createElement("canvas");
       function performBalloonAnimation() {
-        const image = new Image()
-        image.src = balloonPhotoUrl
-        const naturalWidth = 250
-        const naturalHeight = 350
-        const imageRatio = naturalHeight / naturalWidth
-        const canvas = document.getElementById('canvas')
-        const ctx = canvas.getContext('2d')
-        canvas.width = window.innerWidth
-        canvas.height = window.innerHeight
-        offScreenCanvas.width = canvas.width
-        offScreenCanvas.height = canvas.height
-        const offScreenCtx = offScreenCanvas.getContext('2d')
-        const numberOfBalloons = Math.round(window.innerWidth / 50)
+        const image = new Image();
+        image.src = balloonPhotoUrl;
+        const naturalWidth = 250;
+        const naturalHeight = 350;
+        const imageRatio = naturalHeight / naturalWidth;
+        const canvas = document.getElementById("canvas");
+        const ctx = canvas.getContext("2d");
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+        offScreenCanvas.width = canvas.width;
+        offScreenCanvas.height = canvas.height;
+        const offScreenCtx = offScreenCanvas.getContext("2d");
+        const numberOfBalloons = Math.round(window.innerWidth / 50);
         for (let i = 0; i < numberOfBalloons; i++) {
           // Optimization: integers are more performant
-          const width = Math.round(Math.random() * 50 + 50)
-          const height = Math.round(width * imageRatio)
+          const width = Math.round(Math.random() * 50 + 50);
+          const height = Math.round(width * imageRatio);
           balloons.push(
             new Balloon({
               canvas: offScreenCanvas,
@@ -1075,26 +1074,26 @@
               ay: 0.15 + Math.random() * 0.14,
               friction: 0.98,
             })
-          )
+          );
         }
         const animationLoop = () => {
-          offScreenCtx.clearRect(0, 0, canvas.width, canvas.height)
-          const isAboveScreen = (x) => x.y + x.height < 0
-          balloons = balloons.filter((x) => !isAboveScreen(x))
-          balloons.forEach((x) => x.draw())
+          offScreenCtx.clearRect(0, 0, canvas.width, canvas.height);
+          const isAboveScreen = (x) => x.y + x.height < 0;
+          balloons = balloons.filter((x) => !isAboveScreen(x));
+          balloons.forEach((x) => x.draw());
           // Optimization: Faster to redraw everything on an offscreen canvas
           // and then redraw once on the actual canvas
-          ctx.clearRect(0, 0, canvas.width, canvas.height)
-          ctx.drawImage(offScreenCanvas, 0, 0)
+          ctx.clearRect(0, 0, canvas.width, canvas.height);
+          ctx.drawImage(offScreenCanvas, 0, 0);
           if (balloons.length) {
-            requestAnimationFrame(animationLoop)
+            requestAnimationFrame(animationLoop);
           } else {
-            isBalloonAnimationRunning = false
+            isBalloonAnimationRunning = false;
           }
-        }
+        };
         if (!isBalloonAnimationRunning) {
-          isBalloonAnimationRunning = true
-          animationLoop()
+          isBalloonAnimationRunning = true;
+          animationLoop();
         }
       }
       // #endregion
