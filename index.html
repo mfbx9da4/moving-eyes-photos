@@ -652,7 +652,8 @@
           img.src = url;
         });
       let hasLoadedAllImages = false;
-      image.onload = async () => {
+      const preloadImages = async () => {
+        console.log("here");
         if (hasLoadedAllImages) return;
         hasLoadedAllImages = true;
 
@@ -668,13 +669,9 @@
         await preloadImage(balloonPhotoUrl);
       };
       if (image.complete) {
-        image.onload();
+        preloadImages();
       }
-      // The onload doesn't seem to fire if loading from cache
-      setTimeout(() => {
-        console.log("Running timeout");
-        image.onload();
-      }, 200);
+      image.addEventListener("load", preloadImages);
 
       const eyesRelativePosition = { x: frameWidth / 2, y: frameWidth / 2 };
 
