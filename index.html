@@ -671,7 +671,10 @@
         image.onload();
       }
       // The onload doesn't seem to fire if loading from cache
-      setTimeout(() => image.onload(), 200);
+      setTimeout(() => {
+        console.log("Running timeout");
+        image.onload();
+      }, 200);
 
       const eyesRelativePosition = { x: frameWidth / 2, y: frameWidth / 2 };
 
