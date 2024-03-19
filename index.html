@@ -657,7 +657,7 @@
         hasLoadedAllImages = true;
 
         await Promise.all(
-          photos.concat([hoveredPhoto, clickedPhoto]).map(async (photo) => {
+          [...photos, hoveredPhoto, clickedPhoto].map(async (photo) => {
             try {
               await preloadImage(photo.url);
             } catch (e) {
