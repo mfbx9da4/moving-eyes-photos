@@ -279,6 +279,7 @@
           flex-wrap: wrap;
           justify-content: center;
         "
+        id="links"
       >
         <!-- CV -->
         <a class="social-link" href="/cv.pdf" target="_blank">CV</a>
@@ -820,7 +821,7 @@
         }
       }
 
-      window.addEventListener("click", handleClick);
+      document.addEventListener("click", handleClick);
       window.addEventListener("mousemove", handleMouseMove);
       window.addEventListener("touchstart", handleMouseMove);
       window.addEventListener("touchmove", handleMouseMove);
@@ -842,7 +843,7 @@
           callButton.parentElement.style.marginTop = frameHeight / 28 + "px";
           callButton.style.transform = "scale(1)";
           callButton.style.pointerEvents = "";
-          callButton.onclick = async () => {
+          callButton.onclick = () => {
             if (call) {
               return;
             }
@@ -960,17 +961,25 @@
           state = "connecting";
           callButton.innerText = "Calling...";
           ringtoneDelayTimeoutId = setTimeout(() => {
-            ringtone.play();
-            ringtoneDurationTimeoutId = setTimeout(() => {
-              state = "connected";
-              ringtone.pause();
-              callButton.innerText = "Connected";
-              response.onended = () => {
-                state = "disconnected";
-                onDisconnect();
-              };
-              response.play();
-            }, 7000);
+            try {
+              ringtone.play();
+              ringtoneDurationTimeoutId = setTimeout(() => {
+                try {
+                  state = "connected";
+                  ringtone.pause();
+                  callButton.innerText = "Connected";
+                  response.onended = () => {
+                    state = "disconnected";
+                    onDisconnect();
+                  };
+                  response.play();
+                } catch (e) {
+                  console.error("Error playing response", e);
+                }
+              }, 7000);
+            } catch (e) {
+              console.error("Error playing ringtone", e);
+            }
           }, 500);
         };
 
