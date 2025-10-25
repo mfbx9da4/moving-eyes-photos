@@ -79,6 +79,16 @@
         --btn-primary-hover-border: rgba(31, 35, 40, 0.15);
         --btn-primary-selected-bg: hsla(137, 66%, 28%, 1);
         --btn-primary-selected-shadow: inset 0 1px 0 rgba(0, 45, 17, 0.2);
+
+        /* Grid link pastel colors */
+        --grid-link-1-bg: #fff4b3;
+        --grid-link-1-hover: #ffe680;
+        --grid-link-2-bg: #ffd4a3;
+        --grid-link-2-hover: #ffbf7a;
+        --grid-link-3-bg: #c8e6c9;
+        --grid-link-3-hover: #a5d6a7;
+        --grid-link-4-bg: #d7ccc8;
+        --grid-link-4-hover: #bcaaa4;
       }
 
       /* Dark mode */
@@ -98,6 +108,16 @@
           --btn-primary-hover-border: rgba(240, 246, 252, 0.1);
           --btn-primary-selected-bg: #238636;
           --btn-primary-selected-shadow: 0 0 transparent;
+
+          /* Grid link pastel colors for dark mode */
+          --grid-link-1-bg: #4d4600;      
+          --grid-link-1-hover: #665c00;   
+          --grid-link-2-bg: #663e1f;      
+          --grid-link-2-hover: #804f26;   
+          --grid-link-3-bg: #2e4930;      
+          --grid-link-3-hover: #3d6640;   
+          --grid-link-4-bg: #3b2f2d;      
+          --grid-link-4-hover: #54413d;   
         }
       }
 
@@ -142,6 +162,47 @@
       }
       .social-link:hover {
         border-bottom-color: var(--label);
+      }
+
+      .grid-link {
+        color: var(--label);
+        text-decoration: none;
+        padding: 40px 20px;
+        border: 4px solid var(--label);
+        border-top: none;
+        font-size: 24px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        text-align: center;
+        transition: background-color 0.2s ease;
+      }
+      .grid-link:first-child {
+        border-top: 4px solid var(--label);
+      }
+      .grid-link:nth-child(1) {
+        background-color: var(--grid-link-1-bg);
+      }
+      .grid-link:nth-child(1):hover {
+        background-color: var(--grid-link-1-hover);
+      }
+      .grid-link:nth-child(2) {
+        background-color: var(--grid-link-2-bg);
+      }
+      .grid-link:nth-child(2):hover {
+        background-color: var(--grid-link-2-hover);
+      }
+      .grid-link:nth-child(3) {
+        background-color: var(--grid-link-3-bg);
+      }
+      .grid-link:nth-child(3):hover {
+        background-color: var(--grid-link-3-hover);
+      }
+      .grid-link:nth-child(4) {
+        background-color: var(--grid-link-4-bg);
+      }
+      .grid-link:nth-child(4):hover {
+        background-color: var(--grid-link-4-hover);
       }
 
       #more-link {
@@ -406,36 +467,40 @@
         <div
           style="
             display: grid;
-            grid-auto-rows: auto;
-            gap: 16px;
-            align-content: start;
-            justify-items: center;
-            padding-top: 15%;
+            grid-template-rows: repeat(4, 1fr);
+            height: 100%;
+            width: 100%;
+            max-width: 800px;
+            margin: 0 auto;
           "
         >
           <!-- Instagram -->
           <a
-            class="social-link"
+            class="grid-link"
             href="https://www.instagram.com/davidadlerfb/"
             target="_blank"
-            style="font-size: 24px"
             >Instagram</a
           >
           <!-- Hacker News -->
           <a
-            class="social-link"
+            class="grid-link"
             href="https://news.ycombinator.com/user?id=mfbx9da4"
             target="_blank"
-            style="font-size: 24px"
             >Hacker News</a
           >
           <!-- Twitter -->
           <a
-            class="social-link"
+            class="grid-link"
             href="https://twitter.com/da_adler"
             target="_blank"
-            style="font-size: 24px"
             >Twitter</a
+          >
+          <!-- Stack Overflow -->
+          <a
+            class="grid-link"
+            href="https://stackoverflow.com/users/1376627/david-adler"
+            target="_blank"
+            >Stack Overflow</a
           >
         </div>
       </div>
