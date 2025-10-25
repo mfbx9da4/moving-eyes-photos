@@ -66,6 +66,7 @@
         --labelSecondary: rgba(60, 60, 67, 0.6);
         --labelTertiary: rgba(60, 60, 67, 0.3);
         --background: white;
+        --backgroundSecondary: rgb(240, 240, 240);
         --link: rgb(16, 33, 204);
 
         /* ngl stolen from GitHub */
@@ -87,6 +88,7 @@
           --labelSecondary: rgba(235, 235, 245, 0.6);
           --labelTertiary: rgba(235, 235, 245, 0.3);
           --background: rgb(36, 36, 36);
+          --backgroundSecondary: rgb(60, 60, 60);
 
           --btn-primary-bg: #238636;
           --btn-primary-border: rgba(240, 246, 252, 0.1);
@@ -134,11 +136,25 @@
       .social-link {
         color: var(--label);
         text-decoration: none;
-        padding: 0px 16px 4px 16px;
+        padding: 4px 16px 4px 16px;
         margin-bottom: 12px;
+        border-bottom: 1px solid transparent;
       }
       .social-link:hover {
-        border-bottom: 1px solid var(--label);
+        border-bottom-color: var(--label);
+      }
+
+      #more-link {
+        border: 1px solid transparent;
+        border-radius: 12px;
+        padding: 4px 16px 4px 16px;
+        display: inline-block;
+        transition: none;
+        margin-bottom: 12px;
+      }
+      #more-link:hover {
+        border-color: var(--label);
+        background: var(--backgroundSecondary);
       }
 
       @media (max-height: 789px) {
@@ -182,6 +198,16 @@
         100% {
           border-color: var(--btn-primary-hover-border);
         }
+      }
+
+      /* Dialog styles */
+      #more-dialog::backdrop {
+        background: transparent;
+      }
+
+      #close-dialog:hover,
+      #close-dialog:focus-visible {
+        transform: rotate(90deg);
       }
     </style>
   </head>
@@ -297,38 +323,122 @@
           target="_blank"
           >LinkedIn</a
         >
-        <!-- StackOverflow -->
+        <!-- More -->
         <a
           class="social-link"
-          href="https://stackoverflow.com/users/1376627/david-adler"
-          target="_blank"
-          >StackOverflow</a
-        >
-        <!-- Twitter -->
-        <a
-          class="social-link"
-          href="https://twitter.com/da_adler"
-          target="_blank"
-          >Twitter</a
-        >
-
-        <!-- Instagram -->
-        <a
-          class="social-link"
-          href="https://www.instagram.com/davidadlerfb/"
-          target="_blank"
-          >Instagram</a
-        >
-
-        <!-- Hacker News -->
-        <a
-          class="social-link"
-          href="https://news.ycombinator.com/user?id=mfbx9da4"
-          target="_blank"
-          >Hacker News</a
+          href="#"
+          id="more-link"
+          ><span id="more-link-text">More</span></a
         >
       </div>
     </div>
+
+    <!-- More Links Dialog -->
+    <dialog
+      id="more-dialog"
+      style="
+        border: 0;
+        padding: 0;
+        margin: 0;
+        outline: 0;
+        max-width: 100vw;
+        max-height: 100vh;
+        width: 100vw;
+        height: 100vh;
+        background: var(--backgroundSecondary);
+        color: var(--label);
+      "
+    >
+      <div
+        style="
+          display: grid;
+          grid-template-rows: auto 1fr;
+          height: 100%;
+          width: 100%;
+          padding: 40px;
+        "
+      >
+        <!-- Header with title and close button -->
+        <div
+          style="
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+          "
+        >
+          <h2
+            id="dialog-title"
+            style="
+              font-size: 48px;
+              margin: 0;
+            "
+          >
+            More
+          </h2>
+          <button
+            type="button"
+            id="close-dialog"
+            aria-label="Close dialog"
+            style="
+              margin: 0;
+              padding: 0;
+              background: transparent;
+              border-width: 2px;
+              border-style: solid;
+              border-radius: 999px;
+              width: 3rem;
+              height: 3rem;
+              display: grid;
+              place-items: center;
+              cursor: pointer;
+              transition: transform 180ms ease;
+              font-size: 48px;
+              line-height: 1;
+            "
+          >
+            ×
+          </button>
+        </div>
+
+        <!-- Links -->
+        <div
+          style="
+            display: grid;
+            grid-auto-rows: auto;
+            gap: 16px;
+            align-content: start;
+            justify-items: center;
+            padding-top: 15%;
+          "
+        >
+          <!-- Instagram -->
+          <a
+            class="social-link"
+            href="https://www.instagram.com/davidadlerfb/"
+            target="_blank"
+            style="font-size: 24px"
+            >Instagram</a
+          >
+          <!-- Hacker News -->
+          <a
+            class="social-link"
+            href="https://news.ycombinator.com/user?id=mfbx9da4"
+            target="_blank"
+            style="font-size: 24px"
+            >Hacker News</a
+          >
+          <!-- Twitter -->
+          <a
+            class="social-link"
+            href="https://twitter.com/da_adler"
+            target="_blank"
+            style="font-size: 24px"
+            >Twitter</a
+          >
+        </div>
+      </div>
+    </dialog>
+
     <!-- Positioned in the bottom right hand corner label tertiary -->
     <div
       id="copyright"
@@ -1104,6 +1214,74 @@
           animationLoop();
         }
       }
+      // #endregion
+
+      // #region More Dialog
+      const moreDialog = document.getElementById("more-dialog");
+      const moreLink = document.getElementById("more-link");
+      const closeDialogBtn = document.getElementById("close-dialog");
+
+      if (!moreDialog) throw new Error("Missing more dialog");
+      if (!moreLink) throw new Error("Missing more link");
+      if (!closeDialogBtn) throw new Error("Missing close dialog button");
+
+      const dialogTitle = document.getElementById("dialog-title");
+      if (!dialogTitle) throw new Error("Missing dialog title");
+      const moreLinkText = document.getElementById("more-link-text");
+      if (!moreLinkText) throw new Error("Missing more link text");
+
+      const prefersReducedMotion = window.matchMedia?.("(prefers-reduced-motion: reduce)")?.matches ?? false;
+
+      function openDialog() {
+        if (!document.startViewTransition || prefersReducedMotion) {
+          moreDialog.showModal();
+          return;
+        }
+
+        moreLink.style.viewTransitionName = "more-box";
+        moreLinkText.style.viewTransitionName = "more-text";
+
+        document.startViewTransition(() => {
+          moreLink.style.viewTransitionName = "";
+          moreLinkText.style.viewTransitionName = "";
+          moreDialog.style.viewTransitionName = "more-box";
+          dialogTitle.style.viewTransitionName = "more-text";
+          moreDialog.showModal();
+        });
+      }
+
+      function closeDialog() {
+        if (!document.startViewTransition || prefersReducedMotion) {
+          moreDialog.close();
+          return;
+        }
+
+        moreDialog.style.viewTransitionName = "more-box";
+        dialogTitle.style.viewTransitionName = "more-text";
+
+        document.startViewTransition(() => {
+          moreDialog.style.viewTransitionName = "";
+          dialogTitle.style.viewTransitionName = "";
+          moreLink.style.viewTransitionName = "more-box";
+          moreLinkText.style.viewTransitionName = "more-text";
+          moreDialog.close();
+        });
+      }
+
+      moreLink.addEventListener("click", (e) => {
+        e.preventDefault();
+        openDialog();
+      });
+
+      closeDialogBtn.addEventListener("click", () => {
+        closeDialog();
+      });
+
+      moreDialog.addEventListener("click", (e) => {
+        if (e.target === moreDialog) {
+          closeDialog();
+        }
+      });
       // #endregion
     </script>
 
