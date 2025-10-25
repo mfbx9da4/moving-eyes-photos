@@ -382,6 +382,7 @@
             style="
               margin: 0;
               padding: 0;
+              outline: 0;
               background: transparent;
               border-width: 2px;
               border-style: solid;
@@ -1230,7 +1231,7 @@
       const moreLinkText = document.getElementById("more-link-text");
       if (!moreLinkText) throw new Error("Missing more link text");
 
-      const prefersReducedMotion = window.matchMedia?.("(prefers-reduced-motion: reduce)")?.matches ?? false;
+      const prefersReducedMotion = window.matchMedia?.("(prefers-reduced-motion: reduce)")?.matches || false;
 
       function openDialog() {
         if (!document.startViewTransition || prefersReducedMotion) {
