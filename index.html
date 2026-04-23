@@ -548,260 +548,37 @@
       // #endregion
 
       // #region Eye Tracking
-      const directionVectors = {
-        north: { x: 0, y: -1 },
-        "north north east": { x: 0.25, y: -0.75 },
-        "north east": { x: 0.5, y: -0.5 },
-        "north east east": { x: 0.75, y: -0.25 },
-        east: { x: 1, y: 0 },
-        "south east east": { x: 0.75, y: 0.25 },
-        "south east": { x: 0.5, y: 0.5 },
-        "south south east": { x: 0.25, y: 0.75 },
-        south: { x: 0, y: 1 },
-        "south south west": { x: -0.25, y: 0.75 },
-        "south west": { x: -0.5, y: 0.5 },
-        "south west west": { x: -0.75, y: 0.25 },
-        west: { x: -1, y: 0 },
-        "north west west": { x: -0.75, y: -0.25 },
-        "north west": { x: -0.5, y: -0.5 },
-        "north north west": { x: -0.25, y: -0.75 },
-      };
-
-      const rawPhotos = [
-        {
-          url: "/static/immutable/webp/0E9A9000.webp",
-          // The direction the photo is pointing
-          direction: "north",
-          // The coordinates of the eyes, these are used for aligning the photos so
-          // the eyes are in the center of the screen
-          leftEye: {
-            x: 221.21,
-            y: 248.62,
-          },
-          rightEye: {
-            x: 306.64,
-            y: 247.35,
-          },
-        },
-        {
-          url: "/static/immutable/webp/0E9A9002.webp",
-          direction: "north east",
-          leftEye: {
-            x: 223.12,
-            y: 250.54,
-          },
-          rightEye: {
-            x: 309.19,
-            y: 249.26,
-          },
-        },
-        {
-          url: "/static/immutable/webp/0E9A9003.webp",
-          direction: "north east east",
-          leftEye: {
-            x: 236.51,
-            y: 251.17,
-          },
-          rightEye: {
-            x: 323.21,
-            y: 249.9,
-          },
-        },
-        {
-          url: "/static/immutable/webp/0E9A9004.webp",
-          direction: "east",
-          leftEye: {
-            x: 236.51,
-            y: 257.55,
-          },
-          rightEye: {
-            x: 323.21,
-            y: 255,
-          },
-        },
-        {
-          url: "/static/immutable/webp/0E9A9005.webp",
-          direction: "south east east",
-          leftEye: {
-            x: 240.97,
-            y: 256.91,
-          },
-          rightEye: {
-            x: 328.31,
-            y: 255,
-          },
-        },
-        {
-          url: "/static/immutable/webp/0E9A9006.webp",
-          direction: "south east",
-          leftEye: {
-            x: 231.41,
-            y: 256.27,
-          },
-          rightEye: {
-            x: 320.02,
-            y: 250.54,
-          },
-        },
-        {
-          url: "/static/immutable/webp/0E9A9008.webp",
-          direction: "south south east",
-          leftEye: {
-            x: 233.32,
-            y: 258.82,
-          },
-          rightEye: {
-            x: 320.66,
-            y: 256.27,
-          },
-        },
-        {
-          url: "/static/immutable/webp/0E9A9009.webp",
-          direction: "south",
-          leftEye: {
-            x: 235.87,
-            y: 255.64,
-          },
-          rightEye: {
-            x: 328.31,
-            y: 252.45,
-          },
-        },
-        {
-          url: "/static/immutable/webp/0E9A9012.webp",
-          direction: "south south west",
-          leftEye: {
-            x: 211.65,
-            y: 260.1,
-          },
-          rightEye: {
-            x: 302.81,
-            y: 257.55,
-          },
-        },
-        {
-          url: "/static/immutable/webp/0E9A9013.webp",
-          direction: "south west",
-          leftEye: {
-            x: 214.2,
-            y: 256.27,
-          },
-          rightEye: {
-            x: 306.64,
-            y: 255,
-          },
-        },
-        {
-          url: "/static/immutable/webp/0E9A9015.webp",
-          direction: "south west west",
-          leftEye: {
-            x: 208.46,
-            y: 251.17,
-          },
-          rightEye: {
-            x: 303.45,
-            y: 249.9,
-          },
-        },
-        {
-          url: "/static/immutable/webp/0E9A9017.webp",
-          direction: "west",
-          leftEye: {
-            x: 201.45,
-            y: 252.45,
-          },
-          rightEye: {
-            x: 291.34,
-            y: 248.62,
-          },
-        },
-        {
-          url: "/static/immutable/webp/0E9A9020.webp",
-          direction: "north west",
-          leftEye: {
-            x: 197.62,
-            y: 255,
-          },
-          rightEye: {
-            x: 290.06,
-            y: 249.26,
-          },
-        },
-        {
-          url: "/static/immutable/webp/0E9A9019.webp",
-          direction: "north north west",
-          leftEye: {
-            x: 207.82,
-            y: 246.07,
-          },
-          rightEye: {
-            x: 302.17,
-            y: 240.34,
-          },
-        },
+      // Each photo is taken with the subject looking in a different direction.
+      // The angle (radians) is the direction of gaze, measured from east (0) clockwise.
+      // Eye coordinates are used to align photos so the eyes stay centered in the frame.
+      const photos = [
+        { url: "/static/immutable/webp/0E9A9000.webp", angle: -Math.PI / 2, leftEye: { x: 221.21, y: 248.62 }, rightEye: { x: 306.64, y: 247.35 } },             // N
+        { url: "/static/immutable/webp/0E9A9002.webp", angle: -Math.PI / 4, leftEye: { x: 223.12, y: 250.54 }, rightEye: { x: 309.19, y: 249.26 } },             // NE
+        { url: "/static/immutable/webp/0E9A9003.webp", angle: -Math.PI / 8, leftEye: { x: 236.51, y: 251.17 }, rightEye: { x: 323.21, y: 249.9 } },              // ENE
+        { url: "/static/immutable/webp/0E9A9004.webp", angle: 0, leftEye: { x: 236.51, y: 257.55 }, rightEye: { x: 323.21, y: 255 } },                            // E
+        { url: "/static/immutable/webp/0E9A9005.webp", angle: Math.PI / 8, leftEye: { x: 240.97, y: 256.91 }, rightEye: { x: 328.31, y: 255 } },                  // ESE
+        { url: "/static/immutable/webp/0E9A9006.webp", angle: Math.PI / 4, leftEye: { x: 231.41, y: 256.27 }, rightEye: { x: 320.02, y: 250.54 } },               // SE
+        { url: "/static/immutable/webp/0E9A9008.webp", angle: (3 * Math.PI) / 8, leftEye: { x: 233.32, y: 258.82 }, rightEye: { x: 320.66, y: 256.27 } },        // SSE
+        { url: "/static/immutable/webp/0E9A9009.webp", angle: Math.PI / 2, leftEye: { x: 235.87, y: 255.64 }, rightEye: { x: 328.31, y: 252.45 } },               // S
+        { url: "/static/immutable/webp/0E9A9012.webp", angle: (5 * Math.PI) / 8, leftEye: { x: 211.65, y: 260.1 }, rightEye: { x: 302.81, y: 257.55 } },         // SSW
+        { url: "/static/immutable/webp/0E9A9013.webp", angle: (3 * Math.PI) / 4, leftEye: { x: 214.2, y: 256.27 }, rightEye: { x: 306.64, y: 255 } },            // SW
+        { url: "/static/immutable/webp/0E9A9015.webp", angle: (7 * Math.PI) / 8, leftEye: { x: 208.46, y: 251.17 }, rightEye: { x: 303.45, y: 249.9 } },         // WSW
+        { url: "/static/immutable/webp/0E9A9017.webp", angle: Math.PI, leftEye: { x: 201.45, y: 252.45 }, rightEye: { x: 291.34, y: 248.62 } },                   // W
+        { url: "/static/immutable/webp/0E9A9020.webp", angle: (-3 * Math.PI) / 4, leftEye: { x: 197.62, y: 255 }, rightEye: { x: 290.06, y: 249.26 } },          // NW
+        { url: "/static/immutable/webp/0E9A9019.webp", angle: (-5 * Math.PI) / 8, leftEye: { x: 207.82, y: 246.07 }, rightEye: { x: 302.17, y: 240.34 } },       // NNW
       ];
 
       const hoveredPhoto = {
         url: "/static/immutable/webp/0E9A8952_hovered.webp",
-        direction: "north",
-        leftEye: {
-          x: 207.83,
-          y: 249.9,
-        },
-        rightEye: {
-          x: 297.71,
-          y: 246.08,
-        },
+        leftEye: { x: 207.83, y: 249.9 },
+        rightEye: { x: 297.71, y: 246.08 },
       };
       const clickedPhoto = {
         url: "/static/immutable/webp/0E9A8956_clicked.webp",
-        direction: "north east",
-        leftEye: {
-          x: 203.36,
-          y: 260.1,
-        },
-        rightEye: {
-          x: 297.71,
-          y: 260.74,
-        },
+        leftEye: { x: 203.36, y: 260.1 },
+        rightEye: { x: 297.71, y: 260.74 },
       };
       const balloonPhotoUrl = "/static/immutable/resized/IMG_7981.png";
-
-      // Each photo points in a direction convert these human readable directions into vectors
-      const photosWithVectors = rawPhotos.map((photo) => {
-        const vector = directionVectors[photo.direction];
-        if (!vector) {
-          throw new Error(`Unknown direction ${photo.direction}`);
-        }
-        return { ...photo, vector };
-      });
-
-      // Convert each direction vector into two vectors indicating the section
-      // of the screen it captures flush against it's neighbouring photos
-      const photos = photosWithVectors.map((photo, index) => {
-        // Indexes wrap around
-        const antiClockwise =
-          photosWithVectors[
-            (index - 1 + photosWithVectors.length) % photosWithVectors.length
-          ];
-        const clockwise =
-          photosWithVectors[(index + 1) % photosWithVectors.length];
-        if (!antiClockwise || !clockwise) {
-          throw new Error(`Missing neighbour for photo ${photo.url}`);
-        }
-        const midpointAnticlockwise = {
-          x: (photo.vector.x + antiClockwise.vector.x) / 2,
-          y: (photo.vector.y + antiClockwise.vector.y) / 2,
-        };
-        const midpointClockwise = {
-          x: (photo.vector.x + clockwise.vector.x) / 2,
-          y: (photo.vector.y + clockwise.vector.y) / 2,
-        };
-        return {
-          ...photo,
-          section: [midpointAnticlockwise, midpointClockwise],
-        };
-      });
 
       // The width of the frame of the photo
       const frameWidth = Math.min(460, window.innerWidth - 100);
@@ -886,26 +663,14 @@
         const x = "clientX" in e ? e.clientX : e.touches[0].clientX;
         const y = "clientY" in e ? e.clientY : e.touches[0].clientY;
 
-        const frameAbsoluteCenter = getEyesAbsolutePosition();
+        const center = getEyesAbsolutePosition();
+        const mouseAngle = Math.atan2(y - center.y, x - center.x);
 
-        // Get unit vector from center of frame to mouse
-        const vector = {
-          // x should be from -1 to 1
-          x: (x - frameAbsoluteCenter.x) / frameAbsoluteCenter.x,
-          // y should be from -1 to 1
-          y: (y - frameAbsoluteCenter.y) / frameAbsoluteCenter.y,
-        };
-
-        // The vector will be inside one of the sections of the photos, find which one
-        let closestPhoto = photos.find((closest, photo) => {
-          const [lower, upper] = closest.section;
-          // https://stackoverflow.com/a/17497339/1376627
-          // if (AxB * AxC >= 0 && CxB * CxA >= 0)
-          // then B is definitely inside A and C
-          const lowerInside = vector.x * lower.y - vector.y * lower.x <= 0;
-          const upperInside = vector.x * upper.y - vector.y * upper.x >= 0;
-          return lowerInside && upperInside;
-        });
+        // Find the photo whose gaze direction is closest to the mouse angle
+        const angleDist = (a, b) => Math.abs(Math.atan2(Math.sin(a - b), Math.cos(a - b)));
+        let closestPhoto = photos.reduce((a, b) =>
+          angleDist(mouseAngle, a.angle) <= angleDist(mouseAngle, b.angle) ? a : b
+        );
 
         // Delay showing the hovered face to avoid jank during quick swipes
         if (isInCentralPortionOfFace(x, y)) {
