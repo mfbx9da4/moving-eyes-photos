@@ -459,11 +459,10 @@
   <div class="meta">Trapezoid: top 5.18 m, left 3.17 m, right 2.70 m, bottom slants SW&rarr;SE &nbsp;|&nbsp; scale: 100 px = 1 m</div>
 
   <div class="controls" id="bed-controls">
-    <button data-w="180" data-l="207" data-label="Existing Super King">Existing Super King 1.80 &times; 2.07</button>
-    <button data-w="163" data-l="207" data-label="New King">New King 1.63 &times; 2.07</button>
-    <button data-w="147" data-l="207" data-label="Standard Double">Standard Double 1.47 &times; 2.07</button>
-    <label style="margin-left:12px; font-size:13px;"><input type="radio" name="drawers" value="closed" checked> drawers closed</label>
-    <label style="font-size:13px;"><input type="radio" name="drawers" value="open"> drawers open</label>
+    <button data-w="180" data-l="207" data-drawers="false" data-label="Existing Super King">Existing Super King 1.80 &times; 2.07</button>
+    <button data-w="163" data-l="207" data-drawers="false" data-label="New King">New King 1.63 &times; 2.07</button>
+    <button data-w="163" data-l="207" data-drawers="true" data-label="New King with Drawers">New King with Drawers 1.63 &times; 2.07</button>
+    <button data-w="147" data-l="207" data-drawers="false" data-label="Standard Double">Standard Double 1.47 &times; 2.07</button>
   </div>
 
   <div class="stage">
@@ -666,29 +665,37 @@
 
     // ----- Bedroom bed render -----
     const BED_GAP_CENTER = 260.065; // local x along slope (mid of 135.56 to 384.57)
+    const bedButtons = Array.from(document.querySelectorAll('#bed-controls button'));
 
-    let currentBed = {w: 180, l: 207, label: 'Existing Super King'};
+    let currentBed = {w: 180, l: 207, label: 'Existing Super King', drawers: false};
+    let currentBedIndex = 0;
 
-    function getDrawersOpen() {
-      const r = document.querySelector('input[name="drawers"]:checked');
-      return r && r.value === 'open';
+    function cycleBed() {
+      currentBedIndex = (currentBedIndex + 1) % bedButtons.length;
+      activateBedButton(bedButtons[currentBedIndex]);
     }
 
-    function toggleDrawers() {
-      const next = getDrawersOpen() ? 'closed' : 'open';
-      document.querySelector('input[name="drawers"][value="' + next + '"]').checked = true;
-      renderBed(currentBed.w, currentBed.l, currentBed.label);
+    function activateBedButton(btn) {
+      bedButtons.forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      currentBedIndex = bedButtons.indexOf(btn);
+      renderBed(
+        parseFloat(btn.dataset.w),
+        parseFloat(btn.dataset.l),
+        btn.dataset.label,
+        btn.dataset.drawers === 'true'
+      );
     }
 
-    function renderBed(widthCm, lengthCm, label) {
-      currentBed = {w: widthCm, l: lengthCm, label};
+    function renderBed(widthCm, lengthCm, label, drawersOpen) {
+      currentBed = {w: widthCm, l: lengthCm, label, drawers: drawersOpen};
       const bed = document.getElementById('bed');
       bed.innerHTML = '';
       const x = BED_GAP_CENTER - widthCm / 2;
       const y = -lengthCm;
 
       // open-drawer extensions either side: 67cm wide, 142cm long, shifted toward foot with leg padding
-      if (getDrawersOpen()) {
+      if (drawersOpen) {
         const drawerOut = 67;
         const drawerLen = 142;
         const FOOT_PAD = 6; // cm leg padding at foot of bed
@@ -697,10 +704,10 @@
         bed.appendChild(el('rect', {x: x + widthCm, y: drawerY, width: drawerOut, height: drawerLen, class: 'drawer'}));
       }
 
-      // mattress (click to toggle drawers)
+      // mattress (click to cycle bed states)
       const mattress = el('rect', {x, y, width: widthCm, height: lengthCm, rx: 6, ry: 6, class: 'furniture'});
       mattress.style.cursor = 'pointer';
-      mattress.addEventListener('click', toggleDrawers);
+      mattress.addEventListener('click', cycleBed);
       bed.appendChild(mattress);
       // headboard along south wall (south edge of bed = wall)
       const hb = el('rect', {x: x - 2, y: -10, width: widthCm + 4, height: 10});
@@ -729,25 +736,11 @@
       bed.appendChild(t2);
     }
 
-    document.querySelectorAll('#bed-controls button').forEach(btn => {
-      btn.addEventListener('click', () => {
-        document.querySelectorAll('#bed-controls button').forEach(b => b.classList.remove('active'));
-        btn.classList.add('active');
-        renderBed(
-          parseFloat(btn.dataset.w),
-          parseFloat(btn.dataset.l),
-          btn.dataset.label
-        );
-      });
+    bedButtons.forEach(btn => {
+      btn.addEventListener('click', () => activateBedButton(btn));
     });
 
-    document.querySelectorAll('input[name="drawers"]').forEach(r => {
-      r.addEventListener('change', () => renderBed(currentBed.w, currentBed.l, currentBed.label));
-    });
-
-    const defaultBedBtn = document.querySelector('#bed-controls button');
-    defaultBedBtn.classList.add('active');
-    renderBed(180, 207, 'Existing Super King');
+    activateBedButton(bedButtons[0]);
 
     // ----- Under-stairs toilet conversion toggle -----
     (function () {
@@ -756,7 +749,7 @@
       const ext = document.getElementById('understairs-extended');
       const hideInToilet = ['a2-step-wall', 'radiator-block', 'label-a2', 'label-a3a', 'label-a3b'];
       let active = false;
-      btn.addEventListener('click', () => {
+      function toggle() {
         active = !active;
         def.style.display = active ? 'none' : '';
         ext.style.display = active ? '' : 'none';
@@ -768,6 +761,11 @@
         btn.textContent = active
           ? 'Hide under-stairs toilet conversion'
           : 'Show under-stairs toilet conversion';
+      }
+      btn.addEventListener('click', toggle);
+      [def, ext].forEach(group => {
+        group.style.cursor = 'pointer';
+        group.addEventListener('click', toggle);
       });
     })();
   </script>
