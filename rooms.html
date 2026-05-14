@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<title>Living Room Floor Plan</title>
+<title>Addison Way Floor Plan</title>
 <style>
   :root {
     color-scheme: light dark;
@@ -85,7 +85,7 @@
 </style>
 </head>
 <body>
-  <h1>Living Room</h1>
+  <h1>Ground Floor &ndash; Reception Room</h1>
   <div class="meta">5.79 m &times; 3.29 m &nbsp;|&nbsp; scale: 100 px = 1 m</div>
   <div class="warn" style="margin:0 0 12px;">&#9888; drawn to ~5.20 m est. (plan: 5.79 m). 3.35 m confirmed.</div>
 
@@ -215,6 +215,182 @@
       <line class="dim-tick" x1="265" y1="431" x2="265" y2="447"/>
       <line class="dim-tick" x1="600" y1="431" x2="600" y2="447"/>
       <text class="dim-text" x="432.5" y="462" text-anchor="middle">3.35 m</text>
+    </svg>
+  </div>
+
+  <h1 style="margin-top:32px;">Ground Floor &ndash; Dining &amp; Kitchen</h1>
+  <div class="meta">South of Reception, open plan &nbsp;|&nbsp; Dining 5.01 m (W) + Kitchen 3.72 m (E), W wall 3.29 m (3-part bay, d1&ndash;d5), E wall 2.53 m, slanted S wall &nbsp;|&nbsp; scale: 100 px = 1 m</div>
+
+  <div class="stage">
+    <!--
+      Dining + Kitchen layout (open plan):
+      - Wall a stepped north 1.20 m at x=581 (dining/kitchen boundary): a1 (W half) -> a2 (N step, 1.20 m) -> a3 (E half).
+      - Dining: NW (80, 80), a1 north wall to (581, 80), W wall 3.29 m with 3-part bay.
+      - Kitchen: pushed 1.20 m further north. NE corner now at (953, -40). E wall 2.53 m -> SE (953, 213).
+      - South wall c: slants from SW (80, 409) to SE (953, 213) - now steeper than before.
+      - Door on wall a1 (W half), close to NW corner.
+    -->
+    <svg width="1053" height="709" viewBox="0 -220 1053 709" xmlns="http://www.w3.org/2000/svg">
+      <!-- Clip-path matching the new room outline (two steps in north wall) -->
+      <defs>
+        <clipPath id="diningKitchenRoom">
+          <polygon points="80,80 464,80 464,-20 630,-20 630,-140 953,-140 953,180 80,409 80,342.75 50,279.5 50,209.5 80,146.25"/>
+        </clipPath>
+      </defs>
+
+      <!-- 0.5m grid (clipped to room) -->
+      <g class="grid" clip-path="url(#diningKitchenRoom)">
+        <!-- Vertical grid lines -->
+        <line x1="130" y1="-160" x2="130" y2="409"/>
+        <line x1="180" y1="-160" x2="180" y2="409"/>
+        <line x1="230" y1="-160" x2="230" y2="409"/>
+        <line x1="280" y1="-160" x2="280" y2="409"/>
+        <line x1="330" y1="-160" x2="330" y2="409"/>
+        <line x1="380" y1="-160" x2="380" y2="409"/>
+        <line x1="430" y1="-160" x2="430" y2="409"/>
+        <line x1="480" y1="-160" x2="480" y2="409"/>
+        <line x1="530" y1="-160" x2="530" y2="409"/>
+        <line x1="581" y1="-160" x2="581" y2="409"/>
+        <line x1="631" y1="-160" x2="631" y2="409"/>
+        <line x1="681" y1="-160" x2="681" y2="409"/>
+        <line x1="731" y1="-160" x2="731" y2="409"/>
+        <line x1="781" y1="-160" x2="781" y2="409"/>
+        <line x1="831" y1="-160" x2="831" y2="409"/>
+        <line x1="881" y1="-160" x2="881" y2="409"/>
+        <line x1="931" y1="-160" x2="931" y2="409"/>
+        <!-- Horizontal grid lines -->
+        <line x1="50" y1="-130" x2="953" y2="-130"/>
+        <line x1="50" y1="-80"  x2="953" y2="-80"/>
+        <line x1="50" y1="-30"  x2="953" y2="-30"/>
+        <line x1="50" y1="20"   x2="953" y2="20"/>
+        <line x1="50" y1="70"   x2="953" y2="70"/>
+        <line x1="50" y1="130"  x2="953" y2="130"/>
+        <line x1="50" y1="180"  x2="953" y2="180"/>
+        <line x1="50" y1="230"  x2="953" y2="230"/>
+        <line x1="50" y1="280"  x2="953" y2="280"/>
+        <line x1="50" y1="330"  x2="953" y2="330"/>
+        <line x1="50" y1="380"  x2="953" y2="380"/>
+      </g>
+
+      <!--
+        Outer wall, going CW from NW corner:
+          a1 (3.00 m E) -> a2 (1.20 m N step) -> a3 (2.50 m E) -> a4 (1.20 m N step) -> a5 (3.23 m E)
+          -> b (E, 2.53 m) -> c (S slanted) -> d5..d1 (W with 3-part bay).
+        Door opening on a1 near NW corner: x=88..164 (76 cm).
+      -->
+      <polyline class="wall" points="80,80 88,80"/>
+      <polyline class="wall" points="164,80 464,80 464,-20 630,-20 630,-140 730,-140"/>
+      <polyline class="wall" points="810,-140 953,-140 953,180 80,409 80,342.75 50,279.5 50,209.5 80,146.25 80,80"/>
+
+      <!-- Door on wall a1: 76 cm, hinge at east jamb (164,80), swings south into the room -->
+      <line class="door-leaf" x1="164" y1="80" x2="164" y2="156"/>
+      <path class="door-swing" d="M 164 156 A 76 76 0 0 1 88 80"/>
+
+      <!-- Exit door on wall a5: 80 cm opening x=730..810, hinge at west jamb (730,-140), swings south into the kitchen -->
+      <line class="door-leaf" x1="730" y1="-140" x2="730" y2="-60"/>
+      <path class="door-swing" d="M 730 -60 A 80 80 0 0 0 810 -140"/>
+      <text class="furniture-label" x="770" y="-148" text-anchor="middle" style="font-style:italic;">Exit</text>
+
+      <!-- Bay window glazing (3 equal panes on d2, d3, d4) -->
+      <line class="glazing" x1="80" y1="146.25" x2="50" y2="209.5"/>
+      <line class="glazing" x1="50" y1="209.5" x2="50" y2="279.5"/>
+      <line class="glazing" x1="50" y1="279.5" x2="80" y2="342.75"/>
+
+      <!--
+        Radiator on wall a3. West edge 66 cm east of wall a2 (a2 is at x=380, so west edge at x=446).
+        Length 1.00 m (assumed - confirm), depth 8 cm into the room.
+      -->
+      <g id="radiator-a3">
+        <rect class="furniture" x="530" y="-20" width="70" height="8"/>
+        <!-- Fin marks -->
+        <line class="furniture-detail" x1="540" y1="-20" x2="540" y2="-12"/>
+        <line class="furniture-detail" x1="550" y1="-20" x2="550" y2="-12"/>
+        <line class="furniture-detail" x1="560" y1="-20" x2="560" y2="-12"/>
+        <line class="furniture-detail" x1="570" y1="-20" x2="570" y2="-12"/>
+        <line class="furniture-detail" x1="580" y1="-20" x2="580" y2="-12"/>
+        <line class="furniture-detail" x1="590" y1="-20" x2="590" y2="-12"/>
+        <text class="furniture-label" x="565" y="3" text-anchor="middle">Radiator</text>
+      </g>
+
+      <!-- Dim: 0.66 m from wall a2 to radiator west edge (along wall a3) -->
+      <line class="dim-line" x1="464" y1="-45" x2="530" y2="-45"/>
+      <line class="dim-tick" x1="464" y1="-53" x2="464" y2="-37"/>
+      <line class="dim-tick" x1="530" y1="-53" x2="530" y2="-37"/>
+      <text class="dim-text" x="497" y="-55" text-anchor="middle">0.66 m</text>
+
+      <!--
+        Kitchen worktop: L-shape wrapping the SE (a5-b / b-c) corner.
+        - Along b (E wall): full 2.53 m
+        - Along c (S slanted): from SE corner ~1/3 of the way down c (~3.07 m)
+        - Depth: 60 cm
+        Vertices CW: NE outer (953,-140), SE outer (953,180), 1/3-down-c (662,256),
+        inner end of c-arm offset 60cm perpendicular into room (646.8,198.3),
+        inner L corner (893,133.7), inner top of b-arm (893,-140).
+      -->
+      <polygon class="furniture" points="953,-140 953,180 662,256 646.8,198.3 893,133.7 893,-140"/>
+      <text class="furniture-label" x="923" y="20" text-anchor="middle" transform="rotate(-90 923 20)">Kitchen worktop</text>
+
+      <!--
+        Wall letters. North wall (door + 2 steps + radiator-flanked middle + exit door = 8 segments):
+          a1: tiny W of NW door (80,80)-(88,80)
+          a2: E of NW door (164,80)-(380,80)
+          a3: 1st step N (380,80)-(380,-20)
+          a4: middle, W of radiator (380,-20)-(446,-20)
+          a5: middle, E of radiator (546,-20)-(630,-20)
+          a6: 2nd step N (630,-20)-(630,-140)
+          a7: W of exit door (630,-140)-(730,-140)
+          a8: E of exit door (810,-140)-(953,-140)
+        West bay: d1..d5.
+      -->
+      <g>
+        <text class="section-label" x="84" y="65" text-anchor="middle">a1</text>
+        <text class="section-label" x="272" y="98" text-anchor="middle">a2</text>
+        <text class="section-label" x="482" y="34" text-anchor="middle">a3</text>
+        <text class="section-label" x="497" y="-8" text-anchor="middle">a4</text>
+        <text class="section-label" x="615" y="-8" text-anchor="middle">a5</text>
+        <text class="section-label" x="648" y="-76" text-anchor="middle">a6</text>
+        <text class="section-label" x="680" y="-122" text-anchor="middle">a7</text>
+        <text class="section-label" x="851.5" y="-122" text-anchor="middle">a8</text>
+        <text class="section-label" x="938" y="-10" text-anchor="middle">b</text>
+        <text class="section-label" x="516.5" y="293" text-anchor="middle">c</text>
+        <text class="section-label" x="98" y="117" text-anchor="middle">d1</text>
+        <text class="section-label" x="78" y="182" text-anchor="middle">d2</text>
+        <text class="section-label" x="62" y="248" text-anchor="middle">d3</text>
+        <text class="section-label" x="78" y="315" text-anchor="middle">d4</text>
+        <text class="section-label" x="98" y="380" text-anchor="middle">d5</text>
+      </g>
+
+      <!-- Top dim for a1 (W half of N wall): 3.00 m -->
+      <line class="dim-line" x1="80" y1="50" x2="464" y2="50"/>
+      <line class="dim-tick" x1="80" y1="42" x2="80" y2="58"/>
+      <line class="dim-tick" x1="464" y1="42" x2="464" y2="58"/>
+      <text class="dim-text" x="272" y="40" text-anchor="middle">3.84 m</text>
+
+      <!-- Top dim for a5 (east of second N step): 3.23 m -->
+      <line class="dim-line" x1="630" y1="-170" x2="953" y2="-170"/>
+      <line class="dim-tick" x1="630" y1="-178" x2="630" y2="-162"/>
+      <line class="dim-tick" x1="953" y1="-178" x2="953" y2="-162"/>
+      <text class="dim-text" x="791.5" y="-180" text-anchor="middle">3.23 m</text>
+
+      <!-- West wall depth (3.29 m). Shifted left to clear the bay (projects to x=50). -->
+      <line class="dim-line" x1="25" y1="80" x2="25" y2="409"/>
+      <line class="dim-tick" x1="17" y1="80" x2="33" y2="80"/>
+      <line class="dim-tick" x1="17" y1="409" x2="33" y2="409"/>
+      <text class="dim-text" x="10" y="244.5" text-anchor="middle" transform="rotate(-90 10 244.5)">3.29 m</text>
+
+      <!-- East wall depth (b = 2.53 m) -->
+      <line class="dim-line" x1="983" y1="-140" x2="983" y2="180"/>
+      <line class="dim-tick" x1="975" y1="-140" x2="991" y2="-140"/>
+      <line class="dim-tick" x1="975" y1="180" x2="991" y2="180"/>
+      <text class="dim-text" x="999" y="20" text-anchor="middle" transform="rotate(90 999 20)">3.20 m</text>
+
+      <!-- Scale bar -->
+      <g shape-rendering="crispEdges">
+        <line x1="80" y1="479" x2="180" y2="479" stroke="currentColor" stroke-width="2"/>
+        <line x1="80" y1="473" x2="80" y2="485" stroke="currentColor" stroke-width="2"/>
+        <line x1="180" y1="473" x2="180" y2="485" stroke="currentColor" stroke-width="2"/>
+        <text x="130" y="475" text-anchor="middle" style="font-size:11px;" fill="currentColor">1 m</text>
+      </g>
     </svg>
   </div>
 
