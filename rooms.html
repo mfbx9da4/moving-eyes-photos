@@ -297,6 +297,20 @@
       <line class="glazing" x1="50" y1="279.5" x2="80" y2="342.75"/>
 
       <!--
+        Under-stairs utility room (reduced height) tucked against the a2 step.
+        1.00 m wide x 1.20 m deep (depth = full a2 step length).
+        - South wall: shared with east 1.00 m of a1b (x=364..464 at y=80)
+        - East wall: shared with full a2 step (x=464, y=80..-40)
+        - North wall: NEW, x=364..464 at y=-40
+        - West wall: NEW, x=364, y=-40..80
+      -->
+      <polyline class="wall" points="364,80 364,-40 464,-40"/>
+      <!-- Washing machine: 60 x 60 cm, flush against the a2 wall (east edge at x=464) -->
+      <rect class="furniture" x="404" y="0" width="60" height="60"/>
+      <text class="furniture-label" x="434" y="32" text-anchor="middle">WM</text>
+      <text class="furniture-label" x="414" y="-20" text-anchor="middle">Under stairs</text>
+
+      <!--
         Radiator on wall a3. West edge 66 cm east of wall a2 (a2 is at x=380, so west edge at x=446).
         Length 1.00 m (assumed - confirm), depth 8 cm into the room.
       -->
@@ -362,12 +376,6 @@
         <text class="section-label" x="78" y="315" text-anchor="middle">d4</text>
         <text class="section-label" x="98" y="380" text-anchor="middle">d5</text>
       </g>
-
-      <!-- Top dim for a1 (W half of N wall): 3.00 m -->
-      <line class="dim-line" x1="80" y1="50" x2="464" y2="50"/>
-      <line class="dim-tick" x1="80" y1="42" x2="80" y2="58"/>
-      <line class="dim-tick" x1="464" y1="42" x2="464" y2="58"/>
-      <text class="dim-text" x="272" y="40" text-anchor="middle">3.84 m</text>
 
       <!-- Top dim for a5 (east of second N step): 3.23 m. Bumped north to clear the door recess at y=-130. -->
       <line class="dim-line" x1="630" y1="-165" x2="953" y2="-165"/>
