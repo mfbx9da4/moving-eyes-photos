@@ -401,8 +401,12 @@
       const zoneW = ZONE_EAST - ZONE_WEST;
       warn.textContent = widthCm > zoneW ? 'WARNING: sofa width ' + widthCm + 'cm > zone ' + zoneW + 'cm' : '';
 
-      // render footstool aligned with sofa right edge
-      renderFootstool(y, x + widthCm);
+      // render pouf only with New sofa; clear it for Existing
+      if (label === 'Existing') {
+        document.getElementById('footstool').innerHTML = '';
+      } else {
+        renderFootstool(y, x + widthCm);
+      }
     }
 
     document.querySelectorAll('#sofa-controls button').forEach(btn => {
