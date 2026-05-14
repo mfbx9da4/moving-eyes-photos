@@ -221,6 +221,10 @@
   <h1 style="margin-top:32px;">Ground Floor &ndash; Dining &amp; Kitchen</h1>
   <div class="meta">South of Reception, open plan &nbsp;|&nbsp; Dining 5.01 m (W) + Kitchen 3.72 m (E), W wall 3.29 m (3-part bay, d1&ndash;d5), E wall 2.53 m, slanted S wall &nbsp;|&nbsp; scale: 100 px = 1 m</div>
 
+  <div class="controls" id="understairs-controls">
+    <button id="toilet-conversion-btn">Show under-stairs toilet conversion</button>
+  </div>
+
   <div class="stage">
     <!--
       Dining + Kitchen layout (open plan):
@@ -279,7 +283,9 @@
         Door opening on a1 near NW corner: x=88..164 (76 cm).
       -->
       <polyline class="wall" points="80,80 88,80"/>
-      <polyline class="wall" points="164,80 464,80 464,-40 630,-40 630,-110 650,-110 650,-130"/>
+      <polyline class="wall" points="164,80 464,80"/>
+      <polyline class="wall" id="a2-step-wall" points="464,80 464,-40"/>
+      <polyline class="wall" points="464,-40 630,-40 630,-110 650,-110 650,-130"/>
       <polyline class="wall" points="730,-130 730,-110 953,-110 953,210 80,409 80,342.75 50,279.5 50,209.5 80,146.25 80,80"/>
 
       <!-- Door on wall a1: 76 cm, hinge at east jamb (164,80), swings south into the room -->
@@ -298,39 +304,83 @@
 
       <!--
         Under-stairs utility room (reduced height) tucked against the a2 step.
-        1.00 m wide x 1.20 m deep (depth = full a2 step length).
-        - South wall: shared with east 1.00 m of a1b (x=364..464 at y=80)
-        - East wall: shared with full a2 step (x=464, y=80..-40)
-        - North wall: NEW, x=364..464 at y=-40
-        - West wall: NEW, x=364, y=-40..80
+        Default: 1.00 m wide x 1.20 m deep, east flush with a2 step.
+        Extended (toggle button): stretches east to x=630 so the east wall is in line with a4.
       -->
-      <polyline class="wall" points="364,80 364,-40 464,-40"/>
-      <!-- Washing machine: 60 x 60 cm, flush against the a2 wall (east edge at x=464) -->
-      <rect class="furniture" x="404" y="0" width="60" height="60"/>
-      <text class="furniture-label" x="434" y="32" text-anchor="middle">WM</text>
-      <text class="furniture-label" x="414" y="-20" text-anchor="middle">Under stairs</text>
+      <g id="understairs-default">
+        <polyline class="wall" points="364,80 364,-40 464,-40"/>
+        <rect class="furniture" x="404" y="0" width="60" height="60"/>
+        <text class="furniture-label" x="434" y="32" text-anchor="middle">WM</text>
+        <text class="furniture-label" x="414" y="-20" text-anchor="middle">Under stairs</text>
+      </g>
+      <g id="understairs-extended" style="display:none">
+        <!--
+          Under-stairs toilet conversion. 2.66 m wide x 1.20 m deep.
+          New east wall in line with a4 at x=630, new south stub at y=80 closes the gap to a1b.
+          Entrance door on t3 (south) at x=480..556, swinging south out into the dining.
+          Toilet at the west end (close to t4); WM flush against t2 (east wall).
+          a2, radiator, WM-default, a3a/a3b labels are hidden via JS when this mode is active.
+          Walls labelled t1 (N), t2 (E), t3 (S), t4 (W) clockwise from north.
+        -->
+        <!-- Outer walls, split for the entrance door on t3 (60 cm, x=464..524 - door west jamb flush with a1b east end) -->
+        <polyline class="wall" points="364,80 364,-40 630,-40 630,80 524,80"/>
 
-      <!--
-        Radiator on wall a3. West edge 66 cm east of wall a2 (a2 is at x=380, so west edge at x=446).
-        Length 1.00 m (assumed - confirm), depth 8 cm into the room.
-      -->
-      <g id="radiator-a3">
-        <rect class="furniture" x="530" y="-40" width="70" height="8"/>
-        <!-- Fin marks -->
-        <line class="furniture-detail" x1="540" y1="-40" x2="540" y2="-32"/>
-        <line class="furniture-detail" x1="550" y1="-40" x2="550" y2="-32"/>
-        <line class="furniture-detail" x1="560" y1="-40" x2="560" y2="-32"/>
-        <line class="furniture-detail" x1="570" y1="-40" x2="570" y2="-32"/>
-        <line class="furniture-detail" x1="580" y1="-40" x2="580" y2="-32"/>
-        <line class="furniture-detail" x1="590" y1="-40" x2="590" y2="-32"/>
-        <text class="furniture-label" x="565" y="-17" text-anchor="middle">Radiator</text>
+        <!-- Entrance door on t3: 60 cm (cloakroom door), hinge at east jamb (524,80), swings south into dining (out of toilet) -->
+        <line class="door-leaf" x1="524" y1="80" x2="524" y2="140"/>
+        <path class="door-swing" d="M 524 140 A 60 60 0 0 0 464 80"/>
+
+        <!-- Toilet (oval) close to t4 -->
+        <ellipse class="furniture" cx="390" cy="30" rx="22" ry="20"/>
+        <text class="furniture-label" x="390" y="33" text-anchor="middle">Toilet</text>
+
+        <!-- Washing machine 60 x 60 cm flush against t2 (east wall) -->
+        <rect class="furniture" x="570" y="-10" width="60" height="60"/>
+        <text class="furniture-label" x="600" y="22" text-anchor="middle">WM</text>
+
+        <!--
+          Radiator (toilet-mode placement): mounted on east face of the x=630 wall.
+          Primary length on a4 (kitchen side, y=-110 .. -40, 70 cm); spills ~10 cm south onto t2 (y=-40 .. -30).
+        -->
+        <rect class="furniture" x="630" y="-110" width="8" height="80"/>
+        <line class="furniture-detail" x1="630" y1="-100" x2="638" y2="-100"/>
+        <line class="furniture-detail" x1="630" y1="-90" x2="638" y2="-90"/>
+        <line class="furniture-detail" x1="630" y1="-80" x2="638" y2="-80"/>
+        <line class="furniture-detail" x1="630" y1="-70" x2="638" y2="-70"/>
+        <line class="furniture-detail" x1="630" y1="-60" x2="638" y2="-60"/>
+        <line class="furniture-detail" x1="630" y1="-50" x2="638" y2="-50"/>
+        <line class="furniture-detail" x1="630" y1="-40" x2="638" y2="-40"/>
+        <text class="furniture-label" x="650" y="-70" text-anchor="middle" transform="rotate(-90 650 -70)">Radiator</text>
+
+        <!-- Wall letters for the toilet conversion room -->
+        <text class="section-label" x="497" y="-28" text-anchor="middle">t1</text>
+        <text class="section-label" x="618" y="65" text-anchor="middle">t2</text>
+        <text class="section-label" x="420" y="70" text-anchor="middle">t3</text>
+        <text class="section-label" x="378" y="70" text-anchor="middle">t4</text>
       </g>
 
-      <!-- Dim: 0.66 m from wall a2 to radiator west edge (along wall a3) -->
-      <line class="dim-line" x1="464" y1="-65" x2="530" y2="-65"/>
-      <line class="dim-tick" x1="464" y1="-73" x2="464" y2="-57"/>
-      <line class="dim-tick" x1="530" y1="-73" x2="530" y2="-57"/>
-      <text class="dim-text" x="497" y="-75" text-anchor="middle">0.66 m</text>
+      <g id="radiator-block">
+        <!--
+          Radiator on wall a3. West edge 66 cm east of wall a2 (a2 is at x=380, so west edge at x=446).
+          Length 1.00 m (assumed - confirm), depth 8 cm into the room.
+        -->
+        <g id="radiator-a3">
+          <rect class="furniture" x="530" y="-40" width="70" height="8"/>
+          <!-- Fin marks -->
+          <line class="furniture-detail" x1="540" y1="-40" x2="540" y2="-32"/>
+          <line class="furniture-detail" x1="550" y1="-40" x2="550" y2="-32"/>
+          <line class="furniture-detail" x1="560" y1="-40" x2="560" y2="-32"/>
+          <line class="furniture-detail" x1="570" y1="-40" x2="570" y2="-32"/>
+          <line class="furniture-detail" x1="580" y1="-40" x2="580" y2="-32"/>
+          <line class="furniture-detail" x1="590" y1="-40" x2="590" y2="-32"/>
+          <text class="furniture-label" x="565" y="-17" text-anchor="middle">Radiator</text>
+        </g>
+
+        <!-- Dim: 0.66 m from wall a2 to radiator west edge (along wall a3) -->
+        <line class="dim-line" x1="464" y1="-65" x2="530" y2="-65"/>
+        <line class="dim-tick" x1="464" y1="-73" x2="464" y2="-57"/>
+        <line class="dim-tick" x1="530" y1="-73" x2="530" y2="-57"/>
+        <text class="dim-text" x="497" y="-75" text-anchor="middle">0.66 m</text>
+      </g>
 
       <!--
         Kitchen worktop: L-shape wrapping the SE (a5-b / b-c) corner.
@@ -360,9 +410,9 @@
         <line x1="48" y1="35" x2="82" y2="78" stroke="var(--section-label)" stroke-width="0.75"/>
         <text class="section-label" x="40" y="30" text-anchor="middle">a1a</text>
         <text class="section-label" x="272" y="98" text-anchor="middle">a1b</text>
-        <text class="section-label" x="482" y="24" text-anchor="middle">a2</text>
-        <text class="section-label" x="497" y="-28" text-anchor="middle">a3a</text>
-        <text class="section-label" x="615" y="-28" text-anchor="middle">a3b</text>
+        <text class="section-label" id="label-a2" x="482" y="24" text-anchor="middle">a2</text>
+        <text class="section-label" id="label-a3a" x="497" y="-28" text-anchor="middle">a3a</text>
+        <text class="section-label" id="label-a3b" x="615" y="-28" text-anchor="middle">a3b</text>
         <text class="section-label" x="615" y="-75" text-anchor="middle">a4</text>
         <line x1="588" y1="-130" x2="635" y2="-113" stroke="var(--section-label)" stroke-width="0.75"/>
         <text class="section-label" x="570" y="-130" text-anchor="middle">a5a</text>
@@ -698,6 +748,28 @@
     const defaultBedBtn = document.querySelector('#bed-controls button');
     defaultBedBtn.classList.add('active');
     renderBed(180, 207, 'Existing Super King');
+
+    // ----- Under-stairs toilet conversion toggle -----
+    (function () {
+      const btn = document.getElementById('toilet-conversion-btn');
+      const def = document.getElementById('understairs-default');
+      const ext = document.getElementById('understairs-extended');
+      const hideInToilet = ['a2-step-wall', 'radiator-block', 'label-a2', 'label-a3a', 'label-a3b'];
+      let active = false;
+      btn.addEventListener('click', () => {
+        active = !active;
+        def.style.display = active ? 'none' : '';
+        ext.style.display = active ? '' : 'none';
+        hideInToilet.forEach(id => {
+          const el = document.getElementById(id);
+          if (el) el.style.display = active ? 'none' : '';
+        });
+        btn.classList.toggle('active', active);
+        btn.textContent = active
+          ? 'Hide under-stairs toilet conversion'
+          : 'Show under-stairs toilet conversion';
+      });
+    })();
   </script>
 </body>
 </html>
