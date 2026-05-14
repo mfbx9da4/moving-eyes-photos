@@ -234,7 +234,7 @@
       <!-- Clip-path matching the new room outline (two steps in north wall) -->
       <defs>
         <clipPath id="diningKitchenRoom">
-          <polygon points="80,80 464,80 464,-40 630,-40 630,-110 953,-110 953,210 80,409 80,342.75 50,279.5 50,209.5 80,146.25"/>
+          <polygon points="80,80 464,80 464,-40 630,-40 630,-110 650,-110 650,-130 730,-130 730,-110 953,-110 953,210 80,409 80,342.75 50,279.5 50,209.5 80,146.25"/>
         </clipPath>
       </defs>
 
@@ -279,17 +279,17 @@
         Door opening on a1 near NW corner: x=88..164 (76 cm).
       -->
       <polyline class="wall" points="80,80 88,80"/>
-      <polyline class="wall" points="164,80 464,80 464,-40 630,-40 630,-110 650,-110"/>
-      <polyline class="wall" points="730,-110 953,-110 953,210 80,409 80,342.75 50,279.5 50,209.5 80,146.25 80,80"/>
+      <polyline class="wall" points="164,80 464,80 464,-40 630,-40 630,-110 650,-110 650,-130"/>
+      <polyline class="wall" points="730,-130 730,-110 953,-110 953,210 80,409 80,342.75 50,279.5 50,209.5 80,146.25 80,80"/>
 
       <!-- Door on wall a1: 76 cm, hinge at east jamb (164,80), swings south into the room -->
       <line class="door-leaf" x1="164" y1="80" x2="164" y2="156"/>
       <path class="door-swing" d="M 164 156 A 76 76 0 0 1 88 80"/>
 
-      <!-- Exit door on wall a5: 80 cm opening x=730..810, hinge at west jamb (730,-140), swings south into the kitchen -->
-      <line class="door-leaf" x1="650" y1="-110" x2="650" y2="-30"/>
-      <path class="door-swing" d="M 650 -30 A 80 80 0 0 0 730 -110"/>
-      <text class="furniture-label" x="690" y="-118" text-anchor="middle" style="font-style:italic;">Exit</text>
+      <!-- Exit door, inset 20 cm north of wall a7-a8 (recess y=-130). 80 cm, hinge at west jamb, swings south into the kitchen. -->
+      <line class="door-leaf" x1="650" y1="-130" x2="650" y2="-50"/>
+      <path class="door-swing" d="M 650 -50 A 80 80 0 0 0 730 -130"/>
+      <text class="furniture-label" x="690" y="-138" text-anchor="middle" style="font-style:italic;">Exit</text>
 
       <!-- Bay window glazing (3 equal panes on d2, d3, d4) -->
       <line class="glazing" x1="80" y1="146.25" x2="50" y2="209.5"/>
@@ -348,8 +348,8 @@
         <text class="section-label" x="482" y="24" text-anchor="middle">a3</text>
         <text class="section-label" x="497" y="-28" text-anchor="middle">a4</text>
         <text class="section-label" x="615" y="-28" text-anchor="middle">a5</text>
-        <text class="section-label" x="668" y="-75" text-anchor="middle">a6</text>
-        <text class="section-label" x="640" y="-98" text-anchor="middle">a7</text>
+        <text class="section-label" x="615" y="-75" text-anchor="middle">a6</text>
+        <text class="section-label" x="640" y="-120" text-anchor="middle">a7</text>
         <text class="section-label" x="811.5" y="-92" text-anchor="middle">a8</text>
         <text class="section-label" x="938" y="50" text-anchor="middle">b</text>
         <text class="section-label" x="512" y="290" text-anchor="middle">c</text>
@@ -366,11 +366,11 @@
       <line class="dim-tick" x1="464" y1="42" x2="464" y2="58"/>
       <text class="dim-text" x="272" y="40" text-anchor="middle">3.84 m</text>
 
-      <!-- Top dim for a5 (east of second N step): 3.23 m -->
-      <line class="dim-line" x1="630" y1="-140" x2="953" y2="-140"/>
-      <line class="dim-tick" x1="630" y1="-148" x2="630" y2="-132"/>
-      <line class="dim-tick" x1="953" y1="-148" x2="953" y2="-132"/>
-      <text class="dim-text" x="791.5" y="-150" text-anchor="middle">3.23 m</text>
+      <!-- Top dim for a5 (east of second N step): 3.23 m. Bumped north to clear the door recess at y=-130. -->
+      <line class="dim-line" x1="630" y1="-165" x2="953" y2="-165"/>
+      <line class="dim-tick" x1="630" y1="-173" x2="630" y2="-157"/>
+      <line class="dim-tick" x1="953" y1="-173" x2="953" y2="-157"/>
+      <text class="dim-text" x="791.5" y="-175" text-anchor="middle">3.23 m</text>
 
       <!-- West wall depth (3.29 m). Shifted left to clear the bay (projects to x=50). -->
       <line class="dim-line" x1="25" y1="80" x2="25" y2="409"/>
