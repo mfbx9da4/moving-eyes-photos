@@ -61,8 +61,12 @@
   body { font-family: system-ui, sans-serif; margin: 24px; background: var(--bg); color: var(--fg); }
   h1 { margin: 0 0 4px; font-size: 20px; }
   .meta { color: var(--muted); margin-bottom: 16px; font-size: 14px; }
-  .stage { background: var(--stage-bg); border: 1px solid var(--stage-border); padding: 16px; display: inline-block; }
-  svg { display: block; }
+  .stage { background: var(--stage-bg); border: 1px solid var(--stage-border); padding: 16px; display: inline-block; max-width: 100%; box-sizing: border-box; }
+  svg { display: block; max-width: 100%; height: auto; }
+  @media (max-width: 600px) {
+    body { margin: 12px; }
+    .stage { padding: 8px; }
+  }
   .wall { fill: none; stroke: var(--wall); stroke-width: 2; shape-rendering: crispEdges; }
   .door-leaf { stroke: var(--door); stroke-width: 2; fill: none; }
   .door-swing { stroke: var(--door); stroke-width: 1; fill: none; stroke-dasharray: 3 3; }
