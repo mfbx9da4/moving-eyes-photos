@@ -304,34 +304,44 @@
 
       <!--
         Under-stairs utility room (reduced height) tucked against the a2 step.
-        Default: 1.00 m wide x 1.20 m deep, east flush with a2 step.
+        Default: ~0.70 m wide (estimate, labelled u) x 1.20 m deep, east flush with a2 step.
         Extended (toggle button): stretches east to x=630 so the east wall is in line with a4.
       -->
       <g id="understairs-default">
-        <polyline class="wall" points="364,80 364,-40 464,-40"/>
+        <rect x="394" y="-40" width="70" height="120" fill="transparent"/>
+        <polyline class="wall" points="394,80 394,-40 464,-40"/>
         <rect class="furniture" x="404" y="0" width="60" height="60"/>
         <text class="furniture-label" x="434" y="32" text-anchor="middle">WM</text>
-        <text class="furniture-label" x="414" y="-20" text-anchor="middle">Under stairs</text>
+        <text class="furniture-label" x="429" y="-15" text-anchor="middle">Under stairs</text>
+        <!-- Width dim above the cupboard's north wall; length is an estimate so labelled with a letter only -->
+        <line class="dim-line" x1="394" y1="-55" x2="464" y2="-55"/>
+        <line class="dim-tick" x1="394" y1="-63" x2="394" y2="-47"/>
+        <line class="dim-tick" x1="464" y1="-63" x2="464" y2="-47"/>
+        <text class="section-label" x="429" y="-60" text-anchor="middle">u</text>
       </g>
       <g id="understairs-extended" style="display:none">
         <!--
-          Under-stairs toilet conversion. 2.66 m wide x 1.20 m deep.
+          Under-stairs toilet conversion. ~2.36 m wide x 1.20 m deep.
+          West wall t4 stays at x=394 (in line with the cupboard's "u" width - we can't widen the under-stairs constraint).
           New east wall in line with a4 at x=630, new south stub at y=80 closes the gap to a1b.
-          Entrance door on t3 (south) at x=480..556, swinging south out into the dining.
+          Entrance door on t3 (south) at x=464..524, swinging south out into the dining.
           Toilet at the west end (close to t4); WM flush against t2 (east wall).
           a2, radiator, WM-default, a3a/a3b labels are hidden via JS when this mode is active.
           Walls labelled t1 (N), t2 (E), t3 (S), t4 (W) clockwise from north.
         -->
+        <!-- Click hit area covering the t1-t4 interior -->
+        <rect x="394" y="-40" width="236" height="120" fill="transparent"/>
+
         <!-- Outer walls, split for the entrance door on t3 (60 cm, x=464..524 - door west jamb flush with a1b east end) -->
-        <polyline class="wall" points="364,80 364,-40 630,-40 630,80 524,80"/>
+        <polyline class="wall" points="394,80 394,-40 630,-40 630,80 524,80"/>
 
         <!-- Entrance door on t3: 60 cm (cloakroom door), hinge at east jamb (524,80), swings south into dining (out of toilet) -->
         <line class="door-leaf" x1="524" y1="80" x2="524" y2="140"/>
         <path class="door-swing" d="M 524 140 A 60 60 0 0 0 464 80"/>
 
         <!-- Toilet (oval) close to t4 -->
-        <ellipse class="furniture" cx="390" cy="30" rx="22" ry="20"/>
-        <text class="furniture-label" x="390" y="33" text-anchor="middle">Toilet</text>
+        <ellipse class="furniture" cx="420" cy="30" rx="22" ry="20"/>
+        <text class="furniture-label" x="420" y="33" text-anchor="middle">Toilet</text>
 
         <!-- Washing machine 60 x 60 cm flush against t2 (east wall) -->
         <rect class="furniture" x="570" y="-10" width="60" height="60"/>
@@ -352,10 +362,10 @@
         <text class="furniture-label" x="650" y="-70" text-anchor="middle" transform="rotate(-90 650 -70)">Radiator</text>
 
         <!-- Wall letters for the toilet conversion room -->
-        <text class="section-label" x="497" y="-28" text-anchor="middle">t1</text>
+        <text class="section-label" x="512" y="-28" text-anchor="middle">t1</text>
         <text class="section-label" x="618" y="65" text-anchor="middle">t2</text>
-        <text class="section-label" x="420" y="70" text-anchor="middle">t3</text>
-        <text class="section-label" x="378" y="70" text-anchor="middle">t4</text>
+        <text class="section-label" x="450" y="70" text-anchor="middle">t3</text>
+        <text class="section-label" x="408" y="70" text-anchor="middle">t4</text>
       </g>
 
       <g id="radiator-block">
@@ -645,23 +655,33 @@
       }
     }
 
-    document.querySelectorAll('#sofa-controls button').forEach(btn => {
-      btn.addEventListener('click', () => {
-        document.querySelectorAll('#sofa-controls button').forEach(b => b.classList.remove('active'));
-        btn.classList.add('active');
-        renderSofa(
-          parseFloat(btn.dataset.w),
-          parseFloat(btn.dataset.d),
-          parseInt(btn.dataset.seats, 10),
-          btn.dataset.label
-        );
-      });
-    });
+    const sofaButtons = Array.from(document.querySelectorAll('#sofa-controls button'));
+    let currentSofaIndex = 0;
 
-    // default: existing sofa
-    const defaultBtn = document.querySelector('#sofa-controls button');
-    defaultBtn.classList.add('active');
-    renderSofa(215, 95, 3, 'Existing');
+    function activateSofaButton(btn) {
+      sofaButtons.forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      currentSofaIndex = sofaButtons.indexOf(btn);
+      renderSofa(
+        parseFloat(btn.dataset.w),
+        parseFloat(btn.dataset.d),
+        parseInt(btn.dataset.seats, 10),
+        btn.dataset.label
+      );
+    }
+
+    function cycleSofa() {
+      currentSofaIndex = (currentSofaIndex + 1) % sofaButtons.length;
+      activateSofaButton(sofaButtons[currentSofaIndex]);
+    }
+
+    sofaButtons.forEach(btn => btn.addEventListener('click', () => activateSofaButton(btn)));
+
+    const sofaGroup = document.getElementById('sofa');
+    sofaGroup.style.cursor = 'pointer';
+    sofaGroup.addEventListener('click', cycleSofa);
+
+    activateSofaButton(sofaButtons[0]);
 
     // ----- Bedroom bed render -----
     const BED_GAP_CENTER = 260.065; // local x along slope (mid of 135.56 to 384.57)
