@@ -227,7 +227,7 @@
   <div class="meta">South of Reception, open plan &nbsp;|&nbsp; Dining 5.01 m (W) + Kitchen 3.72 m (E), W wall 3.29 m (3-part bay, d1&ndash;d5), E wall 2.53 m, slanted S wall &nbsp;|&nbsp; scale: 100 px = 1 m</div>
 
   <div class="controls" id="understairs-controls">
-    <button data-variant="default">Under stairs washing machine</button>
+    <button data-variant="default">Existing under stairs</button>
     <button data-variant="toilet">Under stairs toilet option 1</button>
     <button data-variant="toilet-tight">Under stairs toilet option 2</button>
     <button data-variant="toilet-combi">Under stairs toilet option 3</button>
@@ -322,6 +322,10 @@
         <rect class="furniture" x="404" y="0" width="60" height="63"/>
         <text class="furniture-label" x="434" y="32" text-anchor="middle">WM</text>
         <text class="furniture-label" x="429" y="-7" text-anchor="middle" style="font-size:9px;">Under stairs</text>
+        <!-- WM appliance door on east face: 24 cm opening, hinge at top jamb, swings east -->
+        <line x1="464" y1="20" x2="464" y2="44" stroke="var(--stage-bg)" stroke-width="3"/>
+        <line class="door-leaf" x1="464" y1="20" x2="488" y2="20"/>
+        <path class="door-swing" d="M 488 20 A 24 24 0 0 1 464 44"/>
         <!-- Width dim above the cupboard's north wall; length is an estimate so labelled with a letter only -->
         <line class="dim-line" x1="394" y1="-35" x2="464" y2="-35"/>
         <line class="dim-tick" x1="394" y1="-43" x2="394" y2="-27"/>
@@ -357,9 +361,13 @@
         <ellipse class="furniture-detail" cx="514" cy="-3" rx="15" ry="11"/>
         <text class="furniture-label" x="514" y="1" text-anchor="middle">Sink</text>
 
-        <!-- Washing machine 60 x 60 cm flush against t2 (east wall) -->
+        <!-- Washing machine 63 x 60 cm flush against t2 (east wall) -->
         <rect class="furniture" x="567" y="-10" width="63" height="60"/>
-        <text class="furniture-label" x="600" y="22" text-anchor="middle">WM</text>
+        <text class="furniture-label" x="598" y="22" text-anchor="middle">WM</text>
+        <!-- WM appliance door on east face: 24 cm opening, hinge at top jamb, swings east through t2 -->
+        <line x1="630" y1="8" x2="630" y2="32" stroke="var(--stage-bg)" stroke-width="3"/>
+        <line class="door-leaf" x1="630" y1="8" x2="654" y2="8"/>
+        <path class="door-swing" d="M 654 8 A 24 24 0 0 1 630 32"/>
 
         <!--
           Radiator (toilet-mode placement): mounted on east face of the x=630 wall.
@@ -396,19 +404,18 @@
         <polyline class="wall" points="457,80 394,80 394,-20 630,-20"/>
 
         <!-- Diagonal partition (t2) from WM SE (457,80) to a4 south end (630,-20); length ~2.00 m -->
-        <line class="wall" x1="457" y1="80" x2="517.5" y2="45"/>
-        <line class="wall" x1="569.5" y1="15" x2="630" y2="-20"/>
-        <!-- Entry door on the diagonal: 60 cm, hinged at jamb nearer a4, swings out into the kitchen/dining -->
-        <line class="door-leaf" x1="569.5" y1="15" x2="599.5" y2="67"/>
-        <path class="door-swing" d="M 599.5 67 A 60 60 0 0 0 517.5 45"/>
+        <!-- 60 cm entry door starts at the WM SE corner; remaining wall continues to a4. Hinge at the far jamb, swings out south into the kitchen/dining. -->
+        <line class="wall" x1="509" y1="50" x2="630" y2="-20"/>
+        <line class="door-leaf" x1="509" y1="50" x2="539" y2="102"/>
+        <path class="door-swing" d="M 539 102 A 60 60 0 0 0 457 80"/>
 
-        <!-- Sink on t1 (west, at the toilet's old position) -->
-        <rect class="furniture" x="408" y="-20" width="42" height="34"/>
-        <text class="furniture-label" x="429" y="1" text-anchor="middle">Sink</text>
+        <!-- Toilet on t1 (west, back against t4) -->
+        <ellipse class="furniture" cx="429" cy="-2" rx="30" ry="18"/>
+        <text class="furniture-label" x="429" y="1" text-anchor="middle">Toilet</text>
 
-        <!-- Toilet on t1 (east, at the sink's old position) -->
-        <ellipse class="furniture" cx="514" cy="-2" rx="30" ry="18"/>
-        <text class="furniture-label" x="514" y="1" text-anchor="middle">Toilet</text>
+        <!-- Sink on t1 (east of toilet) -->
+        <rect class="furniture" x="493" y="-20" width="42" height="34"/>
+        <text class="furniture-label" x="514" y="1" text-anchor="middle">Sink</text>
 
         <!-- WM in SW corner: back to t4, south face is the t3 stub. Tiny door opening on the south face. -->
         <rect class="furniture" x="394" y="20" width="63" height="60"/>
@@ -431,7 +438,7 @@
         <!-- Wall labels: t1 (north), t2 (diagonal, labelled on the kitchen side), t3 (south stub), t4 (west) -->
         <text class="section-label" x="512" y="-28" text-anchor="middle">t1</text>
         <text class="section-label" x="555" y="36" text-anchor="middle">t2</text>
-        <text class="section-label" x="424" y="95" text-anchor="middle">t3</text>
+        <text class="section-label" x="446" y="95" text-anchor="middle">t3</text>
         <text class="section-label" x="380" y="20" text-anchor="middle">t4</text>
       </g>
 
