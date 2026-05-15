@@ -404,7 +404,6 @@
 
         <!-- Sink on t1 (west, at the toilet's old position) -->
         <rect class="furniture" x="408" y="-20" width="42" height="34"/>
-        <ellipse class="furniture-detail" cx="429" cy="-3" rx="15" ry="11"/>
         <text class="furniture-label" x="429" y="1" text-anchor="middle">Sink</text>
 
         <!-- Toilet on t1 (east, at the sink's old position) -->
@@ -414,8 +413,10 @@
         <!-- WM in SW corner: back to t4, south face is the t3 stub. Tiny door opening on the south face. -->
         <rect class="furniture" x="394" y="20" width="63" height="60"/>
         <text class="furniture-label" x="424" y="50" text-anchor="middle">WM</text>
+        <!-- Door opening (24 cm) on the WM's south face: knockout the t3 stub, hinge at west jamb, swings south -->
         <line x1="412" y1="80" x2="436" y2="80" stroke="var(--stage-bg)" stroke-width="3"/>
-        <line x1="412" y1="80" x2="436" y2="80" stroke="var(--door)" stroke-width="1.5" stroke-dasharray="3 2"/>
+        <line class="door-leaf" x1="412" y1="80" x2="412" y2="104"/>
+        <path class="door-swing" d="M 412 104 A 24 24 0 0 0 436 80"/>
 
         <rect class="furniture" x="630" y="-90" width="8" height="80"/>
         <line class="furniture-detail" x1="630" y1="-80" x2="638" y2="-80"/>
