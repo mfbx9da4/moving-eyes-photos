@@ -88,19 +88,16 @@
   .controls button:hover:not(.active) { background: var(--btn-hover); }
   .warn { color: var(--warn); font-size: 13px; margin-left: 8px; }
   body.pen-mode svg { cursor: crosshair; }
-  body.pen-mode #bed,
-  body.pen-mode #sofa,
-  body.pen-mode #footstool,
-  body.pen-mode #understairs-default,
-  body.pen-mode #understairs-extended,
-  body.pen-mode #understairs-v3,
-  body.pen-mode #understairs-v4 { pointer-events: none; }
   .pen-stroke { fill: none; stroke: var(--warn); stroke-width: 2.5; stroke-linecap: round; stroke-linejoin: round; pointer-events: none; transition: opacity 2s ease-in; }
+  .pen-toolbar { position: fixed; top: 8px; right: 8px; z-index: 1000; background: var(--stage-bg); border: 1px solid var(--btn-border); border-radius: 4px; padding: 2px; opacity: 0.55; transition: opacity 0.15s; }
+  .pen-toolbar:hover { opacity: 1; }
+  .pen-toolbar button { font-size: 11px; padding: 2px 8px; border: none; background: transparent; color: var(--fg); cursor: pointer; border-radius: 3px; font-family: system-ui, sans-serif; }
+  .pen-toolbar button.active { background: var(--btn-active-bg); color: var(--btn-active-fg); }
 </style>
 </head>
 <body>
-  <div class="controls" style="margin-bottom: 16px;">
-    <button id="pen-toggle">Pen mode</button>
+  <div class="pen-toolbar">
+    <button id="pen-toggle" title="Toggle pen mode (p)">Pen</button>
   </div>
 
   <h1>Ground Floor &ndash; Reception Room</h1>
@@ -189,7 +186,7 @@
       <line class="dim-line" x1="450" y1="55" x2="600" y2="55"/>
       <line class="dim-tick" x1="450" y1="47" x2="450" y2="63"/>
       <line class="dim-tick" x1="600" y1="47" x2="600" y2="63"/>
-      <text class="dim-text" x="525" y="48" text-anchor="middle"><tspan fill="var(--section-label)" font-weight="bold">g:</tspan> 1.50 m</text>
+      <text class="dim-text" x="525" y="48" text-anchor="middle"><tspan fill="var(--section-label)" font-weight="bold">a2:</tspan> 1.50 m</text>
 
       <!-- Sofa group - rendered via JS -->
       <g id="sofa"></g>
@@ -229,7 +226,7 @@
       <line class="dim-tick" x1="622" y1="299" x2="638" y2="299"/>
       <text class="dim-text" x="646" y="243.75" text-anchor="middle" transform="rotate(90 646 243.75)">1.105 m</text>
       <line class="dim-line" x1="630" y1="299" x2="630" y2="409"/>
-      <text class="dim-text" x="646" y="354" text-anchor="middle" transform="rotate(90 646 354)"><tspan fill="var(--section-label)" font-weight="bold">f:</tspan> 1.10 m</text>
+      <text class="dim-text" x="646" y="354" text-anchor="middle" transform="rotate(90 646 354)"><tspan fill="var(--section-label)" font-weight="bold">b2:</tspan> 1.10 m</text>
 
       <!-- 3.35m from clip end (x=265) to east wall (x=600) along south wall -->
       <line class="dim-line" x1="265" y1="439" x2="600" y2="439"/>
@@ -560,8 +557,8 @@
         <text class="section-label" id="label-a3a" x="497" y="-2" text-anchor="middle">a3a</text>
         <text class="section-label" id="label-a3b" x="615" y="-2" text-anchor="middle">a3b</text>
         <text class="section-label" x="615" y="-55" text-anchor="middle">a4</text>
-        <line x1="588" y1="-110" x2="635" y2="-110" stroke="var(--section-label)" stroke-width="0.75"/>
-        <text class="section-label" x="570" y="-110" text-anchor="middle">a5a</text>
+        <line x1="640" y1="-109" x2="640" y2="-94" stroke="var(--section-label)" stroke-width="0.75"/>
+        <text class="section-label" x="640" y="-115" text-anchor="middle">a5a</text>
         <line x1="811.5" y1="-104" x2="811.5" y2="-93" stroke="var(--section-label)" stroke-width="0.75"/>
         <text class="section-label" x="811.5" y="-110" text-anchor="middle">a5b</text>
         <text class="section-label" x="938" y="50" text-anchor="middle">b</text>
@@ -937,17 +934,41 @@
     (function () {
       const FADE_MS = 2000;
       const penBtn = document.getElementById('pen-toggle');
-      let penMode = false;
+      let penMode = true;
+      penBtn.classList.add('active');
+      document.body.classList.add('pen-mode');
 
-      penBtn.addEventListener('click', () => {
+      function togglePen() {
         penMode = !penMode;
         penBtn.classList.toggle('active', penMode);
         document.body.classList.toggle('pen-mode', penMode);
+      }
+
+      penBtn.addEventListener('click', togglePen);
+      document.addEventListener('keydown', (e) => {
+        if (e.key !== 'p' || e.metaKey || e.ctrlKey || e.altKey) return;
+        if (e.target.matches('input, textarea, [contenteditable="true"]')) return;
+        e.preventDefault();
+        togglePen();
       });
 
+      // A drag-vs-click heuristic so brief taps still cycle furniture variants in pen mode.
+      const DRAG_THRESHOLD = 5; // px in screen coords
+      let suppressNextClick = false;
+      document.addEventListener('click', (e) => {
+        if (!suppressNextClick) return;
+        e.stopPropagation();
+        e.preventDefault();
+        suppressNextClick = false;
+      }, true);
+
       document.querySelectorAll('svg').forEach(svg => {
+        let pointerActive = false;
         let drawing = false;
+        let activePointerId = null;
         let path = null;
+        let startSvgPt = null;
+        let startClient = null;
 
         function svgPoint(evt) {
           const pt = svg.createSVGPoint();
@@ -958,23 +979,35 @@
 
         svg.addEventListener('pointerdown', (e) => {
           if (!penMode) return;
-          e.preventDefault();
-          try { svg.setPointerCapture(e.pointerId); } catch (_) {}
-          drawing = true;
-          const p = svgPoint(e);
-          path = document.createElementNS('http://www.w3.org/2000/svg', 'path');
-          path.setAttribute('class', 'pen-stroke');
-          path.setAttribute('d', 'M ' + p.x + ' ' + p.y);
-          svg.appendChild(path);
+          pointerActive = true;
+          drawing = false;
+          activePointerId = e.pointerId;
+          startSvgPt = svgPoint(e);
+          startClient = { x: e.clientX, y: e.clientY };
+          path = null;
         });
 
         svg.addEventListener('pointermove', (e) => {
-          if (!drawing || !path) return;
+          if (!pointerActive || e.pointerId !== activePointerId) return;
+          if (!drawing) {
+            const dx = e.clientX - startClient.x;
+            const dy = e.clientY - startClient.y;
+            if (Math.hypot(dx, dy) < DRAG_THRESHOLD) return;
+            drawing = true;
+            try { svg.setPointerCapture(e.pointerId); } catch (_) {}
+            path = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+            path.setAttribute('class', 'pen-stroke');
+            path.setAttribute('d', 'M ' + startSvgPt.x + ' ' + startSvgPt.y);
+            svg.appendChild(path);
+          }
           const p = svgPoint(e);
           path.setAttribute('d', path.getAttribute('d') + ' L ' + p.x + ' ' + p.y);
         });
 
         function endStroke(e) {
+          if (!pointerActive || e.pointerId !== activePointerId) return;
+          pointerActive = false;
+          activePointerId = null;
           if (!drawing) return;
           drawing = false;
           try { svg.releasePointerCapture(e.pointerId); } catch (_) {}
@@ -982,6 +1015,8 @@
           path = null;
           requestAnimationFrame(() => { finished.style.opacity = '0'; });
           setTimeout(() => finished.remove(), FADE_MS + 100);
+          // We dragged, so suppress the synthetic click that would otherwise cycle a variant.
+          suppressNextClick = true;
         }
 
         svg.addEventListener('pointerup', endStroke);
