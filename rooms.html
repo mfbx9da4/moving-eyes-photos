@@ -418,10 +418,10 @@
         <polyline class="wall" points="457,80 394,80 394,-20 630,-20"/>
 
         <!-- Diagonal partition (t2) from WM SE (457,80) to a4 south end (630,-20); length ~2.00 m -->
-        <!-- 60 cm entry door starts at the WM SE corner; remaining wall continues to a4. Hinge at the far jamb, swings out south into the kitchen/dining. -->
+        <!-- 60 cm entry door starts at the WM SE corner; remaining wall continues to a4. Hinge at the far jamb, drawn quarter-open (22.5 deg from closed). -->
         <line class="wall" x1="509" y1="50" x2="630" y2="-20"/>
-        <line class="door-leaf" x1="509" y1="50" x2="539" y2="102"/>
-        <path class="door-swing" d="M 539 102 A 60 60 0 0 0 457 80"/>
+        <line class="door-leaf" x1="509" y1="50" x2="472.5" y2="97.6"/>
+        <path class="door-swing" d="M 472.5 97.6 A 60 60 0 0 0 457 80"/>
 
         <!-- Toilet on t1 (west), vertically equidistant between t1 and the WM north face -->
         <ellipse class="furniture" cx="434" cy="0" rx="30" ry="18"/>
@@ -535,6 +535,20 @@
       -->
       <polygon class="furniture" points="953,-90 953,210 662,276 648.7,217.5 893,162.1 893,-90"/>
       <text class="furniture-label" x="923" y="50" text-anchor="middle" transform="rotate(-90 923 50)">Kitchen worktop</text>
+
+      <!-- Dining table 1.60 x 0.80 m + 4 chairs (45 x 45 cm), pulled south toward the slanted c wall, rotated -12.66 deg parallel to c -->
+      <g id="dining-table" transform="rotate(-12.66 250 270)">
+        <!-- North-side chairs -->
+        <rect class="furniture" x="201" y="183" width="45" height="45" rx="3"/>
+        <rect class="furniture" x="254" y="183" width="45" height="45" rx="3"/>
+        <!-- Table -->
+        <rect class="furniture" x="170" y="230" width="160" height="80" rx="4" ry="4"/>
+        <text class="furniture-label" x="250" y="266" text-anchor="middle">Dining table</text>
+        <text class="furniture-label" x="250" y="280" text-anchor="middle">1.60 &#215; 0.80</text>
+        <!-- South-side chairs -->
+        <rect class="furniture" x="201" y="312" width="45" height="45" rx="3"/>
+        <rect class="furniture" x="254" y="312" width="45" height="45" rx="3"/>
+      </g>
 
       <!--
         Wall letters. North wall (a1..a5, with a1/a3/a5 each split by an obstruction into a/b sub-segments):
