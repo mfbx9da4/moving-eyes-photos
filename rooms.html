@@ -730,6 +730,17 @@
     const SOUTH_WALL_Y = 409;
     const SVG_NS = "http://www.w3.org/2000/svg";
 
+    // ----- History (back/forward navigation) -----
+    let __recordReady = false;
+    let __restoring = false;
+    function __record() {
+      if (!__recordReady || __restoring) return;
+      const usBtn = document.querySelector('#understairs-controls button.active');
+      const us = usBtn ? usBtn.dataset.variant : 'default';
+      const state = { sofa: currentSofaIndex, bed: currentBedIndex, us };
+      history.pushState(state, '', '#s=' + state.sofa + '&b=' + state.bed + '&u=' + state.us);
+    }
+
     function el(tag, attrs) {
       const e = document.createElementNS(SVG_NS, tag);
       for (const k in attrs) e.setAttribute(k, attrs[k]);
@@ -811,6 +822,7 @@
         parseInt(btn.dataset.seats, 10),
         btn.dataset.label
       );
+      __record();
     }
 
     function cycleSofa() {
@@ -848,6 +860,7 @@
         btn.dataset.label,
         btn.dataset.drawers === 'true'
       );
+      __record();
     }
 
     function renderBed(widthCm, lengthCm, label, drawersOpen) {
@@ -928,7 +941,9 @@
         });
         buttons.forEach(b => b.classList.toggle('active', b.dataset.variant === variant));
         currentIndex = buttons.findIndex(b => b.dataset.variant === variant);
+        __record();
       }
+      window.__activateUnderstairs = activate;
 
       function cycle() {
         const next = buttons[(currentIndex + 1) % buttons.length];
@@ -943,6 +958,27 @@
 
       activate('default');
     })();
+
+    // ----- History (popstate handler + arming the recorder) -----
+    __recordReady = true;
+    history.replaceState({
+      sofa: currentSofaIndex,
+      bed: currentBedIndex,
+      us: (document.querySelector('#understairs-controls button.active') || {dataset:{}}).dataset.variant || 'default'
+    }, '', location.hash || '');
+
+    window.addEventListener('popstate', (e) => {
+      if (!e.state) return;
+      __restoring = true;
+      try {
+        const s = e.state;
+        if (typeof s.sofa === 'number' && sofaButtons[s.sofa]) activateSofaButton(sofaButtons[s.sofa]);
+        if (typeof s.bed === 'number' && bedButtons[s.bed]) activateBedButton(bedButtons[s.bed]);
+        if (s.us && window.__activateUnderstairs) window.__activateUnderstairs(s.us);
+      } finally {
+        __restoring = false;
+      }
+    });
 
     // ----- Fading pen mode -----
     (function () {
