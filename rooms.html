@@ -368,22 +368,24 @@
         <line class="door-leaf" x1="474" y1="80" x2="474" y2="140"/>
         <path class="door-swing" d="M 474 140 A 60 60 0 0 0 414 80"/>
 
-        <!-- Toilet (compact cloakroom WC ~0.60 m projection x 0.36 m wide), close to t4 with a small gap -->
-        <ellipse class="furniture" cx="429" cy="20" rx="30" ry="18"/>
-        <text class="furniture-label" x="429" y="23" text-anchor="middle">Toilet</text>
+        <!-- Toilet vertically centred between t1 (y=-20) and t3 (y=80), close to t4 with a small gap -->
+        <ellipse class="furniture" cx="429" cy="30" rx="30" ry="18"/>
+        <text class="furniture-label" x="429" y="33" text-anchor="middle">Toilet</text>
 
         <!-- Small sink (42 x 34 cm) hung on t1 between the toilet and the WM -->
         <rect class="furniture" x="493" y="-20" width="42" height="34"/>
-        <ellipse class="furniture-detail" cx="514" cy="-3" rx="15" ry="11"/>
         <text class="furniture-label" x="514" y="1" text-anchor="middle">Sink</text>
 
-        <!-- Washing machine 63 x 60 cm flush against t2 (east wall) -->
-        <rect class="furniture" x="567" y="-10" width="63" height="60"/>
-        <text class="furniture-label" x="598" y="22" text-anchor="middle">WM</text>
-        <!-- WM appliance door on east face: 24 cm opening, hinge at top jamb, swings east through t2 -->
-        <line x1="630" y1="8" x2="630" y2="32" stroke="var(--stage-bg)" stroke-width="3"/>
-        <line class="door-leaf" x1="630" y1="8" x2="654" y2="8"/>
-        <path class="door-swing" d="M 654 8 A 24 24 0 0 1 630 32"/>
+        <!-- Dashed partition wall just west of the WM (3 cm gap), full height t1 to t3 -->
+        <line x1="564" y1="-20" x2="564" y2="80" stroke="var(--wall)" stroke-width="1.5" stroke-dasharray="4 4"/>
+
+        <!-- Washing machine 63 x 60 cm flush against t2 (east wall), shifted south to 4 cm from t3 -->
+        <rect class="furniture" x="567" y="16" width="63" height="60"/>
+        <text class="furniture-label" x="598" y="48" text-anchor="middle">WM</text>
+        <!-- WM appliance door on east face: 24 cm opening centred on the WM, hinge at top jamb, swings east through t2 -->
+        <line x1="630" y1="34" x2="630" y2="58" stroke="var(--stage-bg)" stroke-width="3"/>
+        <line class="door-leaf" x1="630" y1="34" x2="654" y2="34"/>
+        <path class="door-swing" d="M 654 34 A 24 24 0 0 1 630 58"/>
 
         <!--
           Radiator (toilet-mode placement): mounted on east face of the x=630 wall.
