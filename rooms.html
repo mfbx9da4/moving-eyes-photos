@@ -86,7 +86,7 @@
   .controls button.active { background: var(--btn-active-bg); color: var(--btn-active-fg); border-color: var(--btn-active-bg); }
   .controls button:hover:not(.active) { background: var(--btn-hover); }
   .warn { color: var(--warn); font-size: 13px; margin-left: 8px; }
-  body.pen-mode svg { cursor: crosshair; }
+  body.pen-mode svg { cursor: crosshair; touch-action: none; }
   .pen-stroke { fill: none; stroke: var(--warn); stroke-width: 2.5; stroke-linecap: round; stroke-linejoin: round; pointer-events: none; transition: opacity 2s ease-in; }
   .pen-toolbar { position: fixed; top: 8px; right: 8px; z-index: 1000; background: var(--stage-bg); border: 1px solid var(--btn-border); border-radius: 4px; padding: 2px; opacity: 0.55; transition: opacity 0.15s; }
   .pen-toolbar:hover { opacity: 1; }
@@ -451,7 +451,7 @@
 
         <!-- Wall labels: t1 (north), t2 (diagonal, labelled on the kitchen side), t3 (south stub), t4 (west) -->
         <text class="section-label" x="512" y="-28" text-anchor="middle">t1</text>
-        <text class="section-label" x="555" y="36" text-anchor="middle">t2</text>
+        <text class="section-label" x="580" y="20" text-anchor="middle">t2</text>
         <text class="section-label" x="446" y="95" text-anchor="middle">t3</text>
         <text class="section-label" x="380" y="20" text-anchor="middle">t4</text>
       </g>
