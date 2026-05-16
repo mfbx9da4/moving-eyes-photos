@@ -248,6 +248,7 @@
     <button data-variant="toilet">Under stairs toilet option 1</button>
     <button data-variant="toilet-tight">Under stairs toilet option 2</button>
     <button data-variant="toilet-combi">Under stairs toilet option 3</button>
+    <button data-variant="toilet-enclosed">Under stairs toilet option 4</button>
   </div>
 
   <div class="stage">
@@ -502,6 +503,63 @@
 
         <text class="section-label" x="467" y="-28" text-anchor="middle">t1</text>
         <text class="section-label" x="424" y="95" text-anchor="middle">t3</text>
+        <text class="section-label" x="380" y="20" text-anchor="middle">t4</text>
+      </g>
+
+      <g id="understairs-v5" style="display:none">
+        <!--
+          Toilet conversion (option 4): fully enclosed WC with a combi (sink-on-cistern) toilet.
+          - Storage occupies the original toilet position (back against t4, above WM).
+          - Combi toilet runs N-S where option 3's sink was; cistern + integrated sink at the
+            north end, bowl at the south end. East edge sits 3 cm from t2.
+          - New vertical wall t2 at x=513 closes the room from t1 (y=-20) down to a1b line (y=80).
+          - Two doors on the y=80 south wall: WM mini door (24 cm), and the WC entrance
+            (56 cm) immediately to its east.
+        -->
+        <polygon points="394,80 394,-20 513,-20 513,80" fill="transparent"/>
+
+        <!-- North/east/west walls drawn as a single polyline (t4 -> t1 -> t2). -->
+        <polyline class="wall" points="394,80 394,-20 513,-20 513,80"/>
+        <!-- South wall t3 stubs: 394-412 (W of WM door), 436-457 (between doors). -->
+        <polyline class="wall" points="394,80 412,80"/>
+        <polyline class="wall" points="436,80 457,80"/>
+
+        <!-- WM mini door (24 cm): hinge at west jamb (412,80), swings south into dining -->
+        <line class="door-leaf" x1="412" y1="80" x2="412" y2="104"/>
+        <path class="door-swing" d="M 412 104 A 24 24 0 0 0 436 80"/>
+
+        <!-- WC entrance door (56 cm): hinge at east jamb (513,80), swings south into dining -->
+        <line class="door-leaf" x1="513" y1="80" x2="513" y2="136"/>
+        <path class="door-swing" d="M 513 136 A 56 56 0 0 1 457 80"/>
+
+        <!-- Storage above WM, back against t4 and t1 -->
+        <rect class="furniture" x="394" y="-20" width="63" height="38"/>
+        <text class="furniture-label" x="425" y="3" text-anchor="middle">Storage</text>
+
+        <!-- WM 63 x 60 cm in SW corner of toilet room -->
+        <rect class="furniture" x="394" y="20" width="63" height="60"/>
+        <text class="furniture-label" x="425" y="56" text-anchor="middle">WM</text>
+
+        <!-- Combi toilet 40 x 65 cm, N-S orientation; cistern/sink north, bowl south. -->
+        <rect class="furniture" x="470" y="-20" width="40" height="65"/>
+        <line class="furniture-detail" x1="470" y1="3" x2="510" y2="3"/>
+        <text class="furniture-label" x="490" y="-7" text-anchor="middle" style="font-size:8px;">Sink+Cist.</text>
+        <text class="furniture-label" x="490" y="28" text-anchor="middle" style="font-size:9px;">WC</text>
+
+        <!-- Radiator on south face of a3a wall (east of t2, in kitchen alcove) -->
+        <rect class="furniture" x="560" y="-20" width="70" height="8"/>
+        <line class="furniture-detail" x1="570" y1="-20" x2="570" y2="-12"/>
+        <line class="furniture-detail" x1="580" y1="-20" x2="580" y2="-12"/>
+        <line class="furniture-detail" x1="590" y1="-20" x2="590" y2="-12"/>
+        <line class="furniture-detail" x1="600" y1="-20" x2="600" y2="-12"/>
+        <line class="furniture-detail" x1="610" y1="-20" x2="610" y2="-12"/>
+        <line class="furniture-detail" x1="620" y1="-20" x2="620" y2="-12"/>
+        <text class="furniture-label" x="595" y="3" text-anchor="middle">Radiator</text>
+
+        <!-- Wall letters -->
+        <text class="section-label" x="454" y="-28" text-anchor="middle">t1</text>
+        <text class="section-label" x="525" y="20" text-anchor="middle">t2</text>
+        <text class="section-label" x="485" y="95" text-anchor="middle">t3</text>
         <text class="section-label" x="380" y="20" text-anchor="middle">t4</text>
       </g>
 
@@ -938,6 +996,7 @@
         'toilet': document.getElementById('understairs-extended'),
         'toilet-tight': document.getElementById('understairs-v3'),
         'toilet-combi': document.getElementById('understairs-v4'),
+        'toilet-enclosed': document.getElementById('understairs-v5'),
       };
       const buttons = Array.from(document.querySelectorAll('#understairs-controls button'));
       const hideInToilet = ['a2-step-wall', 'radiator-block', 'label-a2', 'label-a3a', 'label-a3b', 'a1b-east-of-toilet-door'];
