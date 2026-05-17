@@ -3,6 +3,14 @@
 <head>
 <meta charset="UTF-8">
 <title>Addison Way Floor Plan</title>
+<link rel="manifest" href="/rooms.webmanifest">
+<script>
+  if ('serviceWorker' in navigator) {
+    window.addEventListener('load', () => {
+      navigator.serviceWorker.register('/rooms-sw.js', { scope: '/rooms' }).catch(() => {});
+    });
+  }
+</script>
 <style>
   :root {
     color-scheme: light dark;

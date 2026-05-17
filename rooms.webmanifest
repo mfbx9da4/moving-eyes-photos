@@ -1,0 +1,10 @@
+{
+  "name": "Addison Way Floor Plan",
+  "short_name": "Floor Plan",
+  "start_url": "/rooms",
+  "scope": "/rooms",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#ffffff",
+  "icons": []
+}
