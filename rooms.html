@@ -94,7 +94,7 @@
   .controls button.active { background: var(--btn-active-bg); color: var(--btn-active-fg); border-color: var(--btn-active-bg); }
   .controls button:hover:not(.active) { background: var(--btn-hover); }
   .warn { color: var(--warn); font-size: 13px; margin-left: 8px; }
-  body.pen-mode svg { cursor: crosshair; touch-action: none; }
+  body.pen-mode svg { cursor: crosshair; touch-action: pinch-zoom; }
   .pen-stroke { fill: none; stroke: var(--warn); stroke-width: 2.5; stroke-linecap: round; stroke-linejoin: round; pointer-events: none; transition: opacity 2s ease-in; }
   .pen-toolbar { position: fixed; top: 8px; right: 8px; z-index: 1000; background: var(--stage-bg); border: 1px solid var(--btn-border); border-radius: 4px; padding: 2px; opacity: 0.55; transition: opacity 0.15s; }
   .pen-toolbar:hover { opacity: 1; }
