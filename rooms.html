@@ -108,8 +108,7 @@
   </div>
 
   <h1>Ground Floor &ndash; Reception Room</h1>
-  <div class="meta">5.79 m &times; 3.29 m &nbsp;|&nbsp; scale: 100 px = 1 m</div>
-  <div class="warn" style="margin:0 0 12px;">&#9888; drawn to ~5.20 m est. (plan: 5.79 m). 3.35 m confirmed.</div>
+  <div class="meta">4.66 m &times; 3.30 m &nbsp;|&nbsp; scale: 100 px = 1 m &nbsp;|&nbsp; measured 2026-05-18</div>
 
   <div class="controls" id="sofa-controls">
     <button data-w="215" data-d="95" data-seats="3" data-label="Existing">Existing 2.15 &times; 0.95</button>
@@ -119,101 +118,102 @@
 
   <div class="stage">
     <!--
-      Room: 5.79 m wide x 3.29 m tall
-      Scale: 100 px per metre
-      Room area: 579 x 329 px
-      Margins for dimension lines/labels: 80 px each side
+      Room: 4.66 m wide x 3.30 m tall (measured 2026-05-18). c (south wall east piece) = 3.35 m measured.
+      Diagonal c2+c3+c4 (102 cm) projects 75.5 horiz x 68.58 vert (angle ~42 deg).
+      Derived W wall length: 2.40 m.
     -->
-    <svg width="780" height="489" viewBox="0 0 780 489" xmlns="http://www.w3.org/2000/svg">
+    <svg width="726" height="490" viewBox="0 0 726 490" xmlns="http://www.w3.org/2000/svg">
       <!-- 0.5m grid -->
       <g class="grid">
-        <line x1="80" y1="80" x2="80" y2="409"/>
-        <line x1="130" y1="80" x2="130" y2="409"/>
-        <line x1="180" y1="80" x2="180" y2="409"/>
-        <line x1="230" y1="80" x2="230" y2="409"/>
-        <line x1="280" y1="80" x2="280" y2="409"/>
-        <line x1="330" y1="80" x2="330" y2="409"/>
-        <line x1="380" y1="80" x2="380" y2="409"/>
-        <line x1="430" y1="80" x2="430" y2="409"/>
-        <line x1="480" y1="80" x2="480" y2="409"/>
-        <line x1="530" y1="80" x2="530" y2="409"/>
-        <line x1="580" y1="80" x2="580" y2="409"/>
-        <line x1="80"  y1="130" x2="600" y2="130"/>
-        <line x1="80"  y1="180" x2="600" y2="180"/>
-        <line x1="80"  y1="230" x2="600" y2="230"/>
-        <line x1="80"  y1="280" x2="600" y2="280"/>
-        <line x1="80"  y1="330" x2="600" y2="330"/>
-        <line x1="80"  y1="380" x2="600" y2="380"/>
+        <line x1="80" y1="80" x2="80" y2="410"/>
+        <line x1="130" y1="80" x2="130" y2="410"/>
+        <line x1="180" y1="80" x2="180" y2="410"/>
+        <line x1="230" y1="80" x2="230" y2="410"/>
+        <line x1="280" y1="80" x2="280" y2="410"/>
+        <line x1="330" y1="80" x2="330" y2="410"/>
+        <line x1="380" y1="80" x2="380" y2="410"/>
+        <line x1="430" y1="80" x2="430" y2="410"/>
+        <line x1="480" y1="80" x2="480" y2="410"/>
+        <line x1="530" y1="80" x2="530" y2="410"/>
+        <line x1="80"  y1="130" x2="546" y2="130"/>
+        <line x1="80"  y1="180" x2="546" y2="180"/>
+        <line x1="80"  y1="230" x2="546" y2="230"/>
+        <line x1="80"  y1="280" x2="546" y2="280"/>
+        <line x1="80"  y1="330" x2="546" y2="330"/>
+        <line x1="80"  y1="380" x2="546" y2="380"/>
       </g>
 
       <!-- Room walls -->
-      <!-- SW corner is clipped: west wall ends 80cm above south wall, 60cm horizontal step east, diagonal to 3.35m marker on south wall. -->
-      <!-- East wall: 1.105m French door (43.5" per joinery drawing 2018-12-03). f=1.10m bottom gap. Opening y=188.5 to 299. -->
-      <line class="wall" x1="80" y1="80" x2="600" y2="80"/>
-      <line class="wall" x1="600" y1="80" x2="600" y2="188.5"/>
-      <line class="wall" x1="600" y1="299" x2="600" y2="409"/>
-      <line class="wall" x1="80" y1="80" x2="80" y2="329"/>
-      <line class="wall" x1="80" y1="329" x2="140" y2="329"/>
-      <!-- Diagonal (b + c) ends at (265, 379). 30cm vertical d from there down to south wall. -->
-      <!-- Diagonal unit (0.9285, 0.3714). Door 76cm centered. b NW jamb (167.21, 339.88), c SE jamb (237.78, 368.11) -->
-      <line class="wall" x1="140" y1="329" x2="167.21" y2="339.88"/>
-      <line class="wall" x1="237.78" y1="368.11" x2="265" y2="379"/>
-      <line class="wall" x1="265" y1="379" x2="265" y2="409"/>
-      <line class="wall" x1="265" y1="409" x2="600" y2="409"/>
+      <!-- SW corner clipped: c1 horiz 55.5, diagonal (c2+c3+c4 = 13+78+11 = 102) at ~42 deg, c5 21.5 vertical. -->
+      <!-- East wall: b1 (1.18 m) + b2 French door (1.05 m) + b3 (1.07 m) = 3.30 m. -->
+      <!-- Diagonal unit (0.7402, 0.6724). c2 NW jamb (145.12, 328.66), c3 door 78cm, c4 SE jamb (202.86, 381.11). -->
+      <line class="wall" x1="80" y1="80" x2="546" y2="80"/>
+      <line class="wall" x1="546" y1="80" x2="546" y2="198"/>
+      <line class="wall" x1="546" y1="303" x2="546" y2="410"/>
+      <line class="wall" x1="80" y1="80" x2="80" y2="319.92"/>
+      <line class="wall" x1="80" y1="319.92" x2="135.5" y2="319.92"/>
+      <line class="wall" x1="135.5" y1="319.92" x2="145.12" y2="328.66"/>
+      <line class="wall" x1="202.86" y1="381.11" x2="211" y2="388.50"/>
+      <line class="wall" x1="211" y1="388.50" x2="211" y2="410"/>
+      <line class="wall" x1="211" y1="410" x2="546" y2="410"/>
 
-      <!-- Door on diagonal: 76cm, hinge at SE jamb, swings into room -->
-      <line class="door-leaf" x1="237.78" y1="368.11" x2="266.01" y2="297.55"/>
-      <path class="door-swing" d="M 266.01 297.55 A 76 76 0 0 0 167.21 339.88"/>
+      <!-- Door on diagonal: 78cm, hinge at SE jamb (202.86, 381.11), swings into room. -->
+      <!-- Closed dir hinge->NW jamb (-57.74, -52.45). Open dir 90 deg CCW visually = (52.45, -57.74). Open end (255.31, 323.37). -->
+      <line class="door-leaf" x1="202.86" y1="381.11" x2="255.31" y2="323.37"/>
+      <path class="door-swing" d="M 255.31 323.37 A 78 78 0 0 0 145.12 328.66"/>
 
-      <!-- Main walls: a (N), b (E), c (S; sub-segments c1-c5), d (W) -->
+      <!-- West wall d dim (left outer column) — d = 2.40 m derived from c=3.35 and the diagonal. -->
+      <line class="dim-line" x1="50" y1="80" x2="50" y2="319.92"/>
+      <line class="dim-tick" x1="42" y1="80" x2="58" y2="80"/>
+      <line class="dim-tick" x1="42" y1="319.92" x2="58" y2="319.92"/>
+      <text class="dim-text" x="36" y="200" text-anchor="middle" transform="rotate(-90 36 200)"><tspan fill="var(--section-label)" font-weight="bold">d:</tspan> 2.40 m (derived)</text>
+
       <g>
-        <text class="section-label" x="340" y="115" text-anchor="middle">a</text>
-        <text class="section-label" x="583" y="130" text-anchor="middle">b</text>
-        <text class="section-label" x="95" y="205" text-anchor="middle">d</text>
-        <text class="section-label" x="110" y="322" text-anchor="middle">c1</text>
-        <text class="section-label" x="143" y="349" text-anchor="middle">c2</text>
-        <text class="section-label" x="240" y="385" text-anchor="middle">c3</text>
-        <text class="section-label" x="285" y="397" text-anchor="middle">c4</text>
-        <text class="section-label" x="432.5" y="425" text-anchor="middle">c5</text>
+        <!-- leader lines from off-wall dim labels to the tiny c2/c4/c5 wall segments -->
+        <line x1="78" y1="365" x2="140" y2="324" stroke="var(--section-label)" stroke-width="0.75"/>
+        <!-- c4 label sits west of cut, leader goes up-right to c4 segment midpoint (206.93, 384.80) -->
+        <line x1="178" y1="425" x2="207" y2="385" stroke="var(--section-label)" stroke-width="0.75"/>
+        <!-- c5 label sits east of cut, leader goes up-left to c5 segment midpoint (211, 399.25) -->
+        <line x1="262" y1="425" x2="214" y2="402" stroke="var(--section-label)" stroke-width="0.75"/>
       </g>
 
       <!-- East French doors: open outward to garden. Indicated by dashed line across opening. -->
-      <line class="door-swing" x1="600" y1="188.5" x2="600" y2="299"/>
+      <line class="door-swing" x1="546" y1="198" x2="546" y2="303"/>
 
       <!-- L-shaped built-in shelves in NW corner: 80cm along each wall, 30cm deep -->
       <polygon class="furniture" points="80,80 160,80 160,110 110,110 110,160 80,160"/>
       <text class="furniture-label" x="135" y="96" text-anchor="middle">Shelves</text>
       <text class="furniture-label" x="135" y="108" text-anchor="middle">80&#215;30</text>
 
-      <!-- TV: 122cm wide (55"), wall-mounted on north wall. g=1.50m from right edge to east wall. -->
-      <rect class="furniture" x="328" y="80" width="122" height="10"/>
-      <text class="furniture-label" x="389" y="103" text-anchor="middle">TV (1.22 m)</text>
+      <!-- TV: 49" diagonal -> 108 cm wide screen (16:9). Wall-mounted on north wall. a2=1.34m from right edge to east wall. -->
+      <rect class="furniture" x="304" y="80" width="108" height="10"/>
+      <text class="furniture-label" x="358" y="103" text-anchor="middle">TV 49&quot; (1.08 m)</text>
 
-      <!-- g: TV right edge (x=450) to east wall (x=600) -->
-      <line class="dim-line" x1="450" y1="55" x2="600" y2="55"/>
-      <line class="dim-tick" x1="450" y1="47" x2="450" y2="63"/>
-      <line class="dim-tick" x1="600" y1="47" x2="600" y2="63"/>
-      <text class="dim-text" x="525" y="48" text-anchor="middle"><tspan fill="var(--section-label)" font-weight="bold">a2:</tspan> 1.50 m</text>
+      <!-- a2: TV right edge (x=412) to east wall (x=546) = 1.34 m -->
+      <line class="dim-line" x1="412" y1="55" x2="546" y2="55"/>
+      <line class="dim-tick" x1="412" y1="47" x2="412" y2="63"/>
+      <line class="dim-tick" x1="546" y1="47" x2="546" y2="63"/>
+      <text class="dim-text" x="479" y="48" text-anchor="middle"><tspan fill="var(--section-label)" font-weight="bold">a2:</tspan> 1.34 m</text>
 
-      <!-- Rug 1.00 x 1.58 m, in front of sofa -->
-      <rect x="351" y="200" width="158" height="100" rx="4" fill="rgba(180,140,100,0.15)" stroke="var(--furniture-stroke)" stroke-width="1" stroke-dasharray="5 3"/>
-      <text class="furniture-label" x="430" y="244" text-anchor="middle">Rug</text>
-      <text class="furniture-label" x="430" y="258" text-anchor="middle">1.00 &#215; 1.58</text>
+      <!-- Rug 1.00 x 1.58 m, in front of sofa (centred in sofa zone 211..546, so cx=378.5) -->
+      <rect x="299.5" y="200" width="158" height="100" rx="4" fill="rgba(180,140,100,0.15)" stroke="var(--furniture-stroke)" stroke-width="1" stroke-dasharray="5 3"/>
+      <text class="furniture-label" x="378.5" y="244" text-anchor="middle">Rug</text>
+      <text class="furniture-label" x="378.5" y="258" text-anchor="middle">1.00 &#215; 1.58</text>
 
       <!-- Sofa group - rendered via JS -->
       <g id="sofa"></g>
       <!-- Pouf group - rendered via JS, positioned relative to sofa front -->
       <g id="footstool"></g>
 
-      <!-- Room label (placed above the rug) -->
-      <text class="room-label" x="200" y="248" text-anchor="middle">Living Room</text>
-      <text class="room-label" x="200" y="268" text-anchor="middle" style="font-size:13px;">~16.13 m&#178;</text>
+      <!-- Room label (placed in the NW area, north of the diagonal cut) -->
+      <text class="room-label" x="200" y="225" text-anchor="middle">Living Room</text>
+      <text class="room-label" x="200" y="245" text-anchor="middle" style="font-size:13px;">~14.46 m&#178;</text>
 
       <!-- Width dimension (top) -->
-      <line class="dim-line" x1="80" y1="30" x2="600" y2="30"/>
+      <line class="dim-line" x1="80" y1="30" x2="546" y2="30"/>
       <line class="dim-tick" x1="80" y1="22" x2="80" y2="38"/>
-      <line class="dim-tick" x1="600" y1="22" x2="600" y2="38"/>
-      <text class="dim-text" x="340" y="20" text-anchor="middle">~5.20 m (est., plan: 5.79 m)</text>
+      <line class="dim-tick" x1="546" y1="22" x2="546" y2="38"/>
+      <text class="dim-text" x="313" y="20" text-anchor="middle"><tspan fill="var(--section-label)" font-weight="bold">a:</tspan> 4.66 m</text>
 
       <!-- Scale bar: 1 m reference -->
       <g shape-rendering="crispEdges">
@@ -223,33 +223,41 @@
         <text x="130" y="475" text-anchor="middle" style="font-size:11px;" fill="currentColor">1 m</text>
       </g>
 
-      <!-- Height dimension (right outer) -->
-      <line class="dim-line" x1="670" y1="80" x2="670" y2="409"/>
-      <line class="dim-tick" x1="662" y1="80" x2="678" y2="80"/>
-      <line class="dim-tick" x1="662" y1="409" x2="678" y2="409"/>
-      <text class="dim-text" x="686" y="248" text-anchor="middle" transform="rotate(90 686 248)">3.29 m</text>
+      <!-- Height dimension (right outer) — shifted west 50 cm to sit close to east wall. -->
+      <line class="dim-line" x1="650" y1="80" x2="650" y2="410"/>
+      <line class="dim-tick" x1="642" y1="80" x2="658" y2="80"/>
+      <line class="dim-tick" x1="642" y1="410" x2="658" y2="410"/>
+      <text class="dim-text" x="666" y="245" text-anchor="middle" transform="rotate(90 666 245)"><tspan fill="var(--section-label)" font-weight="bold">b:</tspan> 3.30 m</text>
 
       <!-- East wall French door dimensions (inner column) -->
-      <line class="dim-line" x1="630" y1="80" x2="630" y2="188.5"/>
-      <line class="dim-tick" x1="622" y1="80" x2="638" y2="80"/>
-      <line class="dim-tick" x1="622" y1="188.5" x2="638" y2="188.5"/>
-      <text class="dim-text" x="646" y="134.25" text-anchor="middle" transform="rotate(90 646 134.25)">1.085 m</text>
-      <line class="dim-line" x1="630" y1="188.5" x2="630" y2="299"/>
-      <line class="dim-tick" x1="622" y1="299" x2="638" y2="299"/>
-      <text class="dim-text" x="646" y="243.75" text-anchor="middle" transform="rotate(90 646 243.75)">1.105 m</text>
-      <line class="dim-line" x1="630" y1="299" x2="630" y2="409"/>
-      <text class="dim-text" x="646" y="354" text-anchor="middle" transform="rotate(90 646 354)"><tspan fill="var(--section-label)" font-weight="bold">b2:</tspan> 1.10 m</text>
+      <line class="dim-line" x1="576" y1="80" x2="576" y2="198"/>
+      <line class="dim-tick" x1="568" y1="80" x2="584" y2="80"/>
+      <line class="dim-tick" x1="568" y1="198" x2="584" y2="198"/>
+      <text class="dim-text" x="592" y="139" text-anchor="middle" transform="rotate(90 592 139)"><tspan fill="var(--section-label)" font-weight="bold">b1:</tspan> 1.18 m</text>
+      <line class="dim-line" x1="576" y1="198" x2="576" y2="303"/>
+      <line class="dim-tick" x1="568" y1="303" x2="584" y2="303"/>
+      <text class="dim-text" x="592" y="250.5" text-anchor="middle" transform="rotate(90 592 250.5)"><tspan fill="var(--section-label)" font-weight="bold">b2:</tspan> 1.05 m</text>
+      <line class="dim-line" x1="576" y1="303" x2="576" y2="410"/>
+      <line class="dim-tick" x1="568" y1="410" x2="584" y2="410"/>
+      <text class="dim-text" x="592" y="356.5" text-anchor="middle" transform="rotate(90 592 356.5)"><tspan fill="var(--section-label)" font-weight="bold">b3:</tspan> 1.07 m</text>
 
-      <!-- 3.35m from clip end (x=265) to east wall (x=600) along south wall -->
-      <line class="dim-line" x1="265" y1="439" x2="600" y2="439"/>
-      <line class="dim-tick" x1="265" y1="431" x2="265" y2="447"/>
-      <line class="dim-tick" x1="600" y1="431" x2="600" y2="447"/>
-      <text class="dim-text" x="432.5" y="462" text-anchor="middle">3.35 m</text>
+      <!-- Measured c-segment dimensions (cm). c2/c4/c5 placed off-wall with leader lines (above). -->
+      <text class="dim-text" x="108" y="313" text-anchor="middle" style="font-size:11px;"><tspan fill="var(--section-label)" font-weight="bold">c1:</tspan> 55.5</text>
+      <text class="dim-text" x="55" y="370" text-anchor="middle" style="font-size:11px;"><tspan fill="var(--section-label)" font-weight="bold">c2:</tspan> 13</text>
+      <text class="dim-text" x="135" y="365" text-anchor="middle" style="font-size:11px;"><tspan fill="var(--section-label)" font-weight="bold">c3:</tspan> 78</text>
+      <text class="dim-text" x="165" y="432" text-anchor="middle" style="font-size:11px;"><tspan fill="var(--section-label)" font-weight="bold">c4:</tspan> 11</text>
+      <text class="dim-text" x="275" y="432" text-anchor="middle" style="font-size:11px;"><tspan fill="var(--section-label)" font-weight="bold">c5:</tspan> 21.5</text>
+
+      <!-- South wall east piece (measured: 3.35 m) -->
+      <line class="dim-line" x1="211" y1="445" x2="546" y2="445"/>
+      <line class="dim-tick" x1="211" y1="437" x2="211" y2="453"/>
+      <line class="dim-tick" x1="546" y1="437" x2="546" y2="453"/>
+      <text class="dim-text" x="378.5" y="466" text-anchor="middle"><tspan fill="var(--section-label)" font-weight="bold">c:</tspan> 3.35 m</text>
     </svg>
   </div>
 
   <h1 style="margin-top:32px;">Ground Floor &ndash; Dining &amp; Kitchen</h1>
-  <div class="meta">South of Reception, open plan &nbsp;|&nbsp; Dining 5.01 m (W) + Kitchen 3.72 m (E), W wall 3.29 m (3-part bay, d1&ndash;d5), E wall 2.53 m, slanted S wall &nbsp;|&nbsp; scale: 100 px = 1 m</div>
+  <div class="meta">N wall (a) 7.125 m stepped, E (b) 3.37 m, S slanted (c) 7.24 m (c2 4.10 + c1 3.14), W bay (d) D1+D2+D3+D4+D5 = 41.2 + 80 + 95 + 80 + 111 cm &nbsp;|&nbsp; scale: 100 px = 1 m &nbsp;|&nbsp; measured 2026-05-18. NOTE: toilet variants (options 1&ndash;4) still at pre-measurement positions; click them and they will look broken.</div>
 
   <div class="controls" id="understairs-controls">
     <button data-variant="default">Under stairs option 0</button>
@@ -268,74 +276,76 @@
       - South wall c: slants from SW (80, 409) to SE (953, 213) - now steeper than before.
       - Door on wall a1 (W half), close to NW corner.
     -->
-    <svg width="1053" height="709" viewBox="0 -220 1053 709" xmlns="http://www.w3.org/2000/svg">
-      <!-- Clip-path matching the new room outline (two steps in north wall) -->
+    <svg width="990" height="630" viewBox="-70 -180 990 630" xmlns="http://www.w3.org/2000/svg">
+      <!--
+        Room outline (CW from NW), all dimensions in cm:
+          a1a 32.5 -> [door 88] -> a1b 215.5 -> a2 step N 97.5 -> a3 163 -> a4 step N 66.3
+            -> a5a 22.5 -> [exit door 81] -> a5b 110 -> b S 337 -> c1 SW 314 -> c2 SW 410
+            -> d5 N 111 -> d4 80 (NW diag, -75.22 horiz, -27.25 vert)
+            -> d3 N 95 -> d2 80 (NE diag) -> d1 N 41.2 -> NW.
+        Origin NW = (80, 80). NE = (792.5, -83.8). SE = (792.5, 253.2). SW = (80, 381.7).
+        Bay west outer x = 4.78. Slant angle of c = atan(91/466) = 11.05 deg.
+        c1/c2 boundary point on slant = (483.59, 308.94).
+      -->
       <defs>
         <clipPath id="diningKitchenRoom">
-          <polygon points="80,80 464,80 464,-20 630,-20 630,-90 650,-90 650,-110 730,-110 730,-90 953,-90 953,210 80,409 80,342.75 50,279.5 50,209.5 80,146.25"/>
+          <polygon points="80,80 112.5,80 200.5,80 416,80 416,-17.5 579,-17.5 579,-83.8 601.5,-83.8 601.5,-103.8 682.5,-103.8 682.5,-83.8 792.5,-83.8 792.5,253.2 483.59,308.94 80,381.7 80,270.7 4.78,243.45 4.78,148.45 80,121.2"/>
         </clipPath>
       </defs>
 
       <!-- 0.5m grid (clipped to room) -->
       <g class="grid" clip-path="url(#diningKitchenRoom)">
-        <!-- Vertical grid lines -->
-        <line x1="130" y1="-160" x2="130" y2="409"/>
-        <line x1="180" y1="-160" x2="180" y2="409"/>
-        <line x1="230" y1="-160" x2="230" y2="409"/>
-        <line x1="280" y1="-160" x2="280" y2="409"/>
-        <line x1="330" y1="-160" x2="330" y2="409"/>
-        <line x1="380" y1="-160" x2="380" y2="409"/>
-        <line x1="430" y1="-160" x2="430" y2="409"/>
-        <line x1="480" y1="-160" x2="480" y2="409"/>
-        <line x1="530" y1="-160" x2="530" y2="409"/>
-        <line x1="581" y1="-160" x2="581" y2="409"/>
-        <line x1="631" y1="-160" x2="631" y2="409"/>
-        <line x1="681" y1="-160" x2="681" y2="409"/>
-        <line x1="731" y1="-160" x2="731" y2="409"/>
-        <line x1="781" y1="-160" x2="781" y2="409"/>
-        <line x1="831" y1="-160" x2="831" y2="409"/>
-        <line x1="881" y1="-160" x2="881" y2="409"/>
-        <line x1="931" y1="-160" x2="931" y2="409"/>
+        <!-- Vertical grid lines at 0.5m intervals -->
+        <line x1="130" y1="-130" x2="130" y2="400"/>
+        <line x1="180" y1="-130" x2="180" y2="400"/>
+        <line x1="230" y1="-130" x2="230" y2="400"/>
+        <line x1="280" y1="-130" x2="280" y2="400"/>
+        <line x1="330" y1="-130" x2="330" y2="400"/>
+        <line x1="380" y1="-130" x2="380" y2="400"/>
+        <line x1="430" y1="-130" x2="430" y2="400"/>
+        <line x1="480" y1="-130" x2="480" y2="400"/>
+        <line x1="530" y1="-130" x2="530" y2="400"/>
+        <line x1="580" y1="-130" x2="580" y2="400"/>
+        <line x1="630" y1="-130" x2="630" y2="400"/>
+        <line x1="680" y1="-130" x2="680" y2="400"/>
+        <line x1="730" y1="-130" x2="730" y2="400"/>
+        <line x1="780" y1="-130" x2="780" y2="400"/>
         <!-- Horizontal grid lines -->
-        <line x1="50" y1="-110" x2="953" y2="-110"/>
-        <line x1="50" y1="-80"  x2="953" y2="-80"/>
-        <line x1="50" y1="-30"  x2="953" y2="-30"/>
-        <line x1="50" y1="20"   x2="953" y2="20"/>
-        <line x1="50" y1="70"   x2="953" y2="70"/>
-        <line x1="50" y1="130"  x2="953" y2="130"/>
-        <line x1="50" y1="180"  x2="953" y2="180"/>
-        <line x1="50" y1="230"  x2="953" y2="230"/>
-        <line x1="50" y1="280"  x2="953" y2="280"/>
-        <line x1="50" y1="330"  x2="953" y2="330"/>
-        <line x1="50" y1="380"  x2="953" y2="380"/>
+        <line x1="0" y1="-80"  x2="800" y2="-80"/>
+        <line x1="0" y1="-30"  x2="800" y2="-30"/>
+        <line x1="0" y1="20"   x2="800" y2="20"/>
+        <line x1="0" y1="70"   x2="800" y2="70"/>
+        <line x1="0" y1="130"  x2="800" y2="130"/>
+        <line x1="0" y1="180"  x2="800" y2="180"/>
+        <line x1="0" y1="230"  x2="800" y2="230"/>
+        <line x1="0" y1="280"  x2="800" y2="280"/>
+        <line x1="0" y1="330"  x2="800" y2="330"/>
+        <line x1="0" y1="380"  x2="800" y2="380"/>
       </g>
 
       <!--
-        Outer wall, going CW from NW corner:
-          a1 (3.00 m E) -> a2 (1.20 m N step) -> a3 (2.50 m E) -> a4 (1.20 m N step) -> a5 (3.23 m E)
-          -> b (E, 2.53 m) -> c (S slanted) -> d5..d1 (W with 3-part bay).
-        Door opening on a1 near NW corner: x=88..164 (76 cm).
+        Outer walls (measured 2026-05-18). Going CW from NW.
+        Door openings on a1 (88 cm) and a5 (81 cm) leave wall gaps.
       -->
-      <polyline class="wall" points="80,80 88,80"/>
-      <polyline class="wall" points="164,80 414,80"/>
-      <polyline class="wall" id="a1b-east-of-toilet-door" points="414,80 464,80"/>
-      <polyline class="wall" id="a2-step-wall" points="464,80 464,-20"/>
-      <polyline class="wall" points="464,-20 630,-20 630,-90 650,-90 650,-110"/>
-      <polyline class="wall" points="730,-110 730,-90 953,-90 953,210 80,409 80,342.75 50,279.5 50,209.5 80,146.25 80,80"/>
+      <polyline class="wall" points="80,80 112.5,80"/>
+      <polyline class="wall" points="200.5,80 416,80"/>
+      <polyline class="wall" id="a2-step-wall" points="416,80 416,-17.5"/>
+      <polyline class="wall" points="416,-17.5 579,-17.5 579,-83.8 601.5,-83.8 601.5,-103.8"/>
+      <polyline class="wall" points="682.5,-103.8 682.5,-83.8 792.5,-83.8 792.5,253.2 483.59,308.94 80,381.7 80,270.7 4.78,243.45 4.78,148.45 80,121.2 80,80"/>
 
-      <!-- Door on wall a1: 76 cm, hinge at east jamb (164,80), swings south into the room -->
-      <line class="door-leaf" x1="164" y1="80" x2="164" y2="156"/>
-      <path class="door-swing" d="M 164 156 A 76 76 0 0 1 88 80"/>
+      <!-- NW door on a1: 88 cm. Hinge at east jamb (200.5,80), swings south into the room. -->
+      <line class="door-leaf" x1="200.5" y1="80" x2="200.5" y2="168"/>
+      <path class="door-swing" d="M 200.5 168 A 88 88 0 0 1 112.5 80"/>
 
-      <!-- Exit door, inset 20 cm north of wall a7-a8 (recess y=-130). 80 cm, hinge at west jamb, swings south into the kitchen. Shown 50% open (45 deg from closed). -->
-      <line class="door-leaf" x1="650" y1="-110" x2="706.57" y2="-53.43"/>
-      <path class="door-swing" d="M 706.57 -53.43 A 80 80 0 0 0 730 -110"/>
-      <text class="furniture-label" x="690" y="-118" text-anchor="middle" style="font-style:italic;">Exit</text>
+      <!-- Exit door on a5: 81 cm, inset 20 cm north of a5 line (recess at y=-103.8). Hinge at west jamb, 50% open (45 deg). -->
+      <line class="door-leaf" x1="601.5" y1="-103.8" x2="658.78" y2="-46.52"/>
+      <path class="door-swing" d="M 658.78 -46.52 A 81 81 0 0 0 682.5 -103.8"/>
+      <text class="furniture-label" x="642" y="-112" text-anchor="middle" style="font-style:italic;">Exit</text>
 
-      <!-- Bay window glazing (3 equal panes on d2, d3, d4) -->
-      <line class="glazing" x1="80" y1="146.25" x2="50" y2="209.5"/>
-      <line class="glazing" x1="50" y1="209.5" x2="50" y2="279.5"/>
-      <line class="glazing" x1="50" y1="279.5" x2="80" y2="342.75"/>
+      <!-- Bay window glazing (3 panes on d2, d3, d4) -->
+      <line class="glazing" x1="80" y1="121.2" x2="4.78" y2="148.45"/>
+      <line class="glazing" x1="4.78" y1="148.45" x2="4.78" y2="243.45"/>
+      <line class="glazing" x1="4.78" y1="243.45" x2="80" y2="270.7"/>
 
       <!--
         Under-stairs utility room (reduced height) tucked against the a2 step.
@@ -343,20 +353,27 @@
         Extended (toggle button): stretches east to x=630 so the east wall is in line with a4.
       -->
       <g id="understairs-default">
-        <rect x="394" y="-20" width="70" height="100" fill="transparent"/>
-        <polyline class="wall" points="394,80 394,-20 464,-20"/>
-        <rect class="furniture" x="404" y="0" width="60" height="63"/>
-        <text class="furniture-label" x="434" y="32" text-anchor="middle">WM</text>
-        <text class="furniture-label" x="429" y="-7" text-anchor="middle" style="font-size:9px;">Under stairs</text>
+        <!-- Under-stairs cupboard: u=117 wide (east flush with a2 at x=416), exterior depth=a2=97.5 cm. Interior depth a2-inside = 87 cm. -->
+        <rect x="299" y="-17.5" width="117" height="97.5" fill="transparent"/>
+        <polyline class="wall" points="299,80 299,-17.5 416,-17.5"/>
+        <!-- WM 60 x 63, flush against a2 (east, x=416), centred vertically in cupboard (y=-17.5..80 -> midpoint 31.25). -->
+        <rect class="furniture" x="356" y="0" width="60" height="63"/>
+        <text class="furniture-label" x="386" y="34" text-anchor="middle">WM</text>
+        <text class="furniture-label" x="357" y="74" text-anchor="middle" style="font-size:9px;">Under stairs</text>
         <!-- WM appliance door on east face: 24 cm opening, hinge at top jamb, swings east -->
-        <line x1="464" y1="20" x2="464" y2="44" stroke="var(--stage-bg)" stroke-width="3"/>
-        <line class="door-leaf" x1="464" y1="20" x2="488" y2="20"/>
-        <path class="door-swing" d="M 488 20 A 24 24 0 0 1 464 44"/>
-        <!-- Width dim above the cupboard's north wall; length is an estimate so labelled with a letter only -->
-        <line class="dim-line" x1="394" y1="-35" x2="464" y2="-35"/>
-        <line class="dim-tick" x1="394" y1="-43" x2="394" y2="-27"/>
-        <line class="dim-tick" x1="464" y1="-43" x2="464" y2="-27"/>
-        <text class="section-label" x="429" y="-40" text-anchor="middle">u</text>
+        <line x1="416" y1="19" x2="416" y2="43" stroke="var(--stage-bg)" stroke-width="3"/>
+        <line class="door-leaf" x1="416" y1="19" x2="440" y2="19"/>
+        <path class="door-swing" d="M 440 19 A 24 24 0 0 1 416 43"/>
+        <!-- u (width) dim above the cupboard's north wall -->
+        <line class="dim-line" x1="299" y1="-32" x2="416" y2="-32"/>
+        <line class="dim-tick" x1="299" y1="-40" x2="299" y2="-24"/>
+        <line class="dim-tick" x1="416" y1="-40" x2="416" y2="-24"/>
+        <text class="dim-text" x="357.5" y="-38" text-anchor="middle" style="font-size:11px;"><tspan fill="var(--section-label)" font-weight="bold">u:</tspan> 1.17 m</text>
+        <!-- interior depth dim (a2 inside = 87 cm) shown inside the cupboard, vs exterior a2 = 97.5 cm -->
+        <line class="dim-line" x1="320" y1="-12.5" x2="320" y2="74.5"/>
+        <line class="dim-tick" x1="312" y1="-12.5" x2="328" y2="-12.5"/>
+        <line class="dim-tick" x1="312" y1="74.5" x2="328" y2="74.5"/>
+        <text class="dim-text" x="313" y="34" text-anchor="middle" transform="rotate(-90 313 34)" style="font-size:10px;">inside: 0.87 m</text>
       </g>
       <g id="understairs-extended" style="display:none">
         <!--
@@ -573,100 +590,115 @@
 
       <g id="radiator-block">
         <!--
-          Radiator on wall a3. West edge 66 cm east of wall a2 (a2 is at x=380, so west edge at x=446).
-          Length 1.00 m (assumed - confirm), depth 8 cm into the room.
+          Radiator on wall a3, mounted on the south face hanging into the kitchen.
+          West edge 66 cm east of wall a2 (a2 at x=416, so west edge at x=482). Length 70 cm (assumed).
+          a3 wall is at y=-17.5, depth 8 cm south into the room (y=-17.5 to -9.5).
         -->
         <g id="radiator-a3">
-          <rect class="furniture" x="530" y="-20" width="70" height="8"/>
-          <!-- Fin marks -->
-          <line class="furniture-detail" x1="540" y1="-20" x2="540" y2="-12"/>
-          <line class="furniture-detail" x1="550" y1="-20" x2="550" y2="-12"/>
-          <line class="furniture-detail" x1="560" y1="-20" x2="560" y2="-12"/>
-          <line class="furniture-detail" x1="570" y1="-20" x2="570" y2="-12"/>
-          <line class="furniture-detail" x1="580" y1="-20" x2="580" y2="-12"/>
-          <line class="furniture-detail" x1="590" y1="-20" x2="590" y2="-12"/>
-          <text class="furniture-label" x="565" y="3" text-anchor="middle">Radiator</text>
+          <rect class="furniture" x="482" y="-17.5" width="70" height="8"/>
+          <line class="furniture-detail" x1="492" y1="-17.5" x2="492" y2="-9.5"/>
+          <line class="furniture-detail" x1="502" y1="-17.5" x2="502" y2="-9.5"/>
+          <line class="furniture-detail" x1="512" y1="-17.5" x2="512" y2="-9.5"/>
+          <line class="furniture-detail" x1="522" y1="-17.5" x2="522" y2="-9.5"/>
+          <line class="furniture-detail" x1="532" y1="-17.5" x2="532" y2="-9.5"/>
+          <line class="furniture-detail" x1="542" y1="-17.5" x2="542" y2="-9.5"/>
+          <text class="furniture-label" x="517" y="5" text-anchor="middle">Radiator</text>
         </g>
 
         <!-- Dim: 0.66 m from wall a2 to radiator west edge (along wall a3) -->
-        <line class="dim-line" x1="464" y1="-45" x2="530" y2="-45"/>
-        <line class="dim-tick" x1="464" y1="-53" x2="464" y2="-37"/>
-        <line class="dim-tick" x1="530" y1="-53" x2="530" y2="-37"/>
-        <text class="dim-text" x="497" y="-55" text-anchor="middle">0.66 m</text>
+        <line class="dim-line" x1="416" y1="-32" x2="482" y2="-32"/>
+        <line class="dim-tick" x1="416" y1="-40" x2="416" y2="-24"/>
+        <line class="dim-tick" x1="482" y1="-40" x2="482" y2="-24"/>
+        <text class="dim-text" x="449" y="-42" text-anchor="middle" style="font-size:10px;">0.66 m</text>
       </g>
 
       <!--
-        Kitchen worktop: L-shape wrapping the SE (a5-b / b-c) corner.
-        - Along b (E wall): full 2.53 m
-        - Along c (S slanted): from SE corner ~1/3 of the way down c (~3.07 m)
-        - Depth: 60 cm
-        Vertices CW: NE outer (953,-140), SE outer (953,180), 1/3-down-c (662,256),
-        inner end of c-arm offset 60cm perpendicular into room (646.8,198.3),
-        inner L corner (893,133.7), inner top of b-arm (893,-140).
+        Kitchen worktop: L-shape wrapping the SE (b / c) corner. Depth 60 cm.
+        Outer along b (E wall) from (792.5,-83.8) NE to (792.5,253.2) SE.
+        Outer along c (slanted) from SE to (546.45,297.58) — ~250 cm along c going SW.
+        Inner edge of c-arm: 60 cm perpendicular into room from c. Inner L corner where c-arm inner crosses x=732.5.
+        c slope: -10.23 deg from horizontal (E-going), unit (0.9842, -0.1775).
       -->
-      <polygon class="furniture" points="953,-90 953,210 662,276 648.7,217.5 893,162.1 893,-90"/>
-      <text class="furniture-label" x="923" y="50" text-anchor="middle" transform="rotate(-90 923 50)">Kitchen worktop</text>
+      <polygon class="furniture" points="792.5,-83.8 792.5,253.2 546.45,297.58 535.8,238.53 732.5,203.05 732.5,-83.8"/>
+      <text class="furniture-label" x="762" y="85" text-anchor="middle" transform="rotate(-90 762 85)">Kitchen worktop</text>
 
-      <!-- Hob: 4 burner circles spaced 38 cm x 22 cm, centred on the worktop's south arm, parallel to c wall -->
-      <g transform="rotate(-13 798 217)">
-        <circle class="furniture-detail" cx="779" cy="206" r="7"/>
-        <circle class="furniture-detail" cx="817" cy="206" r="7"/>
-        <circle class="furniture-detail" cx="779" cy="228" r="7"/>
-        <circle class="furniture-detail" cx="817" cy="228" r="7"/>
+      <!-- Hob: 4 burners 38 cm x 22 cm, centred on c-arm middle, aligned with c -->
+      <g transform="rotate(-10.23 664 246)">
+        <circle class="furniture-detail" cx="645" cy="235" r="7"/>
+        <circle class="furniture-detail" cx="683" cy="235" r="7"/>
+        <circle class="furniture-detail" cx="645" cy="257" r="7"/>
+        <circle class="furniture-detail" cx="683" cy="257" r="7"/>
       </g>
 
-      <!-- Dining table 1.60 x 0.80 m, pulled south toward the slanted c wall, rotated -12.66 deg parallel to c -->
-      <g id="dining-table" transform="rotate(-12.66 250 270)">
-        <rect class="furniture" x="170" y="230" width="160" height="80" rx="4" ry="4"/>
-        <text class="furniture-label" x="250" y="266" text-anchor="middle">Dining table</text>
-        <text class="furniture-label" x="250" y="280" text-anchor="middle">1.60 &#215; 0.80</text>
+      <!-- Dining table 1.60 x 0.80 m, parallel to c, south edge 50 cm perpendicular from c2. -->
+      <g id="dining-table" transform="rotate(-10.23 252 259)">
+        <rect class="furniture" x="172" y="219" width="160" height="80" rx="4" ry="4"/>
+        <text class="furniture-label" x="252" y="255" text-anchor="middle">Dining table</text>
+        <text class="furniture-label" x="252" y="269" text-anchor="middle">1.60 &#215; 0.80</text>
       </g>
 
       <!--
-        Wall letters. North wall (a1..a5, with a1/a3/a5 each split by an obstruction into a/b sub-segments):
-          a1a: tiny W of NW door
-          a1b: E of NW door
-          a2:  1st step N (1.20 m)
-          a3a: middle, W of radiator (0.66 m)
-          a3b: middle, E of radiator (0.30 m)
-          a4:  2nd step N (0.70 m)
-          a5a: W of exit door (0.20 m)
-          a5b: E of exit door (2.23 m)
-        West bay: d1..d5.
+        Wall letters live inside the dim-text labels below. Hidden anchor IDs preserved for the
+        toilet-variant JS (which hides a2/a3 labels when toilet mode is active).
+        Leader lines for the d1/d2/d4/d5 bay segments (labels parked inside the room).
       -->
       <g>
-        <line x1="48" y1="35" x2="82" y2="78" stroke="var(--section-label)" stroke-width="0.75"/>
-        <text class="section-label" x="40" y="30" text-anchor="middle">a1a</text>
-        <text class="section-label" x="272" y="98" text-anchor="middle">a1b</text>
-        <text class="section-label" id="label-a2" x="482" y="70" text-anchor="middle">a2</text>
-        <text class="section-label" id="label-a3a" x="497" y="-2" text-anchor="middle">a3a</text>
-        <text class="section-label" id="label-a3b" x="615" y="-2" text-anchor="middle">a3b</text>
-        <text class="section-label" x="615" y="-55" text-anchor="middle">a4</text>
-        <line x1="640" y1="-109" x2="640" y2="-94" stroke="var(--section-label)" stroke-width="0.75"/>
-        <text class="section-label" x="640" y="-115" text-anchor="middle">a5a</text>
-        <line x1="811.5" y1="-104" x2="811.5" y2="-93" stroke="var(--section-label)" stroke-width="0.75"/>
-        <text class="section-label" x="811.5" y="-110" text-anchor="middle">a5b</text>
-        <text class="section-label" x="938" y="50" text-anchor="middle">b</text>
-        <text class="section-label" x="805" y="263" text-anchor="middle" transform="rotate(-13 805 263)">c1</text>
-        <text class="section-label" x="366" y="323" text-anchor="middle">c2</text>
-        <text class="section-label" x="60" y="117" text-anchor="middle">d1</text>
-        <text class="section-label" x="78" y="182" text-anchor="middle">d2</text>
-        <text class="section-label" x="62" y="248" text-anchor="middle">d3</text>
-        <text class="section-label" x="78" y="315" text-anchor="middle">d4</text>
-        <text class="section-label" x="98" y="380" text-anchor="middle">d5</text>
+        <!-- d1 sits west of wall now; short pointer goes east to wall midpoint (80, 100.6) -->
+        <line x1="74" y1="100" x2="82" y2="100" stroke="var(--section-label)" stroke-width="0.75"/>
+        <!-- d2 sits west of wall in margin; pointer goes east to d2 midpoint (42.4, 134.8) -->
+        <line x1="33" y1="135" x2="42" y2="135" stroke="var(--section-label)" stroke-width="0.75"/>
+        <line x1="95" y1="258" x2="45" y2="258" stroke="var(--section-label)" stroke-width="0.75"/>
+        <line x1="105" y1="328" x2="82" y2="328" stroke="var(--section-label)" stroke-width="0.75"/>
+        <!-- a5a pointer: from the dim label area to the wall midpoint (590.25, -83.8) -->
+        <line x1="552" y1="-97" x2="588" y2="-85" stroke="var(--section-label)" stroke-width="0.75"/>
+        <text class="section-label" id="label-a2" x="-9999" y="-9999"></text>
+        <text class="section-label" id="label-a3" x="-9999" y="-9999"></text>
       </g>
 
-      <!-- Top dim for a5 (east of second N step): 3.23 m. Bumped north to clear the door recess at y=-130. -->
-      <line class="dim-line" x1="630" y1="-145" x2="953" y2="-145"/>
-      <line class="dim-tick" x1="630" y1="-153" x2="630" y2="-137"/>
-      <line class="dim-tick" x1="953" y1="-153" x2="953" y2="-137"/>
-      <text class="dim-text" x="791.5" y="-155" text-anchor="middle">3.23 m</text>
+      <!-- Top dim for a5b (east of exit door): 1.10 m -->
+      <line class="dim-line" x1="682.5" y1="-118" x2="792.5" y2="-118"/>
+      <line class="dim-tick" x1="682.5" y1="-126" x2="682.5" y2="-110"/>
+      <line class="dim-tick" x1="792.5" y1="-126" x2="792.5" y2="-110"/>
+      <text class="dim-text" x="737.5" y="-128" text-anchor="middle" style="font-size:11px;"><tspan fill="var(--section-label)" font-weight="bold">a5b:</tspan> 1.10 m</text>
 
-      <!-- West wall depth (3.29 m). Shifted left to clear the bay (projects to x=50). -->
-      <line class="dim-line" x1="25" y1="80" x2="25" y2="409"/>
-      <line class="dim-tick" x1="17" y1="80" x2="33" y2="80"/>
-      <line class="dim-tick" x1="17" y1="409" x2="33" y2="409"/>
-      <text class="dim-text" x="10" y="244.5" text-anchor="middle" transform="rotate(-90 10 244.5)">3.29 m</text>
+      <!-- Top dim spanning full a5 (a5a + door + a5b = 22.5 + 81 + 110 = 213.5 cm). -->
+      <line class="dim-line" x1="579" y1="-150" x2="792.5" y2="-150"/>
+      <line class="dim-tick" x1="579" y1="-158" x2="579" y2="-142"/>
+      <line class="dim-tick" x1="792.5" y1="-158" x2="792.5" y2="-142"/>
+      <text class="dim-text" x="685.75" y="-160" text-anchor="middle" style="font-size:11px;"><tspan fill="var(--section-label)" font-weight="bold">a5:</tspan> 2.135 m</text>
+
+      <!-- East wall b (3.37 m) -->
+      <line class="dim-line" x1="825" y1="-83.8" x2="825" y2="253.2"/>
+      <line class="dim-tick" x1="817" y1="-83.8" x2="833" y2="-83.8"/>
+      <line class="dim-tick" x1="817" y1="253.2" x2="833" y2="253.2"/>
+      <text class="dim-text" x="841" y="84.7" text-anchor="middle" transform="rotate(90 841 84.7)"><tspan fill="var(--section-label)" font-weight="bold">b:</tspan> 3.37 m</text>
+
+      <!-- West wall depth (derived 3.017 m from D1+D2+D3+D4+D5 with diagonals projected). -->
+      <line class="dim-line" x1="-25" y1="80" x2="-25" y2="381.7"/>
+      <line class="dim-tick" x1="-33" y1="80" x2="-17" y2="80"/>
+      <line class="dim-tick" x1="-33" y1="381.7" x2="-17" y2="381.7"/>
+      <text class="dim-text" x="-41" y="230.85" text-anchor="middle" transform="rotate(-90 -41 230.85)"><tspan fill="var(--section-label)" font-weight="bold">d:</tspan> 3.02 m</text>
+
+      <!-- c segment dims (along slope) -->
+      <text class="dim-text" x="650" y="318" text-anchor="middle" transform="rotate(-11 650 318)" style="font-size:11px;"><tspan fill="var(--section-label)" font-weight="bold">c1:</tspan> 3.14 m</text>
+      <text class="dim-text" x="270" y="388" text-anchor="middle" transform="rotate(-11 270 388)" style="font-size:11px;"><tspan fill="var(--section-label)" font-weight="bold">c2:</tspan> 4.10 m</text>
+
+      <!-- D bay segment dims. d1 west-of-wall with short east pointer; d2 sits in the bay close to its diagonal; d3 in bay; d4/d5 in room with leaders. -->
+      <text class="dim-text" x="50" y="88" text-anchor="middle" style="font-size:10px;"><tspan fill="var(--section-label)" font-weight="bold">d1:</tspan> 41.2</text>
+      <text class="dim-text" x="15" y="135" text-anchor="middle" style="font-size:10px;"><tspan fill="var(--section-label)" font-weight="bold">d2:</tspan> 80</text>
+      <text class="dim-text" x="38" y="200" text-anchor="middle" style="font-size:10px;"><tspan fill="var(--section-label)" font-weight="bold">d3:</tspan> 95</text>
+      <text class="dim-text" x="120" y="261" text-anchor="middle" style="font-size:10px;"><tspan fill="var(--section-label)" font-weight="bold">d4:</tspan> 80</text>
+      <text class="dim-text" x="125" y="331" text-anchor="middle" style="font-size:10px;"><tspan fill="var(--section-label)" font-weight="bold">d5:</tspan> 111</text>
+
+      <!-- Sub-segment dims on a (north wall) -->
+      <text class="dim-text" x="96" y="72" text-anchor="middle" style="font-size:10px;"><tspan fill="var(--section-label)" font-weight="bold">a1a:</tspan> 32.5</text>
+      <text class="dim-text" x="156" y="72" text-anchor="middle" style="font-size:10px;"><tspan fill="var(--section-label)" font-weight="bold">door:</tspan> 88</text>
+      <text class="dim-text" x="298" y="92" text-anchor="middle" style="font-size:10px;"><tspan fill="var(--section-label)" font-weight="bold">a1b:</tspan> 215.5</text>
+      <text class="dim-text" x="443" y="61" text-anchor="middle" style="font-size:10px;"><tspan fill="var(--section-label)" font-weight="bold">a2:</tspan> 97.5</text>
+      <text class="dim-text" x="520" y="-22" text-anchor="middle" style="font-size:10px;"><tspan fill="var(--section-label)" font-weight="bold">a3:</tspan> 163</text>
+      <text class="dim-text" x="582" y="-49" text-anchor="start" style="font-size:10px;"><tspan fill="var(--section-label)" font-weight="bold">a4:</tspan> 66.3</text>
+      <text class="dim-text" x="540" y="-98" text-anchor="middle" style="font-size:10px;"><tspan fill="var(--section-label)" font-weight="bold">a5a:</tspan> 22.5</text>
+      <text class="dim-text" x="642" y="-128" text-anchor="middle" style="font-size:10px;"><tspan fill="var(--section-label)" font-weight="bold">door:</tspan> 81</text>
 
 
       <!-- Scale bar -->
@@ -680,7 +712,7 @@
   </div>
 
   <h1 style="margin-top:32px;">Master Bedroom</h1>
-  <div class="meta">Trapezoid: top 5.18 m, left 3.17 m, right 2.70 m, bottom slants SW&rarr;SE &nbsp;|&nbsp; scale: 100 px = 1 m</div>
+  <div class="meta">Trapezoid: a (top) 4.66 m, d (left) 3.19 m, b (right) 2.28 m, c (bottom) slants SW&rarr;SE &nbsp;|&nbsp; scale: 100 px = 1 m &nbsp;|&nbsp; measured 2026-05-18</div>
 
   <div class="controls" id="bed-controls">
     <button data-w="180" data-l="207" data-drawers="false" data-label="Existing Super King">Existing Super King 1.80 &times; 2.07</button>
@@ -690,123 +722,127 @@
   </div>
 
   <div class="stage">
-    <svg width="700" height="477" viewBox="0 0 700 477" xmlns="http://www.w3.org/2000/svg">
+    <!--
+      Room: trapezoid 4.66 (top a) x 3.19 (left d, west) x 2.28 (right b, east), bottom c slants SW to SE.
+      Slant angle = atan(91/466) = 11.05 deg. c length = 474.8 cm.
+      Wardrobes aligned with c (back wall = c). SW (north) wardrobe 114 x 53; SE (south) wardrobe 113 x 52.
+      Gap between wardrobes along c = 247.8 cm.
+      A north door: 93 cm wide, east of clear 373 cm; spans x=453..546.
+    -->
+    <svg width="660" height="487" viewBox="0 0 660 487" xmlns="http://www.w3.org/2000/svg">
       <!-- 0.5m grid -->
       <g class="grid">
-        <line x1="80" y1="80" x2="80" y2="397"/>
-        <line x1="130" y1="80" x2="130" y2="397"/>
-        <line x1="180" y1="80" x2="180" y2="397"/>
-        <line x1="230" y1="80" x2="230" y2="397"/>
-        <line x1="280" y1="80" x2="280" y2="397"/>
-        <line x1="330" y1="80" x2="330" y2="397"/>
-        <line x1="380" y1="80" x2="380" y2="397"/>
-        <line x1="430" y1="80" x2="430" y2="397"/>
-        <line x1="480" y1="80" x2="480" y2="397"/>
-        <line x1="530" y1="80" x2="530" y2="397"/>
-        <line x1="580" y1="80" x2="580" y2="397"/>
-        <line x1="80" y1="130" x2="598" y2="130"/>
-        <line x1="80" y1="180" x2="598" y2="180"/>
-        <line x1="80" y1="230" x2="598" y2="230"/>
-        <line x1="80" y1="280" x2="598" y2="280"/>
-        <line x1="80" y1="330" x2="598" y2="330"/>
-        <line x1="80" y1="380" x2="598" y2="380"/>
+        <line x1="80" y1="80" x2="80" y2="399"/>
+        <line x1="130" y1="80" x2="130" y2="399"/>
+        <line x1="180" y1="80" x2="180" y2="399"/>
+        <line x1="230" y1="80" x2="230" y2="399"/>
+        <line x1="280" y1="80" x2="280" y2="399"/>
+        <line x1="330" y1="80" x2="330" y2="399"/>
+        <line x1="380" y1="80" x2="380" y2="399"/>
+        <line x1="430" y1="80" x2="430" y2="399"/>
+        <line x1="480" y1="80" x2="480" y2="399"/>
+        <line x1="530" y1="80" x2="530" y2="399"/>
+        <line x1="80" y1="130" x2="546" y2="130"/>
+        <line x1="80" y1="180" x2="546" y2="180"/>
+        <line x1="80" y1="230" x2="546" y2="230"/>
+        <line x1="80" y1="280" x2="546" y2="280"/>
+        <line x1="80" y1="330" x2="546" y2="330"/>
+        <line x1="80" y1="380" x2="546" y2="380"/>
       </g>
 
-      <!-- Walls: trapezoid, right wall 2.70m, bottom slants SW to SE -->
-      <!-- Top wall split for NE door (76cm opening from x=522 to x=598). -->
-      <line class="wall" x1="80" y1="80" x2="522" y2="80"/>
-      <line class="wall" x1="598" y1="80" x2="598" y2="350"/>
-      <line class="wall" x1="598" y1="350" x2="80" y2="397"/>
-      <line class="wall" x1="80" y1="397" x2="80" y2="80"/>
+      <!-- Walls: trapezoid. Top a (4.66 m total: 3.73 m clear + 0.93 m door from x=453 to x=546). -->
+      <!-- East b (2.28 m), south c slanted, west d (3.19 m). -->
+      <line class="wall" x1="80" y1="80" x2="453" y2="80"/>
+      <line class="wall" x1="546" y1="80" x2="546" y2="308"/>
+      <line class="wall" x1="546" y1="308" x2="80" y2="399"/>
+      <line class="wall" x1="80" y1="399" x2="80" y2="80"/>
 
-      <!-- NE door: 76cm wide, hinge at west jamb (522,80), swings inward (south) -->
-      <line class="door-leaf" x1="522" y1="80" x2="522" y2="156"/>
-      <path class="door-swing" d="M 522 156 A 76 76 0 0 0 598 80"/>
+      <!-- NE door: 93 cm wide, hinge at west jamb (453,80), swings inward (south) -->
+      <line class="door-leaf" x1="453" y1="80" x2="453" y2="173"/>
+      <path class="door-swing" d="M 453 173 A 93 93 0 0 0 546 80"/>
 
       <!-- Clip-path: room polygon -->
       <defs>
         <clipPath id="bedroomRoom">
-          <polygon points="80,80 598,80 598,350 80,397"/>
+          <polygon points="80,80 546,80 546,308 80,399"/>
         </clipPath>
       </defs>
 
-      <!-- Wardrobes + 2.49m gap dim. Slope length = 520.13cm. Each wardrobe = (520.13-249)/2 = 135.56cm. -->
-      <!-- Group is rotated to slope (atan2(-47, 518) = -5.184°), so all distances along slope are exact. -->
+      <!--
+        Wardrobes + 2.48m gap dim. c length = 474.84 cm.
+        Rotation: atan2(-91, 466) = -11.0488 deg, around SW corner (80, 399).
+      -->
       <g clip-path="url(#bedroomRoom)">
-        <g transform="translate(80 397) rotate(-5.184)">
-          <!-- SW wardrobe: x 0 to 135.56 along slope, depth 50 perpendicular -->
-          <rect class="furniture" x="0" y="-50" width="135.56" height="50"/>
-          <!-- SE wardrobe: x 384.57 to 520.13 along slope -->
-          <rect class="furniture" x="384.57" y="-50" width="135.56" height="50"/>
+        <g transform="translate(80 399) rotate(-11.0488)">
+          <!-- "North" wardrobe (SW corner, touching d + c): x 0 to 114 along c, depth 53 perpendicular -->
+          <rect class="furniture" x="0" y="-53" width="114" height="53"/>
+          <!-- "South" wardrobe (SE corner, touching b + c): x 361.84 to 474.84 along c, depth 52 -->
+          <rect class="furniture" x="361.84" y="-52" width="113" height="52"/>
         </g>
       </g>
 
-      <!-- Bed group (rotated to slope, centered in 2.49m gap, flush south wall) -->
-      <g transform="translate(80 397) rotate(-5.184)">
+      <!-- Bed group (rotated to slope, centered in 2.48m gap, flush south wall) -->
+      <g transform="translate(80 399) rotate(-11.0488)">
         <g id="bed"></g>
       </g>
 
       <!-- Wardrobe labels + dim marker (rotated with slope) -->
-      <g transform="translate(80 397) rotate(-5.184)">
-        <text class="furniture-label" x="67.78" y="-28" text-anchor="middle">Wardrobe</text>
-        <text class="furniture-label" x="67.78" y="-16" text-anchor="middle">1.36 &#215; 0.50</text>
-        <text class="furniture-label" x="452.35" y="-28" text-anchor="middle">Wardrobe</text>
-        <text class="furniture-label" x="452.35" y="-16" text-anchor="middle">1.36 &#215; 0.50</text>
+      <g transform="translate(80 399) rotate(-11.0488)">
+        <text class="furniture-label" x="57" y="-30" text-anchor="middle">Wardrobe N</text>
+        <text class="furniture-label" x="57" y="-18" text-anchor="middle">1.14 &#215; 0.53</text>
+        <text class="furniture-label" x="418.34" y="-30" text-anchor="middle">Wardrobe S</text>
+        <text class="furniture-label" x="418.34" y="-18" text-anchor="middle">1.13 &#215; 0.52</text>
 
-        <!-- 2.49m gap between wardrobes along south wall -->
-        <line class="dim-line" x1="135.56" y1="25" x2="384.57" y2="25"/>
-        <line class="dim-tick" x1="135.56" y1="17" x2="135.56" y2="33"/>
-        <line class="dim-tick" x1="384.57" y1="17" x2="384.57" y2="33"/>
-        <text class="dim-text" x="260.065" y="46" text-anchor="middle">2.49 m</text>
+        <!-- 2.48m gap between wardrobes along south wall -->
+        <line class="dim-line" x1="114" y1="25" x2="361.84" y2="25"/>
+        <line class="dim-tick" x1="114" y1="17" x2="114" y2="33"/>
+        <line class="dim-tick" x1="361.84" y1="17" x2="361.84" y2="33"/>
+        <text class="dim-text" x="237.92" y="46" text-anchor="middle">2.48 m</text>
       </g>
 
       <!-- Room label (top of room, clear of bed) -->
-      <text class="room-label" x="339" y="115" text-anchor="middle">Master Bedroom</text>
-      <text class="room-label" x="339" y="135" text-anchor="middle" style="font-size:13px;">~15.20 m&#178;</text>
+      <text class="room-label" x="265" y="110" text-anchor="middle">Master Bedroom</text>
+      <text class="room-label" x="265" y="125" text-anchor="middle" style="font-size:13px;">~12.75 m&#178;</text>
 
-      <!-- Main walls: a (N), b (E), c (S slanted), d (W) -->
-      <g>
-        <text class="section-label" x="150" y="100" text-anchor="middle">a</text>
-        <text class="section-label" x="580" y="215" text-anchor="middle">b</text>
-        <text class="section-label" x="250" y="425" text-anchor="middle">c</text>
-        <text class="section-label" x="100" y="215" text-anchor="middle">d</text>
-      </g>
+      <!-- c (south slanted) has no separate dim, so label it here. a, b, d letters live in their dim texts. -->
+      <text class="section-label" x="280" y="370" text-anchor="middle">c</text>
 
-      <!-- Width dimension (top) -->
-      <line class="dim-line" x1="80" y1="50" x2="598" y2="50"/>
+      <!-- Width dimension (top, a wall total) -->
+      <line class="dim-line" x1="80" y1="50" x2="546" y2="50"/>
       <line class="dim-tick" x1="80" y1="42" x2="80" y2="58"/>
-      <line class="dim-tick" x1="598" y1="42" x2="598" y2="58"/>
-      <text class="dim-text" x="339" y="40" text-anchor="middle">5.18 m</text>
+      <line class="dim-tick" x1="546" y1="42" x2="546" y2="58"/>
+      <text class="dim-text" x="313" y="40" text-anchor="middle"><tspan fill="var(--section-label)" font-weight="bold">a:</tspan> 4.66 m (3.73 clear + 0.93 door)</text>
 
-      <!-- Right wall dimension -->
-      <line class="dim-line" x1="628" y1="80" x2="628" y2="350"/>
-      <line class="dim-tick" x1="620" y1="80" x2="636" y2="80"/>
-      <line class="dim-tick" x1="620" y1="350" x2="636" y2="350"/>
-      <text class="dim-text" x="644" y="215" text-anchor="middle" transform="rotate(90 644 215)">2.70 m</text>
+      <!-- Right wall dimension (b) -->
+      <line class="dim-line" x1="576" y1="80" x2="576" y2="308"/>
+      <line class="dim-tick" x1="568" y1="80" x2="584" y2="80"/>
+      <line class="dim-tick" x1="568" y1="308" x2="584" y2="308"/>
+      <text class="dim-text" x="594" y="194" text-anchor="middle" transform="rotate(90 594 194)"><tspan fill="var(--section-label)" font-weight="bold">b:</tspan> 2.28 m (1.76 + 0.52 ward.)</text>
 
-      <!-- Left wall dimension -->
-      <line class="dim-line" x1="50" y1="80" x2="50" y2="397"/>
+      <!-- Left wall dimension (d) -->
+      <line class="dim-line" x1="50" y1="80" x2="50" y2="399"/>
       <line class="dim-tick" x1="42" y1="80" x2="58" y2="80"/>
-      <line class="dim-tick" x1="42" y1="397" x2="58" y2="397"/>
-      <text class="dim-text" x="34" y="238.5" text-anchor="middle" transform="rotate(-90 34 238.5)">3.17 m</text>
+      <line class="dim-tick" x1="42" y1="399" x2="58" y2="399"/>
+      <text class="dim-text" x="34" y="239.5" text-anchor="middle" transform="rotate(-90 34 239.5)"><tspan fill="var(--section-label)" font-weight="bold">d:</tspan> 3.19 m (2.66 + 0.53 ward.)</text>
 
       <!-- Scale bar -->
       <g shape-rendering="crispEdges">
-        <line x1="80" y1="447" x2="180" y2="447" stroke="currentColor" stroke-width="2"/>
-        <line x1="80" y1="441" x2="80" y2="453" stroke="currentColor" stroke-width="2"/>
-        <line x1="180" y1="441" x2="180" y2="453" stroke="currentColor" stroke-width="2"/>
-        <text x="130" y="443" text-anchor="middle" style="font-size:11px;" fill="currentColor">1 m</text>
+        <line x1="80" y1="457" x2="180" y2="457" stroke="currentColor" stroke-width="2"/>
+        <line x1="80" y1="451" x2="80" y2="463" stroke="currentColor" stroke-width="2"/>
+        <line x1="180" y1="451" x2="180" y2="463" stroke="currentColor" stroke-width="2"/>
+        <text x="130" y="453" text-anchor="middle" style="font-size:11px;" fill="currentColor">1 m</text>
       </g>
     </svg>
   </div>
 
   <script>
-    // East zone: x 265 to 600 (3.35m). South wall y = 409. 10cm padding from south wall.
-    const ZONE_WEST = 265;
-    const ZONE_EAST = 600;
-    const ZONE_CENTER = (ZONE_WEST + ZONE_EAST) / 2;
+    // East zone: x 211 to 546 (3.35m measured). South wall y = 410. 3cm padding from south wall.
+    const ZONE_WEST = 211;
+    const ZONE_EAST = 546;
+    // Sofas shifted 30 cm east of geometric centre (per design preference).
+    const ZONE_CENTER = (ZONE_WEST + ZONE_EAST) / 2 + 30;
     const PAD_FROM_WALL = 3; // cm = px
-    const SOUTH_WALL_Y = 409;
+    const SOUTH_WALL_Y = 410;
     const SVG_NS = "http://www.w3.org/2000/svg";
 
     // ----- History (back/forward navigation) -----
@@ -918,7 +954,7 @@
     activateSofaButton(sofaButtons[0]);
 
     // ----- Bedroom bed render -----
-    const BED_GAP_CENTER = 260.065; // local x along slope (mid of 135.56 to 384.57)
+    const BED_GAP_CENTER = 237.92; // local x along slope (mid of 114 to 361.84)
     const bedButtons = Array.from(document.querySelectorAll('#bed-controls button'));
 
     let currentBed = {w: 180, l: 207, label: 'Existing Super King', drawers: false};
@@ -1007,7 +1043,7 @@
         'toilet-enclosed': document.getElementById('understairs-v5'),
       };
       const buttons = Array.from(document.querySelectorAll('#understairs-controls button'));
-      const hideInToilet = ['a2-step-wall', 'radiator-block', 'label-a2', 'label-a3a', 'label-a3b', 'a1b-east-of-toilet-door'];
+      const hideInToilet = ['a2-step-wall'];
       let currentIndex = 0;
 
       function activate(variant) {
