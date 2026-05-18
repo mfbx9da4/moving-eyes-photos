@@ -916,7 +916,16 @@
       <line class="wall" x1="259" y1="80" x2="259" y2="135"/>
       <line class="wall" x1="259" y1="235" x2="259" y2="290"/>
       <line class="wall" x1="259" y1="390" x2="259" y2="445"/>
-      <line class="wall" x1="259" y1="445" x2="80" y2="445"/>
+      <line class="wall" x1="183" y1="445" x2="80" y2="445"/>
+
+      <!-- SE door on c (south) wall: 76 cm flush to east wall. Hinge at east jamb (259, 445), swings north into the office (leaves SW clear for the wardrobe). -->
+      <line class="door-leaf" x1="259" y1="445" x2="259" y2="369"/>
+      <path class="door-swing" d="M 259 369 A 76 76 0 0 0 183 445"/>
+
+      <!-- Wardrobe 80 x 55 cm, SW corner flush against south and west walls -->
+      <rect class="furniture" x="80" y="390" width="80" height="55"/>
+      <text class="furniture-label" x="120" y="415" text-anchor="middle">Wardrobe</text>
+      <text class="furniture-label" x="120" y="429" text-anchor="middle">0.80 &#215; 0.55</text>
       <line class="wall" x1="80" y1="445" x2="80" y2="80"/>
 
       <!-- Two 100 cm windows on b (east) wall, equidistant: 55 cm gap top / between / bottom -->
