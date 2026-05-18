@@ -734,7 +734,7 @@
       Slant angle = atan(91/466) = 11.05 deg. c length = 474.8 cm.
       Wardrobes aligned with c (back wall = c). SW (north) wardrobe 114 x 53; SE (south) wardrobe 113 x 52.
       Gap between wardrobes along c = 247.8 cm.
-      A north door: 93 cm wide, east of clear 373 cm; spans x=453..546.
+      A north door: 76 cm wide (standard UK internal), 6 cm east stub to b wall; door spans x=464..540.
     -->
     <svg width="660" height="487" viewBox="0 0 660 487" xmlns="http://www.w3.org/2000/svg">
       <!-- 0.5m grid -->
@@ -757,16 +757,17 @@
         <line x1="80" y1="380" x2="546" y2="380"/>
       </g>
 
-      <!-- Walls: trapezoid. Top a (4.66 m total: 3.73 m clear + 0.93 m door from x=453 to x=546). -->
+      <!-- Walls: trapezoid. Top a (4.66 m total: 3.84 m clear + 0.76 m door + 6 cm stub to b). -->
       <!-- East b (2.28 m), south c slanted, west d (3.19 m). -->
-      <line class="wall" x1="80" y1="80" x2="453" y2="80"/>
+      <line class="wall" x1="80" y1="80" x2="464" y2="80"/>
+      <line class="wall" x1="540" y1="80" x2="546" y2="80"/>
       <line class="wall" x1="546" y1="80" x2="546" y2="308"/>
       <line class="wall" x1="546" y1="308" x2="80" y2="399"/>
       <line class="wall" x1="80" y1="399" x2="80" y2="80"/>
 
-      <!-- NE door: 93 cm wide, hinge at west jamb (453,80), swings inward (south) -->
-      <line class="door-leaf" x1="453" y1="80" x2="453" y2="173"/>
-      <path class="door-swing" d="M 453 173 A 93 93 0 0 0 546 80"/>
+      <!-- NE door: 76 cm (standard UK internal), 6 cm short of east wall. Hinge at west jamb (464,80), swings inward (south). -->
+      <line class="door-leaf" x1="464" y1="80" x2="464" y2="156"/>
+      <path class="door-swing" d="M 464 156 A 76 76 0 0 0 540 80"/>
 
       <!-- Clip-path: room polygon -->
       <defs>
@@ -860,11 +861,16 @@
         <line x1="80" y1="280" x2="356" y2="280"/>
       </g>
 
-      <!-- Walls (room: 276 x 241 cm, no openings measured yet) -->
+      <!-- Walls (room: 276 x 241 cm). South wall broken for SE door (76 cm) with 6 cm east stub. -->
       <line class="wall" x1="80" y1="80" x2="356" y2="80"/>
       <line class="wall" x1="356" y1="80" x2="356" y2="321"/>
-      <line class="wall" x1="356" y1="321" x2="80" y2="321"/>
+      <line class="wall" x1="274" y1="321" x2="80" y2="321"/>
+      <line class="wall" x1="350" y1="321" x2="356" y2="321"/>
       <line class="wall" x1="80" y1="321" x2="80" y2="80"/>
+
+      <!-- SE door on c (south) wall: 76 cm, 6 cm short of east wall. Hinge at west jamb (274, 321), swings north into the room. -->
+      <line class="door-leaf" x1="274" y1="321" x2="274" y2="245"/>
+      <path class="door-swing" d="M 274 245 A 76 76 0 0 1 350 321"/>
 
       <!-- Room label -->
       <text class="room-label" x="218" y="195" text-anchor="middle">Baby Room</text>
@@ -916,11 +922,12 @@
       <line class="wall" x1="259" y1="80" x2="259" y2="135"/>
       <line class="wall" x1="259" y1="235" x2="259" y2="290"/>
       <line class="wall" x1="259" y1="390" x2="259" y2="445"/>
-      <line class="wall" x1="183" y1="445" x2="80" y2="445"/>
+      <line class="wall" x1="177" y1="445" x2="80" y2="445"/>
+      <line class="wall" x1="253" y1="445" x2="259" y2="445"/>
 
-      <!-- SE door on c (south) wall: 76 cm flush to east wall. Hinge at east jamb (259, 445), swings north into the office (leaves SW clear for the wardrobe). -->
-      <line class="door-leaf" x1="259" y1="445" x2="259" y2="369"/>
-      <path class="door-swing" d="M 259 369 A 76 76 0 0 0 183 445"/>
+      <!-- SE door on c (south) wall: 76 cm, 6 cm short of east wall. Hinge at west jamb (177, 445), swings north into the office. -->
+      <line class="door-leaf" x1="177" y1="445" x2="177" y2="369"/>
+      <path class="door-swing" d="M 177 369 A 76 76 0 0 1 253 445"/>
 
       <!-- Wardrobe 80 x 55 cm, SW corner flush against south and west walls -->
       <rect class="furniture" x="80" y="390" width="80" height="55"/>
