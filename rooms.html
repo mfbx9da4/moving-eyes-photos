@@ -331,7 +331,14 @@
       <polyline class="wall" points="200.5,80 416,80"/>
       <polyline class="wall" id="a2-step-wall" points="416,80 416,-17.5"/>
       <polyline class="wall" points="416,-17.5 579,-17.5 579,-83.8 601.5,-83.8 601.5,-103.8"/>
-      <polyline class="wall" points="682.5,-103.8 682.5,-83.8 792.5,-83.8 792.5,253.2 483.59,308.94 80,381.7 80,270.7 4.78,243.45 4.78,148.45 80,121.2 80,80"/>
+      <!-- East wall (b) broken for two 100 cm windows, 46/45/46 cm gaps top/mid/bottom -->
+      <polyline class="wall" points="682.5,-103.8 682.5,-83.8 792.5,-83.8 792.5,-37.8"/>
+      <polyline class="wall" points="792.5,62.2 792.5,107.2"/>
+      <polyline class="wall" points="792.5,207.2 792.5,253.2 483.59,308.94 80,381.7 80,270.7 4.78,243.45 4.78,148.45 80,121.2 80,80"/>
+
+      <!-- Two 100 cm windows on b (east) wall, equidistant along its 3.37 m length -->
+      <line class="glazing" x1="792.5" y1="-37.8" x2="792.5" y2="62.2" style="stroke-width:3;"/>
+      <line class="glazing" x1="792.5" y1="107.2" x2="792.5" y2="207.2" style="stroke-width:3;"/>
 
       <!-- NW door on a1: 88 cm. Hinge at east jamb (200.5,80), swings south into the room. -->
       <line class="door-leaf" x1="200.5" y1="80" x2="200.5" y2="168"/>
@@ -904,15 +911,21 @@
         <line x1="80" y1="430" x2="259" y2="430"/>
       </g>
 
-      <!-- Walls (room: 179 x 365 cm) -->
+      <!-- Walls (room: 179 x 365 cm). East wall broken for two 100 cm windows. -->
       <line class="wall" x1="80" y1="80" x2="259" y2="80"/>
-      <line class="wall" x1="259" y1="80" x2="259" y2="445"/>
+      <line class="wall" x1="259" y1="80" x2="259" y2="135"/>
+      <line class="wall" x1="259" y1="235" x2="259" y2="290"/>
+      <line class="wall" x1="259" y1="390" x2="259" y2="445"/>
       <line class="wall" x1="259" y1="445" x2="80" y2="445"/>
       <line class="wall" x1="80" y1="445" x2="80" y2="80"/>
 
-      <!-- Pouffe 30 x 30 cm, north of desk, against north wall, centred on desk -->
-      <rect class="furniture" x="206" y="80" width="30" height="30" rx="4" ry="4"/>
-      <text class="furniture-label" x="221" y="99" text-anchor="middle" style="font-size:9px;">Pouffe</text>
+      <!-- Two 100 cm windows on b (east) wall, equidistant: 55 cm gap top / between / bottom -->
+      <line class="glazing" x1="259" y1="135" x2="259" y2="235" style="stroke-width:3;"/>
+      <line class="glazing" x1="259" y1="290" x2="259" y2="390" style="stroke-width:3;"/>
+
+      <!-- Pouffe 30 x 30 cm, 12 cm south of north wall, centred on desk -->
+      <rect class="furniture" x="206" y="92" width="30" height="30" rx="4" ry="4"/>
+      <text class="furniture-label" x="221" y="111" text-anchor="middle" style="font-size:9px;">Pouffe</text>
 
       <!-- Desk 75 x 60 cm, east wall flush, 50 cm south of the north wall -->
       <rect class="furniture" x="184" y="130" width="75" height="60"/>
