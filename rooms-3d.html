@@ -1,0 +1,455 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<title>Addison Way — 3D</title>
+<style>
+  html, body { margin: 0; padding: 0; height: 100%; background: #1a1a1a; color: #ddd;
+    font-family: -apple-system, BlinkMacSystemFont, "Helvetica Neue", sans-serif; overflow: hidden; }
+  #canvas-container { position: fixed; inset: 0; }
+  #hud { position: fixed; top: 12px; left: 12px; background: rgba(0,0,0,0.55);
+    padding: 10px 14px; border-radius: 6px; font-size: 12px; line-height: 1.5; pointer-events: none; max-width: 280px; }
+  #hud h2 { margin: 0 0 6px; font-size: 13px; font-weight: 600; }
+  .panel { position: fixed; background: rgba(0,0,0,0.55); padding: 10px 12px;
+    border-radius: 6px; min-width: 180px; }
+  .panel strong { display: block; font-size: 11px; text-transform: uppercase;
+    letter-spacing: 0.5px; color: #aaa; margin-bottom: 6px; }
+  .panel button { display: block; width: 100%; margin: 3px 0; background: #222; color: #ddd;
+    border: 1px solid #444; padding: 6px 10px; cursor: pointer; border-radius: 4px;
+    font-size: 12px; text-align: left; }
+  .panel button.active { background: #2d4a7c; border-color: #5a8fd0; color: #fff; }
+  .panel button:hover { background: #333; }
+  .panel button.active:hover { background: #2d4a7c; }
+  #rooms { top: 12px; right: 12px; }
+  #variants { top: 12px; right: 218px; }
+  #variants.hidden { display: none; }
+  #source-host { position: absolute; visibility: hidden; pointer-events: none;
+    width: 1px; height: 1px; overflow: hidden; }
+  #err { position: fixed; bottom: 12px; left: 12px; right: 12px; background: #c33;
+    color: #fff; padding: 10px; border-radius: 6px; display: none; font-family: monospace; font-size: 12px; }
+</style>
+</head>
+<body>
+<div id="canvas-container"></div>
+<div id="hud">
+  <h2 id="room-title">Loading…</h2>
+  Drag to orbit · Scroll to zoom · Shift+drag to pan<br>
+  <span style="opacity: 0.7;">Geometry parsed live from rooms.html</span>
+</div>
+<div id="rooms" class="panel">
+  <strong>Room</strong>
+  <div id="room-buttons"></div>
+</div>
+<div id="variants" class="panel hidden">
+  <strong>Under-stairs option</strong>
+  <div id="variant-buttons"></div>
+</div>
+<div id="source-host"></div>
+<div id="err"></div>
+
+<script type="importmap">
+{
+  "imports": {
+    "three": "https://cdn.jsdelivr.net/npm/three@0.161.0/build/three.module.js",
+    "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.161.0/examples/jsm/"
+  }
+}
+</script>
+
+<script type="module">
+import * as THREE from 'three';
+import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
+
+const SOURCE_URL = 'rooms.html';
+
+// Heights (cm). Tweak via data-height="N" on the SVG node for one-offs.
+const WALL_HEIGHT = 240;
+const WALL_THICKNESS = 8;
+const DOOR_HEIGHT = 200;
+const DOOR_THICKNESS = 4;
+const DEFAULT_FURNITURE_HEIGHT = 50;
+
+// Keyword → height (cm). Matched against the nearest furniture-label sibling text (lowercased).
+// First match wins, so list more-specific keywords first.
+const HEIGHT_BY_KEYWORD = [
+  ['kitchen worktop', 90],
+  ['storage', 200],
+  ['shelves', 200],
+  ['radiator', 60],
+  ['sink+cist', 85],
+  ['cistern', 85],
+  ['toilet', 40],
+  ['wc', 40],
+  ['sink', 85],
+  ['wm', 85],
+  ['hob', 92],
+  ['tv', 5],
+  ['rug', 1],
+  ['sofa', 80],
+  ['pouf', 40],
+  ['footstool', 40],
+  ['table', 75],
+  ['bed', 50],
+];
+
+const COLOR_FLOOR = 0xe6dec8;
+const COLOR_WALL = 0xf5f1ea;
+const COLOR_FURNITURE = 0xb89870;
+const COLOR_DOOR = 0x6b4a2a;
+
+const errEl = document.getElementById('err');
+function showErr(e) {
+  errEl.style.display = 'block';
+  errEl.textContent = String(e && e.stack || e);
+}
+window.addEventListener('error', e => showErr(e.error || e.message));
+window.addEventListener('unhandledrejection', e => showErr(e.reason));
+
+// ---------- 1. Fetch and inline source SVGs ----------
+const resp = await fetch(SOURCE_URL);
+if (!resp.ok) throw new Error(`Failed to fetch ${SOURCE_URL}: ${resp.status}`);
+const html = await resp.text();
+const doc = new DOMParser().parseFromString(html, 'text/html');
+
+// Pair each SVG with the nearest preceding h1, in document order, to label the rooms.
+const allSvgs = Array.from(doc.querySelectorAll('svg'));
+const allH1s = Array.from(doc.querySelectorAll('h1'));
+const rooms = allSvgs.map((svg, i) => {
+  const name = allH1s[i]
+    ? allH1s[i].textContent.replace(/^Ground Floor\s*[–-]\s*/i, '').trim()
+    : `Room ${i + 1}`;
+  return { name, svg };
+});
+
+// Inline all SVGs into the hidden host so getCTM() resolves for any of them.
+const host = document.getElementById('source-host');
+for (const r of rooms) host.appendChild(r.svg);
+
+const VARIANT_LABELS = {
+  'understairs-default':  'Option 0 — None',
+  'understairs-extended': 'Option 1 — Extended',
+  'understairs-v3':       'Option 2 — Diagonal',
+  'understairs-v4':       'Option 3 — Open alcove',
+  'understairs-v5':       'Option 4 — Enclosed',
+};
+
+let activeRoom = rooms[1] || rooms[0]; // Default to Dining & Kitchen (most interesting).
+let activeVariantId = null; // Only meaningful when activeRoom has variants.
+
+// ---------- 2. three.js scene ----------
+const container = document.getElementById('canvas-container');
+const scene = new THREE.Scene();
+scene.background = new THREE.Color(0x1a1a1a);
+scene.fog = new THREE.Fog(0x1a1a1a, 1200, 2400);
+
+const camera = new THREE.PerspectiveCamera(45, innerWidth / innerHeight, 1, 6000);
+const renderer = new THREE.WebGLRenderer({ antialias: true });
+renderer.setSize(innerWidth, innerHeight);
+renderer.setPixelRatio(devicePixelRatio);
+renderer.shadowMap.enabled = true;
+renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+container.appendChild(renderer.domElement);
+
+const controls = new OrbitControls(camera, renderer.domElement);
+controls.enableDamping = true;
+controls.dampingFactor = 0.07;
+controls.maxPolarAngle = Math.PI * 0.49;
+
+scene.add(new THREE.AmbientLight(0xffffff, 0.45));
+const sun = new THREE.DirectionalLight(0xffffff, 1.0);
+sun.position.set(300, 800, 200);
+sun.castShadow = true;
+const SH = 1200;
+sun.shadow.camera.left = -SH; sun.shadow.camera.right = SH;
+sun.shadow.camera.top = SH; sun.shadow.camera.bottom = -SH;
+sun.shadow.camera.near = 1; sun.shadow.camera.far = 2400;
+sun.shadow.mapSize.set(2048, 2048);
+sun.shadow.bias = -0.0005;
+scene.add(sun);
+
+const roomGroup = new THREE.Group();
+scene.add(roomGroup);
+
+// Expose for debugging from the devtools console.
+window.__view = { scene, camera, controls, roomGroup, THREE };
+
+// ---------- 3. SVG → 3D helpers ----------
+// SVG coords are in cm. SVG +y is "south" on the page; we map SVG y → world z so the
+// 3D floor matches the floor plan visually when viewed from above.
+function isVisible(el) {
+  let cur = el;
+  while (cur && cur.nodeType === 1) {
+    if (cur.style && cur.style.display === 'none') return false;
+    cur = cur.parentNode;
+  }
+  return true;
+}
+
+// Apply the element's CTM (within its SVG viewport) to a local point.
+function resolve(el, x, y) {
+  const ctm = el.getCTM();
+  if (!ctm) return null;
+  return { x: ctm.a * x + ctm.c * y + ctm.e,
+           y: ctm.b * x + ctm.d * y + ctm.f };
+}
+
+function parsePoints(str) {
+  const nums = str.trim().split(/[\s,]+/).map(Number);
+  const out = [];
+  for (let i = 0; i + 1 < nums.length; i += 2) out.push([nums[i], nums[i+1]]);
+  return out;
+}
+
+function buildWallSegment(p1, p2) {
+  const dx = p2.x - p1.x, dz = p2.y - p1.y;
+  const len = Math.hypot(dx, dz);
+  if (len < 0.1) return null;
+  const geom = new THREE.BoxGeometry(len, WALL_HEIGHT, WALL_THICKNESS);
+  const mat = new THREE.MeshStandardMaterial({ color: COLOR_WALL, roughness: 0.92 });
+  const mesh = new THREE.Mesh(geom, mat);
+  mesh.position.set((p1.x + p2.x) / 2, WALL_HEIGHT / 2, (p1.y + p2.y) / 2);
+  mesh.rotation.y = -Math.atan2(dz, dx);
+  mesh.castShadow = true;
+  mesh.receiveShadow = true;
+  return mesh;
+}
+
+function walls(root) {
+  const g = new THREE.Group();
+  const els = root.querySelectorAll('line.wall, polyline.wall, polygon.wall');
+  for (const el of els) {
+    if (!isVisible(el)) continue;
+    const tag = el.tagName.toLowerCase();
+    const segs = [];
+    if (tag === 'line') {
+      const p1 = resolve(el, +el.getAttribute('x1'), +el.getAttribute('y1'));
+      const p2 = resolve(el, +el.getAttribute('x2'), +el.getAttribute('y2'));
+      if (p1 && p2) segs.push([p1, p2]);
+    } else {
+      const pts = parsePoints(el.getAttribute('points'));
+      for (let i = 0; i < pts.length - 1; i++) {
+        const a = resolve(el, pts[i][0], pts[i][1]);
+        const b = resolve(el, pts[i+1][0], pts[i+1][1]);
+        if (a && b) segs.push([a, b]);
+      }
+      if (tag === 'polygon' && pts.length > 2) {
+        const a = resolve(el, pts[pts.length-1][0], pts[pts.length-1][1]);
+        const b = resolve(el, pts[0][0], pts[0][1]);
+        if (a && b) segs.push([a, b]);
+      }
+    }
+    for (const [a, b] of segs) {
+      const m = buildWallSegment(a, b);
+      if (m) g.add(m);
+    }
+  }
+  return g;
+}
+
+function furnitureHeight(el) {
+  const explicit = el.getAttribute('data-height');
+  if (explicit) return +explicit;
+  // Walk the parent group looking for furniture-label siblings to infer by keyword.
+  const parent = el.parentNode;
+  if (!parent) return DEFAULT_FURNITURE_HEIGHT;
+  const labels = parent.querySelectorAll('.furniture-label');
+  for (const lab of labels) {
+    const txt = (lab.textContent || '').toLowerCase();
+    for (const [kw, ht] of HEIGHT_BY_KEYWORD) if (txt.includes(kw)) return ht;
+  }
+  return DEFAULT_FURNITURE_HEIGHT;
+}
+
+function buildExtrusion(shape, height) {
+  const geom = new THREE.ExtrudeGeometry(shape, { depth: height, bevelEnabled: false });
+  // ExtrudeGeometry lays the shape on XY and extrudes along +Z. We want shape Y → world Z
+  // (matching walls), and depth → world +Y. Rotating by +π/2 around X gives (x,y,z) → (x,-z,y),
+  // so the shape's Y stays as world Z (correct sign) and the extrusion goes to -Y; we then
+  // lift by `height` so the box sits on the floor.
+  geom.rotateX(Math.PI / 2);
+  const mat = new THREE.MeshStandardMaterial({ color: COLOR_FURNITURE, roughness: 0.7 });
+  const mesh = new THREE.Mesh(geom, mat);
+  mesh.position.y = height;
+  mesh.castShadow = true;
+  mesh.receiveShadow = true;
+  return mesh;
+}
+
+function furniture(root) {
+  const g = new THREE.Group();
+  const els = root.querySelectorAll('rect.furniture, polygon.furniture, ellipse.furniture');
+  for (const el of els) {
+    if (!isVisible(el)) continue;
+    const tag = el.tagName.toLowerCase();
+    const height = furnitureHeight(el);
+    const shape = new THREE.Shape();
+
+    if (tag === 'rect') {
+      const x = +el.getAttribute('x'), y = +el.getAttribute('y');
+      const w = +el.getAttribute('width'), h = +el.getAttribute('height');
+      const c = [[x,y],[x+w,y],[x+w,y+h],[x,y+h]].map(([px,py]) => resolve(el, px, py));
+      if (c.some(p => !p)) continue;
+      shape.moveTo(c[0].x, c[0].y);
+      shape.lineTo(c[1].x, c[1].y);
+      shape.lineTo(c[2].x, c[2].y);
+      shape.lineTo(c[3].x, c[3].y);
+      shape.closePath();
+    } else if (tag === 'polygon') {
+      const pts = parsePoints(el.getAttribute('points'))
+        .map(([px,py]) => resolve(el, px, py)).filter(Boolean);
+      if (pts.length < 3) continue;
+      shape.moveTo(pts[0].x, pts[0].y);
+      for (let i = 1; i < pts.length; i++) shape.lineTo(pts[i].x, pts[i].y);
+      shape.closePath();
+    } else { // ellipse
+      const cx = +el.getAttribute('cx'), cy = +el.getAttribute('cy');
+      const rx = +el.getAttribute('rx'), ry = +el.getAttribute('ry');
+      const N = 32;
+      for (let i = 0; i < N; i++) {
+        const a = (i / N) * Math.PI * 2;
+        const p = resolve(el, cx + rx * Math.cos(a), cy + ry * Math.sin(a));
+        if (!p) continue;
+        if (i === 0) shape.moveTo(p.x, p.y);
+        else shape.lineTo(p.x, p.y);
+      }
+      shape.closePath();
+    }
+    g.add(buildExtrusion(shape, height));
+  }
+  return g;
+}
+
+function doors(root) {
+  const g = new THREE.Group();
+  const els = root.querySelectorAll('line.door-leaf');
+  for (const el of els) {
+    if (!isVisible(el)) continue;
+    const p1 = resolve(el, +el.getAttribute('x1'), +el.getAttribute('y1'));
+    const p2 = resolve(el, +el.getAttribute('x2'), +el.getAttribute('y2'));
+    if (!p1 || !p2) continue;
+    const dx = p2.x - p1.x, dz = p2.y - p1.y;
+    const len = Math.hypot(dx, dz);
+    if (len < 0.5) continue;
+    const geom = new THREE.BoxGeometry(len, DOOR_HEIGHT, DOOR_THICKNESS);
+    const mat = new THREE.MeshStandardMaterial({ color: COLOR_DOOR, roughness: 0.5 });
+    const mesh = new THREE.Mesh(geom, mat);
+    mesh.position.set((p1.x + p2.x) / 2, DOOR_HEIGHT / 2, (p1.y + p2.y) / 2);
+    mesh.rotation.y = -Math.atan2(dz, dx);
+    mesh.castShadow = true;
+    g.add(mesh);
+  }
+  return g;
+}
+
+// ---------- 4. Build / rebuild scene ----------
+let floorMesh = null;
+
+function build({ reframe = false } = {}) {
+  while (roomGroup.children.length) {
+    const c = roomGroup.children.pop();
+    c.traverse && c.traverse(o => { if (o.geometry) o.geometry.dispose(); });
+  }
+
+  const svg = activeRoom.svg;
+  roomGroup.add(walls(svg));
+  roomGroup.add(furniture(svg));
+  roomGroup.add(doors(svg));
+
+  const bbox = new THREE.Box3().setFromObject(roomGroup);
+  if (bbox.isEmpty()) return;
+  const size = new THREE.Vector3(); bbox.getSize(size);
+  const center = new THREE.Vector3(); bbox.getCenter(center);
+
+  if (floorMesh) { scene.remove(floorMesh); floorMesh.geometry.dispose(); }
+  const pad = 100;
+  floorMesh = new THREE.Mesh(
+    new THREE.PlaneGeometry(size.x + pad * 2, size.z + pad * 2),
+    new THREE.MeshStandardMaterial({ color: COLOR_FLOOR, roughness: 0.95 })
+  );
+  floorMesh.rotation.x = -Math.PI / 2;
+  floorMesh.position.set(center.x, 0, center.z);
+  floorMesh.receiveShadow = true;
+  scene.add(floorMesh);
+
+  if (reframe || !build.framed) {
+    const maxDim = Math.max(size.x, size.z, 400);
+    const dist = maxDim * 0.95;
+    camera.position.set(center.x + dist * 0.85, dist * 1.1, center.z - dist * 0.85);
+    controls.target.set(center.x, 0, center.z);
+    controls.update();
+    build.framed = true;
+  }
+}
+
+// ---------- 5. Room + variant switchers ----------
+function variantsOf(room) {
+  return Array.from(room.svg.querySelectorAll('[id^="understairs-"]'));
+}
+
+function setVariant(id) {
+  const variants = variantsOf(activeRoom);
+  for (const g of variants) g.style.display = (g.id === id) ? '' : 'none';
+  activeVariantId = id;
+  for (const b of document.querySelectorAll('#variant-buttons button'))
+    b.classList.toggle('active', b.dataset.id === id);
+  requestAnimationFrame(() => build());
+}
+
+function renderVariantPanel() {
+  const panel = document.getElementById('variants');
+  const host = document.getElementById('variant-buttons');
+  host.innerHTML = '';
+  const variants = variantsOf(activeRoom);
+  if (!variants.length) { panel.classList.add('hidden'); return; }
+  panel.classList.remove('hidden');
+  for (const g of variants) {
+    const b = document.createElement('button');
+    b.textContent = VARIANT_LABELS[g.id] || g.id;
+    b.dataset.id = g.id;
+    b.onclick = () => setVariant(g.id);
+    host.appendChild(b);
+  }
+  const initial = variants.find(g => g.style.display !== 'none')?.id || variants[0].id;
+  setVariant(initial);
+}
+
+function setRoom(idx) {
+  activeRoom = rooms[idx];
+  document.getElementById('room-title').textContent = activeRoom.name;
+  for (const b of document.querySelectorAll('#room-buttons button'))
+    b.classList.toggle('active', +b.dataset.idx === idx);
+  renderVariantPanel();
+  // renderVariantPanel triggers a build via setVariant; if no variants, build manually.
+  if (!variantsOf(activeRoom).length) requestAnimationFrame(() => build({ reframe: true }));
+  else build.framed = false; // force reframe on next build (queued by setVariant)
+}
+
+const roomBtnHost = document.getElementById('room-buttons');
+rooms.forEach((r, i) => {
+  const b = document.createElement('button');
+  b.textContent = r.name;
+  b.dataset.idx = i;
+  b.onclick = () => setRoom(i);
+  roomBtnHost.appendChild(b);
+});
+
+// Initial selection — default to Dining & Kitchen if present, else first room.
+const initialIdx = rooms.findIndex(r => /dining/i.test(r.name));
+setRoom(initialIdx >= 0 ? initialIdx : 0);
+
+// ---------- 6. Render loop ----------
+function tick() {
+  requestAnimationFrame(tick);
+  controls.update();
+  renderer.render(scene, camera);
+}
+tick();
+
+addEventListener('resize', () => {
+  camera.aspect = innerWidth / innerHeight;
+  camera.updateProjectionMatrix();
+  renderer.setSize(innerWidth, innerHeight);
+});
+</script>
+</body>
+</html>
