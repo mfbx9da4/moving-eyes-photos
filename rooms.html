@@ -545,23 +545,18 @@
         <!--
           Toilet conversion option 4: fully enclosed WC with combi (sink-on-cistern) toilet.
           Storage above WM. Combi toilet N-S east of WM. t2 partition at x=466 (50 cm east of a1b end) closes the room.
-          Two doors on south wall: WM mini door (24 cm) and WC entrance (56 cm).
+          Single WC entrance door (56 cm) on south wall.
         -->
         <polygon points="299,80 299,-17.5 466,-17.5 466,80" fill="transparent"/>
 
         <!-- North/east/west walls (t4 -> t1 -> t2). -->
         <polyline class="wall" points="299,80 299,-17.5 466,-17.5 466,80"/>
-        <!-- South wall t3 stubs: 299-318.5 (W of WM door), 342.5-410 (between doors). -->
-        <polyline class="wall" points="299,80 318.5,80"/>
-        <polyline class="wall" points="342.5,80 410,80"/>
+        <!-- South wall t3 stub: 299-416 (west of WC entrance door, ends where a1b finishes). -->
+        <polyline class="wall" points="299,80 416,80"/>
 
-        <!-- WM mini door (24 cm): hinge at west jamb (318.5,80), swings south into dining -->
-        <line class="door-leaf" x1="318.5" y1="80" x2="318.5" y2="104"/>
-        <path class="door-swing" d="M 318.5 104 A 24 24 0 0 0 342.5 80"/>
-
-        <!-- WC entrance door (56 cm): hinge at east jamb (466,80), swings south into dining -->
-        <line class="door-leaf" x1="466" y1="80" x2="466" y2="136"/>
-        <path class="door-swing" d="M 466 136 A 56 56 0 0 1 410 80"/>
+        <!-- WC entrance door (50 cm): hinge at east jamb (466,80), swings south into dining, arc finishes at a1b end (416) -->
+        <line class="door-leaf" x1="466" y1="80" x2="466" y2="130"/>
+        <path class="door-swing" d="M 466 130 A 50 50 0 0 1 416 80"/>
 
         <!-- Storage above WM (37.5 cm tall: y=-17.5..20) -->
         <rect class="furniture" x="299" y="-17.5" width="63" height="37.5"/>
@@ -577,21 +572,19 @@
         <text class="furniture-label" x="443" y="-4.5" text-anchor="middle" style="font-size:8px;">Sink+Cist.</text>
         <text class="furniture-label" x="443" y="30" text-anchor="middle" style="font-size:9px;">WC</text>
 
-        <!-- Radiator on south face of a3 wall, east of t2 (kitchen alcove). 70 x 8 cm flush east at x=579. -->
-        <rect class="furniture" x="509" y="-17.5" width="70" height="8"/>
-        <line class="furniture-detail" x1="519" y1="-17.5" x2="519" y2="-9.5"/>
-        <line class="furniture-detail" x1="529" y1="-17.5" x2="529" y2="-9.5"/>
-        <line class="furniture-detail" x1="539" y1="-17.5" x2="539" y2="-9.5"/>
-        <line class="furniture-detail" x1="549" y1="-17.5" x2="549" y2="-9.5"/>
-        <line class="furniture-detail" x1="559" y1="-17.5" x2="559" y2="-9.5"/>
-        <line class="furniture-detail" x1="569" y1="-17.5" x2="569" y2="-9.5"/>
-        <text class="furniture-label" x="544" y="5" text-anchor="middle">Radiator</text>
+        <!-- Radiator on south face of a3 wall, same location as option 0: west edge 66 cm east of a2 (x=482). 70 x 8 cm. -->
+        <rect class="furniture" x="482" y="-17.5" width="70" height="8"/>
+        <line class="furniture-detail" x1="492" y1="-17.5" x2="492" y2="-9.5"/>
+        <line class="furniture-detail" x1="502" y1="-17.5" x2="502" y2="-9.5"/>
+        <line class="furniture-detail" x1="512" y1="-17.5" x2="512" y2="-9.5"/>
+        <line class="furniture-detail" x1="522" y1="-17.5" x2="522" y2="-9.5"/>
+        <line class="furniture-detail" x1="532" y1="-17.5" x2="532" y2="-9.5"/>
+        <line class="furniture-detail" x1="542" y1="-17.5" x2="542" y2="-9.5"/>
+        <text class="furniture-label" x="517" y="5" text-anchor="middle">Radiator</text>
 
         <!-- Wall letters -->
         <text class="section-label" x="358.5" y="-28" text-anchor="middle" style="font-size:11px">t1</text>
-        <text class="section-label" x="430" y="31" text-anchor="middle" style="font-size:11px">t2</text>
         <text class="section-label" x="330" y="95" text-anchor="middle" style="font-size:11px">t3</text>
-        <text class="section-label" x="310" y="50" text-anchor="middle" style="font-size:11px">t4</text>
       </g>
 
       <g id="radiator-block">
