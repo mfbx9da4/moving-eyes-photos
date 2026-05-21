@@ -444,23 +444,21 @@
       <g id="understairs-v3" style="display:none">
         <!--
           Toilet conversion option 2 (tight, diagonal envelope).
-          Door (48 cm) on a1b/t3 between WM SE corner (362,80) and a 6 cm a1b stub (410..416);
-          t2 starts at the a1b east end (416, 80) and runs diagonally to a4 south end (579, -17.5);
-          new t2 length = sqrt(163^2 + 97.5^2) = 189.93 cm. Diagonal slope -97.5/163.
-          Remaining sides: t3 stub south of WM (299..362 at y=80), t4 west (x=299), t1 north (y=-17.5).
+          Entry door (60 cm) on the diagonal t2 wall, hinged at the SW end (416, 80), swinging SE into dining.
+          t2 runs diagonally from (416, 80) to a4 south end (579, -17.5);
+          new t2 length = sqrt(163^2 + 97.5^2) = 189.93 cm. Diagonal slope -97.5/163, unit (0.8582, -0.5133).
+          Remaining sides: south wall + a1b continuous (299..416 at y=80), t4 west (x=299), t1 north (y=-17.5).
         -->
         <polygon points="299,80 299,-17.5 579,-17.5 416,80" fill="transparent"/>
 
-        <!-- Outer walls: south stub under WM (t3) + west wall (t4) + north wall (t1) -->
-        <polyline class="wall" points="362,80 299,80 299,-17.5 579,-17.5"/>
-        <!-- 6 cm a1b stub between door east jamb and t2 start -->
-        <line class="wall" x1="410" y1="80" x2="416" y2="80"/>
+        <!-- Outer walls: continuous south (incl. a1b) + west wall (t4) + north wall (t1) -->
+        <polyline class="wall" points="416,80 299,80 299,-17.5 579,-17.5"/>
 
-        <!-- Diagonal partition (t2) from a1b east end (416, 80) to a4 south end (579, -17.5) -->
-        <line class="wall" x1="416" y1="80" x2="579" y2="-17.5"/>
-        <!-- 48 cm entry door on a1b (x=362..410), hinge at east jamb (410, 80), swings 90 deg south into dining -->
-        <line class="door-leaf" x1="410" y1="80" x2="410" y2="128"/>
-        <path class="door-swing" d="M 410 128 A 48 48 0 0 1 362 80"/>
+        <!-- Diagonal partition (t2) with door cutout: wall remains from (467.5, 49.2) to a4 south end (579, -17.5) -->
+        <line class="wall" x1="467.5" y1="49.2" x2="579" y2="-17.5"/>
+        <!-- 60 cm entry door on diagonal t2: hinge at SW end (416, 80), leaf swings 90 deg SE (perp to diagonal) into dining -->
+        <line class="door-leaf" x1="416" y1="80" x2="446.8" y2="131.5"/>
+        <path class="door-swing" d="M 446.8 131.5 A 60 60 0 0 0 467.5 49.2"/>
 
         <!-- Toilet on t1 (west), centred between t1 (-17.5) and WM north (20) -> cy=1.25 -->
         <ellipse class="furniture" cx="334" cy="1.25" rx="30" ry="18"/>
@@ -470,13 +468,9 @@
         <rect class="furniture" x="498" y="-17.5" width="42" height="20"/>
         <text class="furniture-label" x="519" y="-3.5" text-anchor="middle">Sink</text>
 
-        <!-- WM 63 x 60 in SW corner: back to t4, south face on t3 stub -->
+        <!-- WM 63 x 60 in SW corner: back to t4, south face on t3 -->
         <rect class="furniture" x="299" y="20" width="63" height="60"/>
         <text class="furniture-label" x="330.5" y="50" text-anchor="middle">WM</text>
-        <!-- 24 cm appliance door on WM south face, hinge at west jamb (318.5,80), swings south through t3 -->
-        <line x1="318.5" y1="80" x2="342.5" y2="80" stroke="var(--stage-bg)" stroke-width="3"/>
-        <line class="door-leaf" x1="318.5" y1="80" x2="318.5" y2="104"/>
-        <path class="door-swing" d="M 318.5 104 A 24 24 0 0 0 342.5 80"/>
 
         <!-- Radiator on east face of a4+t2-strip (x=579), 80 cm length -->
         <rect class="furniture" x="579" y="-83.8" width="8" height="80"/>
