@@ -105,21 +105,34 @@ function showErr(e) {
 window.addEventListener('error', e => showErr(e.error || e.message));
 window.addEventListener('unhandledrejection', e => showErr(e.reason));
 
-// ---------- 1. Fetch and inline source SVGs ----------
-const resp = await fetch(SOURCE_URL);
-if (!resp.ok) throw new Error(`Failed to fetch ${SOURCE_URL}: ${resp.status}`);
-const html = await resp.text();
-const doc = new DOMParser().parseFromString(html, 'text/html');
+// ---------- 1. Load rooms.html in a hidden iframe and snapshot its SVGs ----------
+// An iframe (rather than DOMParser) lets the page's own scripts render dynamic groups
+// like the lounge sofa, the master bed, and the office wardrobe before we clone.
+async function loadRoomSvgs() {
+  const iframe = document.createElement('iframe');
+  iframe.style.cssText = 'position:absolute;visibility:hidden;pointer-events:none;width:1200px;height:900px;border:0;';
+  iframe.src = SOURCE_URL;
+  document.body.appendChild(iframe);
+  await new Promise((resolve, reject) => {
+    iframe.addEventListener('load', resolve, { once: true });
+    iframe.addEventListener('error', reject, { once: true });
+  });
+  // Two animation frames for any post-load init (variant defaults, fixture rendering).
+  await new Promise(r => requestAnimationFrame(r));
+  await new Promise(r => requestAnimationFrame(r));
 
-// Pair each SVG with the nearest preceding h1, in document order, to label the rooms.
-const allSvgs = Array.from(doc.querySelectorAll('svg'));
-const allH1s = Array.from(doc.querySelectorAll('h1'));
-const rooms = allSvgs.map((svg, i) => {
-  const name = allH1s[i]
-    ? allH1s[i].textContent.replace(/^Ground Floor\s*[–-]\s*/i, '').trim()
-    : `Room ${i + 1}`;
-  return { name, svg };
-});
+  const idoc = iframe.contentDocument;
+  const h1s = Array.from(idoc.querySelectorAll('h1'));
+  const svgs = Array.from(idoc.querySelectorAll('svg'));
+  const out = svgs.map((svg, i) => ({
+    name: h1s[i] ? h1s[i].textContent.replace(/^Ground Floor\s*[–-]\s*/i, '').trim() : `Room ${i + 1}`,
+    svg: svg.cloneNode(true),
+  }));
+  iframe.remove();
+  return out;
+}
+
+const rooms = await loadRoomSvgs();
 
 // Inline all SVGs into the hidden host so getCTM() resolves for any of them.
 const host = document.getElementById('source-host');
