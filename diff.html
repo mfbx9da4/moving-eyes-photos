@@ -1,0 +1,157 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Diff</title>
+    <meta name="description" content="Compare two texts or files with GitHub-style diffs." />
+    <link rel="icon" type="image/png" sizes="32x32" href="/static/favicon/favicon-32x32.png" />
+    <link rel="preconnect" href="https://esm.sh" crossorigin />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Mona+Sans:wght@400..700&display=swap" />
+    <link rel="stylesheet" href="/static/diff/diff.css" />
+    <script>
+      // Resolve the colour theme before first paint.
+      ;(() => {
+        let pref = 'auto'
+        try {
+          pref = JSON.parse(localStorage.getItem('diff:settings') || '{}').theme || 'auto'
+        } catch {}
+        const mq = matchMedia('(prefers-color-scheme: dark)')
+        const apply = () => {
+          document.documentElement.dataset.theme = pref === 'auto' ? (mq.matches ? 'dark' : 'light') : pref
+        }
+        apply()
+        mq.addEventListener('change', apply)
+        window.setThemePreference = (p) => {
+          pref = p
+          apply()
+        }
+      })()
+    </script>
+    <script type="importmap">
+      {
+        "imports": {
+          "@codemirror/state": "https://esm.sh/*@codemirror/state@6.7.6",
+          "@codemirror/view": "https://esm.sh/*@codemirror/view@6.43.14",
+          "@codemirror/commands": "https://esm.sh/*@codemirror/commands@6.11.1",
+          "@codemirror/search": "https://esm.sh/*@codemirror/search@6.7.2",
+          "@codemirror/language": "https://esm.sh/*@codemirror/language@6.13.1",
+          "@codemirror/streamparser": "https://esm.sh/*@codemirror/streamparser@6.0.0",
+          "@lezer/common": "https://esm.sh/*@lezer/common@1.5.3",
+          "@lezer/highlight": "https://esm.sh/*@lezer/highlight@1.2.5",
+          "@marijn/find-cluster-break": "https://esm.sh/@marijn/find-cluster-break@1.0.4",
+          "style-mod": "https://esm.sh/style-mod@4.1.4",
+          "w3c-keyname": "https://esm.sh/w3c-keyname@2.2.8",
+          "crelt": "https://esm.sh/crelt@1.0.7"
+        }
+      }
+    </script>
+    <script type="module" src="/static/diff/app.js"></script>
+  </head>
+  <body>
+    <header class="toolbar">
+      <h1><span id="logo"></span>Diff</h1>
+      <label class="field"
+        >Algorithm
+        <select id="algorithm" class="select" aria-label="Diff algorithm">
+          <option value="myers">GitHub (git Myers + indent heuristic)</option>
+          <option value="minimal">git --minimal</option>
+          <option value="patience">git --patience</option>
+          <option value="histogram">git --histogram</option>
+          <option value="jsdiff">jsdiff (diffLines)</option>
+          <option value="difftastic">difftastic (structural)</option>
+        </select>
+      </label>
+      <div class="seg" role="group" aria-label="Diff view">
+        <button type="button" data-view="unified" aria-pressed="true">Unified</button>
+        <button type="button" data-view="split" aria-pressed="false">Split</button>
+      </div>
+      <label class="field"
+        >Whitespace
+        <select id="whitespace" class="select" aria-label="Whitespace handling">
+          <option value="">Show</option>
+          <option value="all">Hide (-w)</option>
+          <option value="change">Ignore amount (-b)</option>
+          <option value="eol">Ignore at line end</option>
+        </select>
+      </label>
+      <label class="check"><input type="checkbox" id="wrap" checked /> Wrap lines</label>
+      <label class="check"><input type="checkbox" id="compact" /> Compact</label>
+      <div class="spacer"></div>
+      <label class="field"
+        >Language
+        <select id="language" class="select" aria-label="Syntax highlighting language">
+          <option value="auto">Auto-detect</option>
+          <option value="none">Plain text</option>
+        </select>
+      </label>
+      <label class="field"
+        >Tab size
+        <select id="tabsize" class="select" aria-label="Tab size">
+          <option>2</option>
+          <option selected>4</option>
+          <option>8</option>
+        </select>
+      </label>
+      <label class="field"
+        >Theme
+        <select id="theme" class="select" aria-label="Colour theme">
+          <option value="auto">Auto</option>
+          <option value="light">Light</option>
+          <option value="dark">Dark</option>
+        </select>
+      </label>
+      <button type="button" class="btn" id="toggle-inputs" aria-expanded="true">Hide inputs</button>
+    </header>
+
+    <section class="inputs" id="inputs">
+      <div class="pane" data-side="old">
+        <div class="pane-header">
+          <span class="pane-title">Original</span>
+          <input class="input filename" type="text" placeholder="file name (optional)" aria-label="Original file name" spellcheck="false" />
+          <span class="lang-badge" title="Detected language"></span>
+          <span class="pane-meta"></span>
+          <button type="button" class="btn btn-icon open" aria-label="Open file" title="Open file"></button>
+          <button type="button" class="btn btn-icon clear" aria-label="Clear" title="Clear"></button>
+          <input type="file" hidden />
+        </div>
+        <div class="editor"></div>
+      </div>
+      <button type="button" class="btn btn-icon swap" id="swap" aria-label="Swap sides" title="Swap sides"></button>
+      <div class="pane" data-side="new">
+        <div class="pane-header">
+          <span class="pane-title">Modified</span>
+          <input class="input filename" type="text" placeholder="file name (optional)" aria-label="Modified file name" spellcheck="false" />
+          <span class="lang-badge" title="Detected language"></span>
+          <span class="pane-meta"></span>
+          <button type="button" class="btn btn-icon open" aria-label="Open file" title="Open file"></button>
+          <button type="button" class="btn btn-icon clear" aria-label="Clear" title="Clear"></button>
+          <input type="file" hidden />
+        </div>
+        <div class="editor"></div>
+      </div>
+    </section>
+    <div class="resizer" id="resizer" role="separator" aria-orientation="horizontal" aria-label="Resize inputs" tabindex="0"></div>
+
+    <section class="output">
+      <div class="status" id="status" aria-live="polite"></div>
+      <div class="file" id="file">
+        <div class="file-header">
+          <button type="button" class="icon-btn" id="collapse" aria-label="Collapse file" aria-expanded="true"></button>
+          <div class="file-path"><code id="file-name">Untitled</code></div>
+          <button type="button" class="icon-btn" id="copy-name" aria-label="Copy file name to clipboard" title="Copy file name"></button>
+          <button type="button" class="icon-btn" id="expand-all" aria-label="Expand all lines" title="Expand all lines"></button>
+          <div class="grow"></div>
+          <span class="file-lang" id="file-lang"></span>
+          <div class="diffstat" id="diffstat"></div>
+        </div>
+        <div class="file-body">
+          <div id="diff"></div>
+          <div class="empty-state" id="empty" hidden></div>
+        </div>
+      </div>
+    </section>
+  </body>
+</html>
