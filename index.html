@@ -275,7 +275,7 @@
     <canvas
       id="canvas"
       style="
-        position: absolute;
+        position: fixed;
         top: 0;
         left: 0;
         right: 0;
@@ -948,104 +948,173 @@
       }
 
       // #region Balloon Animation
+      const canvas = document.getElementById("canvas");
+      const ctx = canvas.getContext("2d");
+      const balloonImage = new Image();
+      let balloons = [];
+      let isBalloonAnimationRunning = false;
+      let lastFrameTime = 0;
+
+      // Track the pointer so swiping through a balloon pops it. iOS cancels pointer
+      // events once a swipe starts but keeps sending touchmove, so listen to both
+      let pointer = null;
+      let lastPointer = null;
+      let isPressOnBalloon = false;
+      const trackPointer = (e) => (pointer = { x: e.clientX, y: e.clientY });
+      window.addEventListener("pointermove", trackPointer);
+      window.addEventListener("touchmove", (e) => trackPointer(e.touches[0]));
+      window.addEventListener("pointerdown", (e) => {
+        trackPointer(e);
+        lastPointer = null;
+        isPressOnBalloon = balloons.some((b) => !b.popped && distance(b, pointer) < b.r);
+      });
+      // Tapping a balloon that floats over a link pops it without following the link
+      window.addEventListener("click", (e) => {
+        if (!isPressOnBalloon || !e.target.closest("a, button")) return;
+        e.preventDefault();
+        e.stopPropagation();
+      }, true);
+
+      function distanceToSegment(p, a, b) {
+        const dx = b.x - a.x;
+        const dy = b.y - a.y;
+        const t = Math.max(0, Math.min(1, ((p.x - a.x) * dx + (p.y - a.y) * dy) / (dx * dx + dy * dy || 1)));
+        return distance(p, { x: a.x + t * dx, y: a.y + t * dy });
+      }
+
+      // x and y are the center, velocities are px per 60fps frame with y pointing down
       class Balloon {
-        constructor(options) {
-          this.canvas = options.canvas;
-          this.ctx = options.ctx;
-          this.image = options.image;
-          this.width = options.width;
-          this.height = options.height;
-          this.x = options.x;
-          this.y = options.y;
-          this.vx = options.vx;
-          this.vy = options.vy;
-          this.ax = options.ax;
-          this.ay = options.ay;
-          this.friction = options.friction;
-          this.sway = Math.random() * 1.5;
+        constructor(x, y, width, vx, vy) {
+          this.x = x;
+          this.y = y;
+          this.width = width;
+          this.r = width * 0.55;
+          this.vx = vx;
+          this.vy = vy;
+          // Smaller balloons have less lift relative to their drag so they rise slower.
+          // Lift scales with the distance to travel (screen plus ~200px of launch and exit)
+          // so balloons take as long to cross a tall screen as a short one
+          this.lift = (0.06 + Math.random() * 0.05) * Math.sqrt(width / 75) * ((canvas.height + 200) / 1000);
+          this.phase = Math.random() * 7;
+          this.angle = 0;
+          this.spin = 0;
+          this.popped = 0;
+        }
+
+        update(dt, time) {
+          if (this.popped) return (this.popped += dt);
+          // Buoyancy, a gentle breeze and air drag which caps the speed
+          this.vy += (-this.lift - this.vy * 0.03) * dt;
+          this.vx += (Math.sin(time / 900 + this.phase) * 0.03 - this.vx * 0.03) * dt;
+          this.x += this.vx * dt;
+          this.y += this.vy * dt;
+          // Bounce softly off the sides of the screen
+          if (this.x < this.r) this.vx = Math.abs(this.vx) / 2;
+          if (this.x > canvas.width - this.r) this.vx = -Math.abs(this.vx) / 2;
+          this.x = Math.max(this.r, Math.min(canvas.width - this.r, this.x));
+          // Lean into sideways motion with a springy wobble
+          this.spin += ((this.vx / 10 - this.angle) / 30 - this.spin / 10) * dt;
+          this.angle += this.spin * dt;
+        }
+
+        pop() {
+          this.popped = 1;
+          // Big balloons burst into two smaller ones, small ones just die
+          if (this.width > 40) {
+            for (const side of [-1, 1]) {
+              balloons.push(new Balloon(this.x + (side * this.r) / 2, this.y, this.width * 0.6, this.vx, this.vy));
+            }
+          }
+          // The blast knocks nearby balloons away
+          const blastRadius = this.r * 4;
+          for (const b of balloons) {
+            const d = distance(b, this);
+            if (b.popped || !d || d > blastRadius) continue;
+            const push = (6 * (1 - d / blastRadius)) / d;
+            b.vx += (b.x - this.x) * push;
+            b.vy += (b.y - this.y) * push;
+          }
         }
 
         draw() {
-          this._update();
-          this.ctx.drawImage(
-            this.image,
-            this.x,
-            this.y,
-            this.width,
-            this.height
-          );
-        }
-
-        _update() {
-          this.vx += this.ax;
-          this.vy += this.ay;
-          this.vx *= this.friction;
-          this.vy *= this.friction;
-          this.x += this.vx;
-          // Apparently rounding improves performance as it prevents anti-aliasing computation
-          this.y -= Math.round(this.vy);
-          this.x += Math.round(Math.sin(Date.now() * 0.001) * this.sway);
+          // Popped balloons swell and fade out
+          const scale = 1 + this.popped / 10;
+          ctx.globalAlpha = Math.max(0, 1 - this.popped / 6);
+          ctx.setTransform(scale, 0, 0, scale, this.x, this.y);
+          ctx.rotate(this.angle);
+          ctx.drawImage(balloonImage, -this.width / 2, -this.width * 0.7, this.width, this.width * 1.4);
         }
       }
 
-      let isBalloonAnimationRunning = false;
-      let balloons = [];
-      // Optimization for drawing more efficiently
-      const offScreenCanvas = document.createElement("canvas");
+      // Balloons bump off each other, bigger ones push smaller ones around more
+      function collideBalloons() {
+        for (let i = 0; i < balloons.length; i++) {
+          for (let j = i + 1; j < balloons.length; j++) {
+            const a = balloons[i];
+            const b = balloons[j];
+            const d = distance(a, b) || 1;
+            const overlap = a.r + b.r - d;
+            if (overlap <= 0 || a.popped || b.popped) continue;
+            const nx = (b.x - a.x) / d;
+            const ny = (b.y - a.y) / d;
+            // How much of the bump a takes, mass grows with volume
+            const share = b.r ** 3 / (a.r ** 3 + b.r ** 3);
+            const approach = Math.min(0, (b.vx - a.vx) * nx + (b.vy - a.vy) * ny) * 1.5;
+            // Ease overlaps apart over a few frames, snapping them apart at once makes crowds jitter
+            const shove = Math.min(overlap / 4, 3);
+            a.x -= nx * shove * share;
+            a.y -= ny * shove * share;
+            a.vx += nx * approach * share;
+            a.vy += ny * approach * share;
+            b.x += nx * shove * (1 - share);
+            b.y += ny * shove * (1 - share);
+            b.vx -= nx * approach * (1 - share);
+            b.vy -= ny * approach * (1 - share);
+          }
+        }
+      }
+
+      function animationLoop(time) {
+        // Step in 60fps frames so 120Hz screens run at the same speed, capped for background tabs
+        const dt = Math.min((time - lastFrameTime) / 16.7, 3);
+        lastFrameTime = time;
+        const hasPointerMoved = pointer !== lastPointer;
+        const from = lastPointer || pointer;
+        lastPointer = pointer;
+        for (const b of balloons.slice()) {
+          b.update(dt, time);
+          if (hasPointerMoved && !b.popped && distanceToSegment(b, from, pointer) < b.r) b.pop();
+        }
+        collideBalloons();
+        balloons = balloons.filter((b) => b.popped < 6 && b.y + b.width > 0);
+        ctx.setTransform(1, 0, 0, 1, 0, 0);
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        balloons.forEach((b) => b.draw());
+        if (!balloons.length) {
+          isBalloonAnimationRunning = false;
+          return;
+        }
+        requestAnimationFrame(animationLoop);
+      }
+
       function performBalloonAnimation() {
-        const image = new Image();
-        image.src = balloonPhotoUrl;
-        const naturalWidth = 250;
-        const naturalHeight = 350;
-        const imageRatio = naturalHeight / naturalWidth;
-        const canvas = document.getElementById("canvas");
-        const ctx = canvas.getContext("2d");
+        balloonImage.src ||= balloonPhotoUrl;
         canvas.width = window.innerWidth;
         canvas.height = window.innerHeight;
-        offScreenCanvas.width = canvas.width;
-        offScreenCanvas.height = canvas.height;
-        const offScreenCtx = offScreenCanvas.getContext("2d");
-        const numberOfBalloons = Math.round(window.innerWidth / 50);
-        for (let i = 0; i < numberOfBalloons; i++) {
-          // Optimization: integers are more performant
-          const width = Math.round(Math.random() * 50 + 50);
-          const height = Math.round(width * imageRatio);
-          balloons.push(
-            new Balloon({
-              canvas: offScreenCanvas,
-              ctx: offScreenCtx,
-              image,
-              width,
-              height,
-              x: Math.random() * window.innerWidth - width / 2,
-              y: window.innerHeight,
-              vx: Math.random() * 12 - 6,
-              vy: 1 + Math.random() * 10,
-              ax: 0,
-              ay: 0.15 + Math.random() * 0.14,
-              friction: 0.98,
-            })
-          );
+        // Stop adding balloons once there are enough to fill the screen
+        const maxBalloons = (canvas.width * canvas.height) / 5000;
+        for (let i = 0; i < canvas.width / 50 && balloons.length < maxBalloons; i++) {
+          const width = 50 + Math.random() * 50;
+          // Release from just below the screen with a strong upward fling
+          const y = canvas.height + width * 0.7 + Math.random() * 100;
+          const fling = (-10 - Math.random() * 10) * ((canvas.height + 200) / 1000);
+          balloons.push(new Balloon(Math.random() * canvas.width, y, width, Math.random() * 12 - 6, fling));
         }
-        const animationLoop = () => {
-          offScreenCtx.clearRect(0, 0, canvas.width, canvas.height);
-          const isAboveScreen = (x) => x.y + x.height < 0;
-          balloons = balloons.filter((x) => !isAboveScreen(x));
-          balloons.forEach((x) => x.draw());
-          // Optimization: Faster to redraw everything on an offscreen canvas
-          // and then redraw once on the actual canvas
-          ctx.clearRect(0, 0, canvas.width, canvas.height);
-          ctx.drawImage(offScreenCanvas, 0, 0);
-          if (balloons.length) {
-            requestAnimationFrame(animationLoop);
-          } else {
-            isBalloonAnimationRunning = false;
-          }
-        };
-        if (!isBalloonAnimationRunning) {
-          isBalloonAnimationRunning = true;
-          animationLoop();
-        }
+        if (isBalloonAnimationRunning) return;
+        isBalloonAnimationRunning = true;
+        lastFrameTime = performance.now();
+        lastPointer = pointer;
+        requestAnimationFrame(animationLoop);
       }
       // #endregion
 
