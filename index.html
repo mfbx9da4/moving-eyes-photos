@@ -1081,9 +1081,12 @@
         const hasPointerMoved = pointer !== lastPointer;
         const from = lastPointer || pointer;
         lastPointer = pointer;
+        const f = frame.getBoundingClientRect();
         for (const b of balloons.slice()) {
           b.update(dt, time);
           if (hasPointerMoved && !b.popped && distanceToSegment(b, from, pointer) < b.r) b.pop();
+          // Hitting the photo pops it, bouncing the halves back so they don't pop at once
+          if (!b.popped && b.x + b.r > f.left && b.x - b.r < f.right && b.y + b.r > f.top && b.y - b.r < f.bottom) b.pop((b.vy *= -1));
         }
         collideBalloons();
         balloons = balloons.filter((b) => b.popped < 6 && b.y + b.width > 0);
